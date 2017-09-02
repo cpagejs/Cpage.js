@@ -1,0 +1,60 @@
+{
+  "name": "cpage",
+  "version": "1.0.3",
+  "description": "Cpage.js是一款轻量级的Mvvm框架，使用TypeScript开发，可以方便地进行组件化开发，语法统一、简介明了，不依赖于第三方框架，适合中小项目开发。框架同时支持es5与es6语法，可参考example中示例。",
+  "main": "dist/bundle.js",
+  "scripts": {
+    "tsc": "tsc",
+    "tsc:w": "tsc -w",
+    "test": "mocha -r ./node_modules/ts-node/register test/**/*_spec.ts --reporter mochawesome",
+    "build": "webpack -p",
+    "wh": "webpack-dev-server --hot",
+    "tslint": "tslint \"src/**/*.ts\" --force"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chenhaozhi/Cpage.js.git"
+  },
+  "keywords": [
+    "cpage",
+    "Cpage.js",
+    "js mvvm",
+    "chen.js",
+    "TypeScript",
+    "mocha",
+    "chai",
+    "test"
+  ],
+  "author": "chenhao",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chai": "^4.0.1",
+    "@types/chai-dom": "^0.0.5",
+    "@types/jsdom": "^11.0.1",
+    "@types/mocha": "^2.2.32",
+    "@types/sinon": "^2.3.2",
+    "@types/sinon-chai": "^2.7.27",
+    "chai": "^4.0.2",
+    "chai-dom": "^1.4.3",
+    "jsdom": "^11.0.0",
+    "mocha": "^3.1.2",
+    "mochawesome": "^2.2.0",
+    "sinon": "^2.3.6",
+    "sinon-chai": "^2.8.0",
+    "source-map-loader": "^0.2.1",
+    "ts-loader": "^2.2.1",
+    "ts-node": "^3.1.0",
+    "tslint": "^5.4.3",
+    "typescript": "^2.2.1",
+    "webpack": "^1.14.0",
+    "webpack-dev-server": "^1.16.2"
+  },
+  "bugs": {
+    "url": "https://github.com/chenhaozhi/Cpage.js/issues"
+  },
+  "homepage": "https://github.com/chenhaozhi/Cpage.js#readme",
+  "directories": {
+    "example": "example",
+    "test": "test"
+  }
+}

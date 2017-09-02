@@ -1,0 +1,5 @@
+node_modules/
+npm-debug.log
+built/
+.idea
+example/es6/node_modules/

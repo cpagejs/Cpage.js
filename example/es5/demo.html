@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>es5 demo</title>
+</head>
+<body>
+    <div id="app"></div>
+
+    <style type="text/Cpage" id="main-style">
+        .main {
+            color: blue
+        }
+    </style>
+
+    <script type="text/Cpage" id="testId">
+        <div>
+             <div class="main" c-click="handelIf()">my app--templateId</div>
+            <div c-if="{{ifTest}}">
+                <my-article></my-article>
+            </div>
+             <header 
+                height="{{headerHeight}}"
+                c-click="headerClick()"
+                ></header>
+            <!-- 列表  -->
+            <div c-for="item in items">
+                <h1>id: {{item.id}}</h1>
+                <h2>text：{{item.text}}</h2>
+            </div>
+            <div c-for="item in items">
+                <my-article></my-article>
+            </div>
+            <footer></footer> 
+        </div>
+    </script>
+
+    <script src="../../dist/bundle.js"></script>
+    <script src="./header.js"></script>
+    <script src="./article.js"></script>
+    <script src="./footer.js"></script>
+    <script>
+        var app = Cpage.component({
+            name: 'myApp',
+            components: [header,article,footer],
+            styleId: '#main-style',
+            templateId: '#testId',
+            data: {
+                ifTest: false,
+                headerHeight: 20,
+                items: [
+                    {id:1, text: 'text1'},
+                    {id:2, text: 'text2'}
+                ]
+            },
+            headerClick(){
+                console.log('headerClick')
+            },
+            handelIf(){
+                this.$data('ifTest', true);
+            },
+            render(){
+            }
+        });
+
+        Cpage.bootstrap("#app", app);
+    </script>
+</body>
+</html>
