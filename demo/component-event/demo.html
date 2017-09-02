@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+	<title>Cpage.js组件之间事件传播</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+<body>
+	<!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="app"></div>
+
+	<script type="text/javascript" src="../../cpage/1.0.3/Cpage-1.0.3.min.js"></script>
+	<script type="text/javascript">
+		var hello = Cpage.component({
+			name: 'hello',
+			template: `
+				<div>
+					<h1 c-click="handelClick()">组件之间事件传播</h1>
+				</div>
+			`,
+			handelClick(){
+				this.$event.trigger('hello-event', 'helloMsg');
+			},
+			render(){
+
+			}
+		});
+		var myApp = Cpage.component({
+			name: 'myApp',
+			components: [hello],
+			template: `
+				<hello></hello>
+				<div>{{text}}</div>
+			`,
+			data: {
+				text: 'render...'
+			},
+			render(){
+				var self = this;
+				this.$event.listen('hello-event', function(msg){
+					self.$data('text', 'changed...');
+				});
+			}
+		});
+		Cpage.bootstrap("#app", myApp);
+	</script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>
