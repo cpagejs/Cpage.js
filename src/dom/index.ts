@@ -2,6 +2,7 @@ import targetDom from './targetDom';
 import nodeModel from './nodeModel';
 import eventModel from './eventModel';
 import moveModel from './moveModel';
+import statusModel from './moveModel';
 import { applyMixins } from '../mixins';
 
 // dom操作
@@ -12,7 +13,7 @@ class DomAction extends targetDom {
     }
 }
 
-applyMixins(DomAction, [nodeModel, eventModel, moveModel]);
+applyMixins(DomAction, [nodeModel, eventModel, moveModel, statusModel]);
 
 const Dom = function(selector){
     const dom = new DomAction(selector);

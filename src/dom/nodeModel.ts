@@ -67,6 +67,10 @@ export default class nodeModel extends targetDom {
         }
     }
 
+    /**
+     * 获取，设置元素宽度
+     * @param str 
+     */
     public width(str?:string){
         if(str && Util.type(str) != 'string'){
             return;
@@ -82,6 +86,10 @@ export default class nodeModel extends targetDom {
         return this;
     }
 
+     /**
+     * 获取，设置元素高度
+     * @param str 
+     */
     public height(str?:string){
         if(str && Util.type(str) != 'string'){
             return;
