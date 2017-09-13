@@ -2,7 +2,7 @@ import targetDom from './targetDom';
 import nodeModel from './nodeModel';
 import eventModel from './eventModel';
 import moveModel from './moveModel';
-import statusModel from './moveModel';
+import statusModel from './statusModel';
 import { applyMixins } from '../mixins';
 
 // dom操作
