@@ -151,4 +151,48 @@ export default class nodeModel extends targetDom {
 		return this;
     }
 
+    /**
+     * 给节点添加class
+     * @param name 
+     */
+    public addClass(name){
+        if(name && Util.type(name) != 'string'){
+            return;
+        }
+        for(let i of this.els){
+            i.classList.add(name)
+         }
+         return this;
+    }
+
+    /**
+     * 删除节点的class
+     * @param name 
+     */
+    public removeClass(name){
+        if(name && Util.type(name) != 'string'){
+            return;
+        }
+        for(let i of this.els){
+            i.classList.remove(name)
+        }
+        return this;
+    }
+
+    /**
+     * 切换class
+     */
+    public toggleClass(name){
+        if(name && Util.type(name) != 'string'){
+            return;
+        }
+        for(let i of this.els){
+            if(i.classList.toggle(name)){
+                return true;
+            }else {
+                return false;
+            }
+         }
+    }
+
 }

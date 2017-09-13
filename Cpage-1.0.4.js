@@ -100,7 +100,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return res;
 	    };
 	});
-	var CPage = (function () {
+	var CPage = /** @class */ (function () {
 	    function CPage() {
 	        this.CList = [];
 	        this.id = 0;
@@ -210,14 +210,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            r.componentToDom();
 	        }
 	    };
-	    CPage.version = '1.0.2';
+	    CPage.version = '1.0.4';
 	    return CPage;
 	}());
 	exports.default = CPage;
 	/**
 	 * es6模式构建组件
 	 */
-	var Component = (function () {
+	var Component = /** @class */ (function () {
 	    function Component() {
 	        this.components = [];
 	        this.name = '';
@@ -278,7 +278,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var handelType_1 = __webpack_require__(6);
 	var handelCoding_1 = __webpack_require__(7);
 	var $log = __webpack_require__(2);
-	var util = (function () {
+	var util = /** @class */ (function () {
 	    function util() {
 	    }
 	    /**
@@ -867,7 +867,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	"use strict";
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var $log = __webpack_require__(2);
-	var HandelType = (function () {
+	var HandelType = /** @class */ (function () {
 	    function HandelType() {
 	    }
 	    /**
@@ -968,7 +968,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 	Object.defineProperty(exports, "__esModule", { value: true });
-	var HandelCoding = (function () {
+	var HandelCoding = /** @class */ (function () {
 	    function HandelCoding() {
 	    }
 	    /**
@@ -1088,7 +1088,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var ID = 'c-data-id';
 	var ID_FOR = 'c-for-id';
 	var ID_REPEAT = 'c-repeat-id';
-	var renderComponents = (function () {
+	var renderComponents = /** @class */ (function () {
 	    function renderComponents(selector, root, CList) {
 	        this.selector = selector;
 	        this.root = root;
@@ -2217,7 +2217,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var util_1 = __webpack_require__(3);
 	var $log = __webpack_require__(2);
-	var HandelDom = (function () {
+	var HandelDom = /** @class */ (function () {
 	    function HandelDom() {
 	        this.BOOLEAN_ATTRS = {
 	            selected: true
@@ -2533,7 +2533,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var $log = __webpack_require__(2);
 	var util_1 = __webpack_require__(3);
 	var parse_1 = __webpack_require__(11);
-	var ParseTpl = (function () {
+	var ParseTpl = /** @class */ (function () {
 	    function ParseTpl(text, data, props) {
 	        this.text = text;
 	        this.data = data;
@@ -2629,7 +2629,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var pipe_1 = __webpack_require__(19);
 	var ps = new pipe_1.default();
 	var util_1 = __webpack_require__(3);
-	var Parse = (function () {
+	var Parse = /** @class */ (function () {
 	    function Parse() {
 	        this.pipes = ps.pipes;
 	    }
@@ -2833,7 +2833,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * 此法解析器，用于解析{{a + b}} 之类的插值运算
 	 */
-	var Lexer = (function () {
+	var Lexer = /** @class */ (function () {
 	    function Lexer() {
 	        this.index = 0;
 	        this.now = undefined;
@@ -3059,7 +3059,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var astBuilder_1 = __webpack_require__(15);
 	var astCompile_1 = __webpack_require__(17);
-	var Parser = (function () {
+	var Parser = /** @class */ (function () {
 	    function Parser(lexer, pipes) {
 	        this.lexer = lexer;
 	        this.astBuilder = new astBuilder_1.default(this.lexer);
@@ -3095,7 +3095,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     true_value: { type: 'ASTBuilder.MetaData', value: 1 },
 	     error_value: { type: 'ASTBuilder.MetaData', value: 0 } } }]
 	 */
-	var ASTBuilder = (function () {
+	var ASTBuilder = /** @class */ (function () {
 	    function ASTBuilder(lexer) {
 	        this.lexer = lexer;
 	        this.tokens = [];
@@ -3545,7 +3545,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var K = __webpack_require__(18);
 	var util_1 = __webpack_require__(3);
 	var ps = {}; //管道集合
-	var ASTCompile = (function () {
+	var ASTCompile = /** @class */ (function () {
 	    function ASTCompile(astBuilder, pipes) {
 	        this.astBuilder = astBuilder;
 	        this.state = {
@@ -4045,7 +4045,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * 执行管道过滤操作
 	 */
-	var Pipe = (function () {
+	var Pipe = /** @class */ (function () {
 	    function Pipe() {
 	        this.pipes = {};
 	    }
@@ -4117,7 +4117,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var HandelEventer_1 = __webpack_require__(21);
 	var util_1 = __webpack_require__(3);
-	var HandelData = (function () {
+	var HandelData = /** @class */ (function () {
 	    function HandelData() {
 	        this.data = {};
 	        this.name = '';
@@ -4161,7 +4161,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 	Object.defineProperty(exports, "__esModule", { value: true });
-	var HandelEventer = (function () {
+	var HandelEventer = /** @class */ (function () {
 	    function HandelEventer() {
 	        this.eventList = {};
 	    }
@@ -4229,7 +4229,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * 组件事件监听函数
 	 */
-	var HandelEvent = (function () {
+	var HandelEvent = /** @class */ (function () {
 	    function HandelEvent() {
 	    }
 	    /**
@@ -4261,7 +4261,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	"use strict";
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var parseHttp_1 = __webpack_require__(24);
-	var Http = (function () {
+	var Http = /** @class */ (function () {
 	    function Http() {
 	    }
 	    /**
@@ -4366,7 +4366,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var store_1 = __webpack_require__(26);
 	var store = new store_1.default();
-	var Router = (function () {
+	var Router = /** @class */ (function () {
 	    function Router(url, routers) {
 	        this.url = url;
 	        this.routers = this._parseRouters(routers);
@@ -4486,7 +4486,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * 数据存储解析服务
 	 */
-	var Store = (function () {
+	var Store = /** @class */ (function () {
 	    function Store(moduleName) {
 	        if (moduleName === void 0) { moduleName = 'Cpage'; }
 	        this.app = loader.module(moduleName, []);
@@ -4553,7 +4553,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var $log = __webpack_require__(2);
 	var moduleNames = {};
-	var Loader = (function () {
+	var Loader = /** @class */ (function () {
 	    function Loader() {
 	        this.modules = {
 	            name: '',
@@ -4668,7 +4668,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var SPACE_REG = /^\s*(\S+)\s*$/;
 	// 处理注释
 	var COMMENTS_REG = /(\/\*.*?\*\/)|(\/\/$)/mg;
-	var Injector = (function () {
+	var Injector = /** @class */ (function () {
 	    function Injector() {
 	    }
 	    /**
@@ -4989,16 +4989,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	var nodeModel_1 = __webpack_require__(32);
 	var eventModel_1 = __webpack_require__(33);
 	var moveModel_1 = __webpack_require__(34);
+	var statusModel_1 = __webpack_require__(36);
 	var mixins_1 = __webpack_require__(5);
 	// dom操作
-	var DomAction = (function (_super) {
+	var DomAction = /** @class */ (function (_super) {
 	    __extends(DomAction, _super);
 	    function DomAction(selector) {
 	        return _super.call(this, selector) || this;
 	    }
 	    return DomAction;
 	}(targetDom_1.default));
-	mixins_1.applyMixins(DomAction, [nodeModel_1.default, eventModel_1.default, moveModel_1.default]);
+	mixins_1.applyMixins(DomAction, [nodeModel_1.default, eventModel_1.default, moveModel_1.default, statusModel_1.default]);
 	var Dom = function (selector) {
 	    var dom = new DomAction(selector);
 	    return dom;
@@ -5015,7 +5016,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * 公共方法
 	 */
-	var targetDom = (function () {
+	var targetDom = /** @class */ (function () {
 	    function targetDom(selector) {
 	        this.elements = document.querySelectorAll(selector);
 	        this.els = this._getEles(this.elements);
@@ -5059,7 +5060,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var targetDom_1 = __webpack_require__(31);
 	var util_1 = __webpack_require__(3);
 	// 操作dom节点
-	var nodeModel = (function (_super) {
+	var nodeModel = /** @class */ (function (_super) {
 	    __extends(nodeModel, _super);
 	    function nodeModel(selector) {
 	        return _super.call(this, selector) || this;
@@ -5124,6 +5125,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 	    };
+	    /**
+	     * 获取，设置元素宽度
+	     * @param str
+	     */
 	    nodeModel.prototype.width = function (str) {
 	        if (str && util_1.default.type(str) != 'string') {
 	            return;
@@ -5139,6 +5144,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return this;
 	    };
+	    /**
+	    * 获取，设置元素高度
+	    * @param str
+	    */
 	    nodeModel.prototype.height = function (str) {
 	        if (str && util_1.default.type(str) != 'string') {
 	            return;
@@ -5202,6 +5211,51 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return this;
 	    };
+	    /**
+	     * 给节点添加class
+	     * @param name
+	     */
+	    nodeModel.prototype.addClass = function (name) {
+	        if (name && util_1.default.type(name) != 'string') {
+	            return;
+	        }
+	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
+	            var i = _a[_i];
+	            i.classList.add(name);
+	        }
+	        return this;
+	    };
+	    /**
+	     * 删除节点的class
+	     * @param name
+	     */
+	    nodeModel.prototype.removeClass = function (name) {
+	        if (name && util_1.default.type(name) != 'string') {
+	            return;
+	        }
+	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
+	            var i = _a[_i];
+	            i.classList.remove(name);
+	        }
+	        return this;
+	    };
+	    /**
+	     * 切换class
+	     */
+	    nodeModel.prototype.toggleClass = function (name) {
+	        if (name && util_1.default.type(name) != 'string') {
+	            return;
+	        }
+	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
+	            var i = _a[_i];
+	            if (i.classList.toggle(name)) {
+	                return true;
+	            }
+	            else {
+	                return false;
+	            }
+	        }
+	    };
 	    return nodeModel;
 	}(targetDom_1.default));
 	exports.default = nodeModel;
@@ -5226,7 +5280,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var targetDom_1 = __webpack_require__(31);
 	var util_1 = __webpack_require__(3);
 	// 事件的操作
-	var eventModel = (function (_super) {
+	var eventModel = /** @class */ (function (_super) {
 	    __extends(eventModel, _super);
 	    function eventModel(selector) {
 	        return _super.call(this, selector) || this;
@@ -5333,7 +5387,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	})();
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var targetDom_1 = __webpack_require__(31);
-	var moveModel = (function (_super) {
+	var moveModel = /** @class */ (function (_super) {
 	    __extends(moveModel, _super);
 	    function moveModel(selector) {
 	        return _super.call(this, selector) || this;
@@ -5442,6 +5496,83 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	};
 	exports.default = Cookie;
+
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || (function () {
+	    var extendStatics = Object.setPrototypeOf ||
+	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+	    return function (d, b) {
+	        extendStatics(d, b);
+	        function __() { this.constructor = d; }
+	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	    };
+	})();
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var targetDom_1 = __webpack_require__(31);
+	var util_1 = __webpack_require__(3);
+	// 操作dom节点
+	var statusModel = /** @class */ (function (_super) {
+	    __extends(statusModel, _super);
+	    function statusModel(selector) {
+	        return _super.call(this, selector) || this;
+	    }
+	    // 判断节点是否拥有属性
+	    statusModel.prototype.hasAttrs = function () {
+	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
+	            var i = _a[_i];
+	            if (i.hasAttributes()) {
+	                return true;
+	            }
+	            else {
+	                return false;
+	            }
+	        }
+	    };
+	    /**
+	     * 判断节点是否有某个属性
+	     * @param attr 属性名
+	     */
+	    statusModel.prototype.hasAttr = function (attr) {
+	        if (attr && util_1.default.type(attr) != 'string') {
+	            return;
+	        }
+	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
+	            var i = _a[_i];
+	            if (i.hasAttribute(attr)) {
+	                return true;
+	            }
+	            else {
+	                return false;
+	            }
+	        }
+	    };
+	    /**
+	     * 判断节点是否有某个class
+	     * @param name class名称
+	     */
+	    statusModel.prototype.hasClass = function (name) {
+	        if (name && util_1.default.type(name) != 'string') {
+	            return;
+	        }
+	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
+	            var i = _a[_i];
+	            if (i.classList.contains(name)) {
+	                return true;
+	            }
+	            else {
+	                return false;
+	            }
+	        }
+	    };
+	    return statusModel;
+	}(targetDom_1.default));
+	exports.default = statusModel;
 
 
 /***/ })

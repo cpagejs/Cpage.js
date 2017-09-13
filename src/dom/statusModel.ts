@@ -9,7 +9,7 @@ export default class statusModel extends targetDom {
     }
 
     // 判断节点是否拥有属性
-    hasAttrs(){
+    public hasAttrs(){
         for(let i of this.els){
             if(i.hasAttributes()){
                 return true;
@@ -19,7 +19,14 @@ export default class statusModel extends targetDom {
          }
     }
 
-    hasAttr(attr){
+    /**
+     * 判断节点是否有某个属性
+     * @param attr 属性名
+     */
+    public hasAttr(attr){
+        if(attr && Util.type(attr) != 'string'){
+            return;
+        }
         for(let i of this.els){
            if(i.hasAttribute(attr)){
                return true;
@@ -27,5 +34,22 @@ export default class statusModel extends targetDom {
                return false;
            }
         }
+    }
+
+    /**
+     * 判断节点是否有某个class
+     * @param name class名称
+     */
+    public hasClass(name){
+        if(name && Util.type(name) != 'string'){
+            return;
+        }
+        for(let i of this.els){
+            if(i.classList.contains(name)){
+                return true;
+            }else {
+                return false;
+            }
+         }
     }
 }

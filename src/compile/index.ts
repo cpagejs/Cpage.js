@@ -33,7 +33,7 @@ export  default class CPage {
     CList = [];
     id = 0;
 
-    static version = '1.0.2';
+    static version = '1.0.4';
 
     constructor(){
         this.id = 0;
