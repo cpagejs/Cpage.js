@@ -63,7 +63,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var store_1 = __webpack_require__(26);
 	var Store = new store_1.default('user');
 	exports.Store = Store;
-	var cookie_1 = __webpack_require__(35);
+	var cookie_1 = __webpack_require__(36);
 	exports.Cookie = cookie_1.default;
 	exports.default = compile_1.default;
 	window.Cpage = new compile_1.default();
@@ -210,7 +210,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            r.componentToDom();
 	        }
 	    };
-	    CPage.version = '1.0.4';
+	    CPage.version = '1.0.5';
 	    return CPage;
 	}());
 	exports.default = CPage;
@@ -4949,6 +4949,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (util_1.default.type(component.props) != 'object') {
 	            $log.error('组件' + component.name + '的props属性应为对象！');
 	        }
+	        // 验证type类型
+	        console.log(Object.entries(component.props));
+	        Object.entries(component.props).forEach(function (v) {
+	            if (util_1.default.type(v[1]['default']) != v[1]['type']) {
+	                $log.error('组件' + component.name + 'props属性中元素' + v[0] + '的default值非' + v[1]['type'] + '类型！');
+	            }
+	        });
 	    }
 	    // 验证组件props方法
 	    if (component.beforeRender) {
@@ -4989,7 +4996,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var nodeModel_1 = __webpack_require__(32);
 	var eventModel_1 = __webpack_require__(33);
 	var moveModel_1 = __webpack_require__(34);
-	var statusModel_1 = __webpack_require__(36);
+	var statusModel_1 = __webpack_require__(35);
 	var mixins_1 = __webpack_require__(5);
 	// dom操作
 	var DomAction = /** @class */ (function (_super) {
@@ -5439,67 +5446,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 35 */
-/***/ (function(module, exports) {
-
-	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
-	var Cookie = {
-	    // 判断cookie是否可用
-	    support: function () {
-	        if (!(document.cookie || navigator.cookieEnabled))
-	            return false;
-	        return true;
-	    },
-	    // 添加cookie
-	    set: function (name, value, config) {
-	        // config = {hours, path, domain, secure}
-	        var data = name + "=" + encodeURIComponent(value);
-	        console.log(123);
-	        if (config && config.hours != undefined) {
-	            var d = new Date();
-	            d.setHours(d.getHours() + config.hours);
-	            data += "; expires=" + d.toUTCString();
-	        }
-	        data += (config && config.path) ? ("; path=" + config.path) : "";
-	        data += (config && config.domain) ? ("; domain=" + config.domain) : "";
-	        data += (config && config.secure) ? ("; secure=" + config.secure) : "";
-	        document.cookie = data;
-	    },
-	    // 查询 cookie
-	    get: function (name) {
-	        var len = arguments.length;
-	        if (len == 0) {
-	            var cs = document.cookie, arr = [], arr2 = [], obj = {};
-	            arr = cs.split(';');
-	            // console.log(arr);
-	            for (var i = 0; i < arr.length; i++) {
-	                var a = arr[i].split('=');
-	                var a1 = [a[0].trim(), decodeURIComponent(a[1])];
-	                arr2.push(a1);
-	            }
-	            return JSON.stringify(arr2);
-	        }
-	        else if (len == 1) {
-	            var reg = eval("/(?:^|;\\s*)" + name + "=([^=]+)(?:;|$)/");
-	            return reg.test(document.cookie) ? decodeURIComponent(RegExp.$1) : "";
-	        }
-	    },
-	    // 删除 cookie
-	    remove: function (name, path) {
-	        if (arguments.length == 0) {
-	            var all = this.get();
-	            for (var i = 0; i < all.length; i++) {
-	                this.set(all[i][0], "", -1);
-	            }
-	        }
-	        this.set(name, path || '', { "hours": -1 });
-	    }
-	};
-	exports.default = Cookie;
-
-
-/***/ }),
-/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5573,6 +5519,67 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return statusModel;
 	}(targetDom_1.default));
 	exports.default = statusModel;
+
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var Cookie = {
+	    // 判断cookie是否可用
+	    support: function () {
+	        if (!(document.cookie || navigator.cookieEnabled))
+	            return false;
+	        return true;
+	    },
+	    // 添加cookie
+	    set: function (name, value, config) {
+	        // config = {hours, path, domain, secure}
+	        var data = name + "=" + encodeURIComponent(value);
+	        console.log(123);
+	        if (config && config.hours != undefined) {
+	            var d = new Date();
+	            d.setHours(d.getHours() + config.hours);
+	            data += "; expires=" + d.toUTCString();
+	        }
+	        data += (config && config.path) ? ("; path=" + config.path) : "";
+	        data += (config && config.domain) ? ("; domain=" + config.domain) : "";
+	        data += (config && config.secure) ? ("; secure=" + config.secure) : "";
+	        document.cookie = data;
+	    },
+	    // 查询 cookie
+	    get: function (name) {
+	        var len = arguments.length;
+	        if (len == 0) {
+	            var cs = document.cookie, arr = [], arr2 = [], obj = {};
+	            arr = cs.split(';');
+	            // console.log(arr);
+	            for (var i = 0; i < arr.length; i++) {
+	                var a = arr[i].split('=');
+	                var a1 = [a[0].trim(), decodeURIComponent(a[1])];
+	                arr2.push(a1);
+	            }
+	            return JSON.stringify(arr2);
+	        }
+	        else if (len == 1) {
+	            var reg = eval("/(?:^|;\\s*)" + name + "=([^=]+)(?:;|$)/");
+	            return reg.test(document.cookie) ? decodeURIComponent(RegExp.$1) : "";
+	        }
+	    },
+	    // 删除 cookie
+	    remove: function (name, path) {
+	        if (arguments.length == 0) {
+	            var all = this.get();
+	            for (var i = 0; i < all.length; i++) {
+	                this.set(all[i][0], "", -1);
+	            }
+	        }
+	        this.set(name, path || '', { "hours": -1 });
+	    }
+	};
+	exports.default = Cookie;
 
 
 /***/ })

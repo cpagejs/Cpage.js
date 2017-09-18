@@ -146,6 +146,8 @@ es6语法
 import { Dom } from 'cpage';
 
 Dom('body').css('width')
+Dom('body').width('100px')
+Dom('body').hasClass('dom')
 ```
 
 ## cookie操作
