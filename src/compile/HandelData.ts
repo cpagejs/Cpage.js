@@ -1,6 +1,9 @@
 import Eventer from '../util/HandelEventer';
 import Util from '../util';
 
+/**
+ * 监听组件的data数据变化
+ */
 class HandelData {
     private data;
     private name;

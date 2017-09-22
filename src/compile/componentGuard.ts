@@ -69,7 +69,6 @@ export default function componentGuard(component){
             $log.error('组件'+component.name + '的props属性应为对象！');
         }
         // 验证type类型
-        console.log(Object.entries(component.props))
         Object.entries(component.props).forEach(v=>{
             if(Util.type(v[1]['default']) != v[1]['type']){
                 $log.error('组件'+component.name + 'props属性中元素'+ v[0] +'的default值非'+v[1]['type']+'类型！');

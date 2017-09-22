@@ -1,4 +1,5591 @@
-!function(t,e){if("object"==typeof exports&&"object"==typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var n=e();for(var r in n)("object"==typeof exports?exports:t)[r]=n[r]}}(this,function(){return function(t){function e(r){if(n[r])return n[r].exports;var o=n[r]={exports:{},id:r,loaded:!1};return t[r].call(o.exports,o,o.exports,e),o.loaded=!0,o.exports}var n={};return e.m=t,e.c=n,e.p="",e(0)}([function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=n(20);e.Component=r.Component;var o=n(12);e.Dom=o.default;var i=n(4),a=new i.default("user");e.Store=a;var u=n(16);e.Cookie=u.default,e.default=r.default,window.Cpage=new r.default},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=n(36),o=new r.util;e.default=o},function(t,e){"use strict";function n(t){console.log(t)}function r(t){console.log(t)}function o(t){console.log(t)}function i(t){throw new Error(t)}Object.defineProperty(e,"__esModule",{value:!0}),e.log=n,e.info=r,e.warn=o,e.error=i},function(t,e){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=function(){function t(t){this.elements=document.querySelectorAll(t),this.els=this._getEles(this.elements)}return t.prototype._getEles=function(t){if(t&&t.length)return t},t.prototype.each=function(t,e){for(var n=0;n<t.length;n++)e(t[n],n)},t}();e.default=n},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=n(10),o=n(33),i=new r.default,a=new o.default,u=function(){function t(t){void 0===t&&(t="Cpage"),this.app=i.module(t,[]),this.ins=function(){return a.inject([t])}}return t.prototype.data=function(t,e){this.app.data(t,e)},t.prototype.has=function(t){return this.ins().has(t)},t.prototype.get=function(t){return this.ins().get(t)},t.prototype.provider=function(t,e){this.app.provider(t,e)},t.prototype.factory=function(t,e){this.app.factory(t,e)},t.prototype.service=function(t,e){this.app.service(t,e)},t}();e.default=u},function(t,e){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=function(){function t(){this.eventList={}}return t.prototype.trigger=function(t,e){var n=Array.prototype.shift.call(arguments),r=this.eventList[n];if(!r||0===r.length)return!1;for(var o,i=0;o=r[i++];)o.apply(this,arguments)},t.prototype.listen=function(t,e){this.eventList[t]||(this.eventList[t]=[]),this.eventList[t].push(e)},t.prototype.remove=function(t,e){var n=this.eventList[t];if(!n)return!1;if(e)for(var r=n.length-1,o=n[r];r>=0;r--)o===e&&n.splice(r,1);else n&&(n.length=0)},t}(),r=new n;e.default=r},function(t,e){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.dataType={1:"ASTBuilder.Init",2:"ASTBuilder.MetaData",3:"ASTBuilder.Array",4:"ASTBuilder.Object",5:"ASTBuilder.Identifier",6:"ASTBuilder.This",7:"ASTBuilder.Member",8:"ASTBuilder.Function",9:"ASTBuilder.Assignment",10:"ASTBuilder.Unary",11:"ASTBuilder.Binary",12:"ASTBuilder.Logical",13:"ASTBuilder.Teranry"},e.ast_init={type:e.dataType[1],body:{}},e.ast_constant={type:e.dataType[2],value:void 0},e.ast_array={type:e.dataType[3],value:void 0},e.ast_object={type:e.dataType[4],value:void 0},e.ast_json={type:e.dataType[5],key:void 0,value:void 0},e.ast_identifier={type:e.dataType[5],value:void 0},e.ast_this={type:e.dataType[6]},e.ast_member={type:e.dataType[7],object:void 0,property:void 0,computed:void 0},e.ast_function={type:e.dataType[8],callee:void 0,arguments:void 0,pipe:Boolean},e.ast_assignment={type:e.dataType[9],left:void 0,right:void 0},e.ast_unary={type:e.dataType[10],operator:"+",value:void 0},e.ast_binary={type:e.dataType[11],left:void 0,operator:void 0,right:void 0},e.ast_logical={type:e.dataType[12],left:void 0,operator:void 0,right:void 0},e.ast_teranry={type:e.dataType[13],boolean_expression:void 0,true_value:void 0,error_value:void 0}},function(t,e){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n={"'":"'",'"':'"',"&":"&","\\":"\\",n:"\n",r:"\r",t:"\t",b:"\b",f:"\f"};e.SPECIALS=n;var r={null:null,true:!0,false:!1,undefined:void 0,this:void 0};e.LETTER=r;var o={"+":!0,"!":!0,"-":!0,"*":!0,"%":!0,"/":!0,"=":!0,">":!0,"<":!0,">=":!0,"<=":!0,"==":!0,"===":!0,"!=":!0,"!==":!0,"&&":!0,"||":!0,"|":!0};e.OPERATORS=o},function(t,e){"use strict";function n(){for(var t=[],e=0;e<arguments.length;e++)t[e]=arguments[e];return function(e){Object.assign.apply(Object,[e.prototype].concat(t))}}function r(t,e){e.forEach(function(e){Object.getOwnPropertyNames(e.prototype).forEach(function(n){t.prototype[n]=e.prototype[n]})})}Object.defineProperty(e,"__esModule",{value:!0}),e.mixins=n,e.applyMixins=r},function(t,e,n){"use strict";function r(){return function(t,e){var n;switch(l.default.type(e)){case"function":n=e;break;case"string":case"number":case"boolean":case"null":case"undefined":case"object":n=o(e);break;default:return t}return t.filter(n)}}function o(t){return function(e){return a(e,t,i)}}function i(t,e){return"null"==l.default.type(t)||"null"==l.default.type(e)?t===e:"undefined"!=l.default.type(t)&&(t=(""+t).toLowerCase(),e=(""+e).toLowerCase(),t.includes(e))}function a(t,e,n){if("string"==l.default.type(e)&&e.startsWith("!"))return!a(t,e.substring(1),n);if("object"==l.default.type(t)){if("object"==l.default.type(e))for(var r in e)return a(t[r],e[r],n);var o=l.default.objVal(t);return o.some(function(t){return a(t,e,n)})}return n(t,e)}Object.defineProperty(e,"__esModule",{value:!0});var u=n(29),s=n(30),c=n(31),p=new c.default,l=n(1),f=function(){function t(){this.pipes=p.pipes}return t.prototype.register=function(t,e){return p.register(t,e),this},t.prototype.pipe=function(t){return p.pipe(t)},t.prototype.parse=function(t){function e(t,e){switch(l.default.type(t)){case"string":var r=new u.default,o=new s.default(r,e),i=!1;":"==t.charAt(0)&&":"==t.charAt(1)&&(i=!0,t=t.substring(2));var a=o.parse(t);return a.constant&&(a.$$handelWatch=n.constantHandelWatch),i&&(a.$$handelWatch=a.literal?n.oneTimeLiteralHandelWatch:n.oneTimeHandelWatch),a.inputs&&(a.$$handelWatch=n.inputsHandelWatch),a;case"function":return t}}var n=this;return e(t,this.pipes)},t.prototype.constantHandelWatch=function(t,e,n,r){var o=t.$watch(function(){return r(t)},function(t,n,r){"function"==l.default.type(e)&&e.apply(this,arguments)},n);return o},t.prototype.oneTimeHandelWatch=function(t,e,n,r){var o,i=t.$watch(function(){return r(t)},function(t,n,r){o=t,"function"==l.default.type(e)&&e.apply(this,arguments),"undefined"!=l.default.type(t)&&r.$afterDigest(function(){"undefined"!=l.default.type(o)&&i()})},n);return i},t.prototype.oneTimeLiteralHandelWatch=function(t,e,n,r){var o,i=t.$watch(function(){return r(t)},function(t,n,r){o=t,"function"==l.default.type(e)&&e.apply(this,arguments),"undefined"!=l.default.type(t)&&r.$afterDigest(function(){"undefined"!=l.default.type(o)&&i()})},n);return i},t.prototype.inputsHandelWatch=function(t,e,n,r){r.inputs;return t.$watch(function(){},e,n)},t}(),d=new f;e.default=d;var h=new f;h.register("filter",r)},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=n(2),o={},i=function(){function t(){this.modules={name:"",requires:[]}}return t.prototype.clear=function(){this.modules={}},t.prototype.module=function(t,e,n){var r={};return e?this.modules=this.$$set(t,e,r,n):this.modules=this.$$get(t,r),this.modules},t.prototype.$$set=function(t,e,n,i){"hasOwnProperty"==t&&r.error("hasOwnProperty不能用于键名");var a=[],u=[],s=function(t,e,n,r){return void 0===n&&(n="push"),void 0===r&&(r=a),function(){return r[n]([t,e,arguments]),c}},c={name:t,requires:e,data:s("$provider","data","unshift"),provider:s("$provider","provider"),factory:s("$provider","factory"),value:s("$provider","value"),service:s("$provider","service"),config:s("$injector","invoke","push",u),run:function(t){return c._runQueue.push(t),c},pipe:s("$pipeProvider","register"),_invokeQueue:a,_configQueue:u,_runQueue:[]};return i&&c.config(i),this.modules=o[t]=c,c},t.prototype.$$get=function(t,e){return o.hasOwnProperty(t)?o[t]:void r.error("名称为"+t+"的module不存在！")},t}();e.default=i},function(t,e,n){"use strict";var r=this&&this.__extends||function(){var t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)e.hasOwnProperty(n)&&(t[n]=e[n])};return function(e,n){function r(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(r.prototype=n.prototype,new r)}}();Object.defineProperty(e,"__esModule",{value:!0});var o=n(3),i=n(1),a=function(t){function e(e){return t.call(this,e)||this}return r(e,t),e.prototype.on=function(t,e){this.each(this.els,function(n,r){n.addEventListener(t,e,!1)})},e.prototype.off=function(t,e){this.each(this.els,function(n,r){n.removeEventListener(t,e,!1)})},e.prototype.hover=function(t,e){for(var n=0,r=this.els;n<r.length;n++){var o=r[n];if("function"!=i.default.type(t))throw new Error("hover方法：没有传递回调函数");o.addEventListener("mouseover",t,!1),"function"==i.default.type(e)&&o.addEventListener("mouseout",t,!1)}return this},e.prototype.click=function(t){for(var e=0,n=this.els;e<n.length;e++){var r=n[e];"function"==i.default.type(t)&&r.addEventListener("click",t,!1)}return this},e.prototype.toggle=function(){for(var t=0,e=this.els;t<e.length;t++){var n=e[t];!function(t,e){var n=0;t.addEventListener("click",function(){e[n++%e.length].call(this)},!1)}(n,arguments)}return this},e.prototype.scroll=function(t){for(var e=0,n=this.els;e<n.length;e++){var r=n[e];"function"==i.default.type(t)&&r.addEventListener("scroll",t,!1)}return this},e.prototype.resize=function(t){for(var e=0,n=this.els;e<n.length;e++){var r=n[e],o=r.offsetLeft,a=r.offsetWidth,u=r.offsetTop,s=r.offsetHeight;window.onresize=function(){t(),o>=i.default.page().width-a&&(o=i.default.page().width-a),u>=i.default.page().height-s&&(u=i.default.page().height-s)}}return this},e}(o.default);e.default=a},function(t,e,n){"use strict";var r=this&&this.__extends||function(){var t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)e.hasOwnProperty(n)&&(t[n]=e[n])};return function(e,n){function r(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(r.prototype=n.prototype,new r)}}();Object.defineProperty(e,"__esModule",{value:!0});var o=n(3),i=n(14),a=n(11),u=n(13),s=n(15),c=n(8),p=function(t){function e(e){return t.call(this,e)||this}return r(e,t),e}(o.default);c.applyMixins(p,[i.default,a.default,u.default,s.default]);var l=function(t){var e=new p(t);return e};e.default=l},function(t,e,n){"use strict";var r=this&&this.__extends||function(){var t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)e.hasOwnProperty(n)&&(t[n]=e[n])};return function(e,n){function r(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(r.prototype=n.prototype,new r)}}();Object.defineProperty(e,"__esModule",{value:!0});var o=n(3),i=function(t){function e(e){return t.call(this,e)||this}return r(e,t),e.prototype.show=function(t){if(t&&"number"==typeof t)for(var e=function(e){setTimeout(function(){e.style.display="none"},t||500)},n=0,r=this.els;n<r.length;n++){var o=r[n];e(o)}else if(!t)for(var i=0,a=this.els;i<a.length;i++){var o=a[i];o.style.display="block"}return this},e.prototype.hide=function(t){if(t&&"number"==typeof t)for(var e=function(e){setTimeout(function(){e.style.display="block"},t||500)},n=0,r=this.els;n<r.length;n++){var o=r[n];e(o)}else if(!t)for(var i=0,a=this.els;i<a.length;i++){var o=a[i];o.style.display="none"}return this},e}(o.default);e.default=i},function(t,e,n){"use strict";var r=this&&this.__extends||function(){var t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)e.hasOwnProperty(n)&&(t[n]=e[n])};return function(e,n){function r(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(r.prototype=n.prototype,new r)}}();Object.defineProperty(e,"__esModule",{value:!0});var o=n(3),i=n(1),a=function(t){function e(e){return t.call(this,e)||this}return r(e,t),e.prototype.html=function(t){if(!t||"string"==i.default.type(t))return t?(this.each(this.els,function(e,n){e.innerHTML=t}),this):this.els[0].innerHTML},e.prototype.text=function(t){if(!t||"string"==i.default.type(t)){for(var e=0,n=this.els;e<n.length;e++){var r=n[e];if(0==arguments.length)return r.innerText||r.textContent;1==arguments.length&&(r.innerText?r.innerText=t:r.textContent=t)}return this}},e.prototype.css=function(t,e){if(!(t&&"string"!=i.default.type(t)||e&&"string"!=i.default.type(e)))for(var n=0,r=this.els;n<r.length;n++){var o=r[n];if(1==arguments.length)return window.getComputedStyle(o,null)[t];if(2==arguments.length)return o.style[t]=e,this}},e.prototype.width=function(t){if(!t||"string"==i.default.type(t)){for(var e=0,n=this.els;e<n.length;e++){var r=n[e];if(!t)return r.offsetWidth;r.style.width=t}return this}},e.prototype.height=function(t){if(!t||"string"==i.default.type(t)){for(var e=0,n=this.els;e<n.length;e++){var r=n[e];if(!t)return r.offsetHeight;r.style.height=t}return this}},e.prototype.attr=function(t,e){if("string"==i.default.type(t)&&(!e||"string"==i.default.type(e)))for(var n=0,r=this.els;n<r.length;n++){var o=r[n];if(1==arguments.length){if(o.hasAttribute(t))return o.getAttribute(t)}else if(2==arguments.length)return o.setAttribute(t,e),this}},e.prototype.val=function(t){if(!t||"string"==i.default.type(t)){for(var e=0,n=this.els;e<n.length;e++){var r=n[e];if(1==arguments.length){var o=r.getAttribute("value");r.setAttribute(o,t)}else if(0==arguments.length)return r.nodeName.match(/INPUT|TEXTAREA|SELECT|RADIO|CHECKBOX/)?r.value:r.getAttribute("value")}return this}},e.prototype.addClass=function(t){if(!t||"string"==i.default.type(t)){for(var e=0,n=this.els;e<n.length;e++){var r=n[e];r.classList.add(t)}return this}},e.prototype.removeClass=function(t){if(!t||"string"==i.default.type(t)){for(var e=0,n=this.els;e<n.length;e++){var r=n[e];r.classList.remove(t)}return this}},e.prototype.toggleClass=function(t){if(!t||"string"==i.default.type(t))for(var e=0,n=this.els;e<n.length;e++){var r=n[e];return!!r.classList.toggle(t)}},e}(o.default);e.default=a},function(t,e,n){"use strict";var r=this&&this.__extends||function(){var t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)e.hasOwnProperty(n)&&(t[n]=e[n])};return function(e,n){function r(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(r.prototype=n.prototype,new r)}}();Object.defineProperty(e,"__esModule",{value:!0});var o=n(3),i=n(1),a=function(t){function e(e){return t.call(this,e)||this}return r(e,t),e.prototype.hasAttrs=function(){for(var t=0,e=this.els;t<e.length;t++){var n=e[t];return!!n.hasAttributes()}},e.prototype.hasAttr=function(t){if(!t||"string"==i.default.type(t))for(var e=0,n=this.els;e<n.length;e++){var r=n[e];return!!r.hasAttribute(t)}},e.prototype.hasClass=function(t){if(!t||"string"==i.default.type(t))for(var e=0,n=this.els;e<n.length;e++){var r=n[e];return!!r.classList.contains(t)}},e}(o.default);e.default=a},function(module,exports){"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var Cookie={support:function(){return!(!document.cookie&&!navigator.cookieEnabled)},set:function(t,e,n){var r=t+"="+encodeURIComponent(e);if(console.log(123),n&&void 0!=n.hours){var o=new Date;o.setHours(o.getHours()+n.hours),r+="; expires="+o.toUTCString()}r+=n&&n.path?"; path="+n.path:"",r+=n&&n.domain?"; domain="+n.domain:"",r+=n&&n.secure?"; secure="+n.secure:"",document.cookie=r},get:function(name){var len=arguments.length;if(0==len){var cs=document.cookie,arr=[],arr2=[],obj={};arr=cs.split(";");for(var i=0;i<arr.length;i++){var a=arr[i].split("="),a1=[a[0].trim(),decodeURIComponent(a[1])];arr2.push(a1)}return JSON.stringify(arr2)}if(1==len){var reg=eval("/(?:^|;\\s*)"+name+"=([^=]+)(?:;|$)/");return reg.test(document.cookie)?decodeURIComponent(RegExp.$1):""}},remove:function(t,e){if(0==arguments.length)for(var n=this.get(),r=0;r<n.length;r++)this.set(n[r][0],"",-1);this.set(t,e||"",{hours:-1})}};exports.default=Cookie},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=n(5),o=n(1),i=function(){function t(){this.data={},this.name="",this.token=void 0,this.props={},this.componentStatus=""}return t.prototype.$data=function(t,e){var n=arguments.length;switch(n){case 0:return this.data;case 1:return this.data[t];case 2:var i=o.default.deepClone(this.data);this.data[t]=e;var a=this.data;r.default.trigger(t,o.default.clone({target:this.token,which:this.name,old:i,new:a,oldVal:i[t],newVal:a[t],props:void 0==this.props?{}:this.props,componentStatus:this.componentStatus}))}},t}(),a=new i;e.default=a},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=n(5),o=function(){function t(){}return t.prototype.trigger=function(t,e){r.default.trigger(t,e)},t.prototype.listen=function(t,e){r.default.listen(t,e)},t}(),i=new o;e.default=i},function(t,e,n){"use strict";function r(t){t.name&&(t.name&&"string"!=i.default.type(t.name)&&o.error("组件"+t.name+"的名称必须为字符串"),t.components&&"array"!=i.default.type(t.components)&&o.error("组件"+t.name+"的components属性应为数组！"),t.style&&"string"!=i.default.type(t.style)&&o.error("组件"+t.name+"的style属性应为字符！"),t.styleId&&("string"!=i.default.type(t.styleId)&&o.error("组件"+t.name+"的styleId属性应为字符！"),void 0==document.querySelector(t.styleId)&&o.error("节点"+t.styleId+"不存在")),t.template&&"string"!=i.default.type(t.template)&&o.error("组件"+t.name+"的template属性应为字符！"),t.templateId&&("string"!=i.default.type(t.templateId)&&o.error("组件"+t.name+"的templateId属性应为字符！"),void 0==document.querySelector(t.templateId)&&o.error("节点"+t.templateId+"不存在")),t.data&&"object"!=i.default.type(t.data)&&o.error("组件"+t.name+"的data属性应为对象！"),t.props&&("object"!=i.default.type(t.props)&&o.error("组件"+t.name+"的props属性应为对象！"),console.log(Object.entries(t.props)),Object.entries(t.props).forEach(function(e){i.default.type(e[1].default)!=e[1].type&&o.error("组件"+t.name+"props属性中元素"+e[0]+"的default值非"+e[1].type+"类型！")})),t.beforeRender&&"function"!=i.default.type(t.beforeRender)&&o.error("组件"+t.name+"的beforeRender属性应为函数！"),t.render&&"function"!=i.default.type(t.render)&&o.error("组件"+t.name+"的render属性应为函数！"))}Object.defineProperty(e,"__esModule",{value:!0});var o=n(2),i=n(1);e.default=r},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=n(2),o=n(1),i=n(22),a=n(19),u=n(4),s=new u.default;s.data("componentList",[]),s.service("component",function(){this.ensureOneInvokeComponent=function(t,e){for(var n={type:"yes"},r=[],o=[],i=0;i<e.length;i++)e[i].name==t&&r.push(t),o.push(e[i].name);return r.length>=2&&(n={type:"no",info:"只能有一个根组件，却发现"+r.length+"个"+t+"根组件"}),n}});var c=function(){function t(){this.CList=[],this.id=0,this.id=0}return t.bootstrap=function(t,e){function n(t,e){void 0===e&&(e=!1);var i=o.default.classToJson(t,e),u=i.componentJson;e&&(r=i.rootComponent),a.default(u),s.data("componentList",s.get("componentList").push(u)),u.components&&"array"==o.default.type(u.components)&&u.components.length&&u.components.forEach(function(t){n(t)})}var r={};n(e,!0);var u=new i.default(t,r,s.get("componentList"));u.componentToDom()},t.router=function(t){function e(t){"array"!=o.default.type(t)&&r.error("路由配置项需为数组形式")}e(t),t.forEach(function(t){var e=o.default.classToJson(t.component,!1);t.component=e.componentJson}),s.data("routerConfig",t)},t.prototype.directive=function(t,e){var n=e();n.id=this.id,this.CList.push(n),this.id++;var o=s.get("component").ensureOneInvokeComponent(t,this.CList);return"no"==o.type&&r.error(o.info),n},t.prototype.component=function(t){a.default(t);var e=o.default.deepClone(t);return Object.defineProperties(e,{isRoot:{value:!1,writable:!0},$el:{value:void 0,writable:!0},$props:{value:{},writable:!0}}),this.directive(t.name,function(){return e})},t.prototype.bootstrap=function(t,e){if("string"!=o.default.type(t)&&r.error(t+"应为字符串"),document.querySelector(t)||r.error("节点“"+t+"”不存在"),"object"!=o.default.type(e)&&r.error(e+"应为json对象"),2==arguments.length){a.default(e),e.name||r.error("找不到根组件的name属性"),s.data("rootComponent",e.name);var n=new i.default(t,e,this.CList);n.componentToDom()}},t.version="1.0.5",t}();e.default=c;var p=function(){function t(){this.components=[],this.name="",this.template="",this.data={},this.props={}}return t.prototype.render=function(){r.error("render方法必须被继承")},t}();e.Component=p},function(t,e,n){"use strict";function r(t,e,n){var r=new u(t,e,n);return r.tpl()}Object.defineProperty(e,"__esModule",{value:!0});var o=n(2),i=n(1),a=n(9),u=function(){function t(t,e,n){this.text=t,this.data=e,this.props=n}return t.prototype.combineData=function(t,e){if(void 0===t&&(t={}),void 0===e&&(e={}),"object"!=i.default.type(t)&&o.error("组件是属性data必须为对象"),"object"!=i.default.type(e)&&o.error("组件是属性props必须为对象"),i.default.isEmpty(e))return t;for(var n in e)t[n]=e[n].default;return t},t.prototype.tpl=function(){var t,e,n,r,o=this,u=0,s=[];if(void 0!=this.text){for(;u<this.text.length;){if(t=this.text.indexOf("{{",u),t!=-1&&(e=this.text.indexOf("}}",t+2)),t==-1||e==-1){s.push(this.text.substring(u));break}t!=u&&s.push(this.text.substring(u,t)),n=this.text.substring(t+2,e),r=a.default.parse(n),s.push(r),u=e+2}return s.reduce(function(t,e){return"function"==i.default.type(e)?t+o.expectNullUndefined(e(o.combineData(o.data,o.props))):t+e},"")}},t.prototype.expectNullUndefined=function(t){return"null"==i.default.type(t)||"undefined"==i.default.type(t)?"":"object"==typeof t?JSON.stringify(t):""+t},t}();e.default=r},function(t,e,n){"use strict";var r=this&&this.__awaiter||function(t,e,n,r){return new(n||(n=Promise))(function(o,i){function a(t){try{s(r.next(t))}catch(t){i(t)}}function u(t){try{s(r.throw(t))}catch(t){i(t)}}function s(t){t.done?o(t.value):new n(function(e){e(t.value)}).then(a,u)}s((r=r.apply(t,e||[])).next())})},o=this&&this.__generator||function(t,e){function n(t){return function(e){return r([t,e])}}function r(n){if(o)throw new TypeError("Generator is already executing.");for(;s;)try{if(o=1,i&&(a=i[2&n[0]?"return":n[0]?"throw":"next"])&&!(a=a.call(i,n[1])).done)return a;switch(i=0,a&&(n=[0,a.value]),n[0]){case 0:case 1:a=n;break;case 4:return s.label++,{value:n[1],done:!1};case 5:s.label++,i=n[1],n=[0];continue;case 7:n=s.ops.pop(),s.trys.pop();continue;default:if(a=s.trys,!(a=a.length>0&&a[a.length-1])&&(6===n[0]||2===n[0])){s=0;continue}if(3===n[0]&&(!a||n[1]>a[0]&&n[1]<a[3])){s.label=n[1];break}if(6===n[0]&&s.label<a[1]){s.label=a[1],a=n;break}if(a&&s.label<a[2]){s.label=a[2],s.ops.push(n);break}a[2]&&s.ops.pop(),s.trys.pop();continue}n=e.call(t,s)}catch(t){n=[6,t],i=0}finally{o=a=0}if(5&n[0])throw n[1];return{value:n[0]?n[1]:void 0,done:!0}}var o,i,a,u,s={label:0,sent:function(){if(1&a[0])throw a[1];return a[1]},trys:[],ops:[]};return u={next:n(0),throw:n(1),return:n(2)},"function"==typeof Symbol&&(u[Symbol.iterator]=function(){return this}),u};Object.defineProperty(e,"__esModule",{value:!0});var i=n(2),a=n(1),u=n(24),s=n(21),c=n(17),p=n(5),l=n(18),f=n(9),d=n(25),h=n(32),y=n(4),v=new y.default,m=/(x[\:\-_]|data[\:\-_])/i,g="c-data-id",b=function(){function t(t,e,n){this.selector=t,this.root=e,this.CList=n,this.CObj=this.listToObj(n),this.eventList=[],this.cRefList=[],this.showList=[],this.ifList=[],this.ifTpl={},this.cHtmlList=[],this.cForList=[],this.cRepeatList=[],this.cViewList=[],this.dataId=parseInt(a.default.now()),this.componentToken=[],this.componentNames=this.getComponentNameList(),this.componentAttrs={},this.templateId={},this.oneRootComponent=1,this.$router=void 0,this.$routerCache={}}return t.prototype.componentToDom=function(){function t(){return r(this,void 0,void 0,function(){return o(this,function(t){switch(t.label){case 0:return[4,e()];case 1:return t.sent(),[4,n()];case 2:return t.sent(),[4,i()];case 3:return t.sent(),[2]}})})}function e(){p=l.loopNodes(l.root.name,u.default.create(d),f)}function n(){l.root.template=p[0].outerHTML,l.root.isRoot=!0,l.templateId[p[0].getAttribute(g)]=p[0].outerHTML,l.loopComponents(f,l.root.data,l.root.components,l.root.name)}function i(){function t(){setTimeout(function(){function t(t){var e=t.component.name,n=t.delay||0;setTimeout(function(){l.cViewList.forEach(function(n){u.default.q(n.ele)&&(t.cache&&l.$routerCache.hasOwnProperty(e)?(u.default.q(n.ele).innerHTML=l.$routerCache[e],l.handelEventListener(l.CObj[e],u.default.q(n.ele).firstChild)):(u.default.q(n.ele).innerHTML="",u.default.q(n.ele).insertAdjacentHTML("afterbegin","<"+a.default._cameCase(e)+"></"+a.default._cameCase(e)+">"),l.loopNodes(e,u.default.q(n.ele).childNodes,[]),l.loopComponents([l.CObj[e]],l.CObj[n.which].data||{},[],n.which),setTimeout(function(){l.$routerCache[e]=u.default.q(a.default._cameCase(e)).outerHTML},0)))})},n)}if("complete"==window.document.readyState){var e=window.location.hash;if(""==e){var n=c();"object"==a.default.type(n)&&t(n)}else{var r=s(e.substr(1));void 0!=r&&t(r)}}window.addEventListener("hashchange",function(e){var n="";e.newURL.includes("/#")&&(n=e.newURL.split("/#")[1]);var r=s(n);void 0!=r&&t(r)},!1)},0)}v.has("routerConfig")&&t()}function s(t){var e=new h.default(t,v.get("routerConfig"));return l.$router=e,e.nowRouter}function c(){var t=void 0;return v.get("routerConfig").forEach(function(e){"/"==e.path&&(t=e)}),t}var p,l=this,f=[],d=u.default.wrapDom(this.theTpl(this.root),a.default._cameCase(this.root.name).toLowerCase());t()},t.prototype.theTpl=function(t){return(t.template?t.template.trim():void 0)||u.default.hasHtml(t.templateId)||u.default.hasHtmlUrl(t.templateUrl)},t.prototype.theStyle=function(t){function e(t){return void 0!=t&&{type:"string",result:t}}function n(t){return void 0!=u.default.q(t)&&{type:"id",result:t}}function r(t){return void 0!=t&&("object"==a.default.type(t)&&(t=t[0][1]),"array"==a.default.type(t)&&(t=t[1]),{type:"url",result:t})}return e(t.style)||n(t.styleId)||r(t.styleUrl)},t.prototype.loopNodes=function(t,e,n){for(var r=this,o=0;o<e.length;o++)if(1==e[o].nodeType){e[o].setAttribute("c-data-id",this.dataId);var i=this.getComponent(e[o],t);i.forEach(function(t){n&&n.push(a.default.deepClone(a.default.extend(r.CObj[t],{token:r.dataId})))}),this.dataId++,this.addDirectiveList(t,e[o]),e[o].childNodes&&e[o].childNodes.length&&this.loopNodes(t,e[o].childNodes,n)}return e},t.prototype.addDirectiveList=function(t,e){for(var n=0,r=e.attributes;n<r.length;n++){var o=this.normalizeDirective(r[n].name);if(o.match(/^cClick|cDbclick|cMouseover|cMousedown|cMouseup|cMousemove|cMouseout|cMouseleave|cBlur|cFocus|cChange|cInput|cDrag|cDragend|cDragenter|cDragleave|cDragover|cDragstart|cDrop|cFocus|cKeydown|cKeypress|cKeyup|cScroll|cSelect|cSubmit|cTtoggle|cResize|cWaiting|cProgress|cLoadstart|cDurationchange|cLoadedmetadata|cLoadeddata|cCanplay|cCanplaythrough|cPlay|cPause|cRef|cShow|cIf|cHtml|cFor|cRepeat|cView$/g))switch(o){case"cRef":this.cRefList.push({which:t,type:r[n].name.split("-")[1],fn:r[n].value,ele:"["+g+'="'+e.getAttribute(g)+'"]',id:e.getAttribute(g)});break;case"cShow":this.showList.push({which:t,type:r[n].name.split("-")[1],fn:r[n].value,ele:"["+g+'="'+e.getAttribute(g)+'"]',id:e.getAttribute(g),directive:o});var i=u.default.boolToDisplay(s.default(r[n].value,this.CObj[t].data,this.CObj[t].props));e.style.display=i;break;case"cIf":this.ifList.push({which:t,type:r[n].name.split("-")[1],fn:r[n].value,ele:"["+g+'="'+e.getAttribute(g)+'"]',id:e.getAttribute(g),directive:o,html:e.outerHTML});var a=s.default(r[n].value,this.CObj[t].data,this.CObj[t].props);"true"==a&&(e.style.display="none");break;case"cHtml":this.cHtmlList.push({which:t,type:r[n].name.split("-")[1],fn:r[n].value,ele:"["+g+'="'+e.getAttribute(g)+'"]',id:e.getAttribute(g),directive:o,html:e.outerHTML});break;case"cFor":this.cForList.push({which:t,type:r[n].name.split("-")[1],fn:r[n].value,ele:"["+g+'="'+e.getAttribute(g)+'"]',id:e.getAttribute(g),html:e.innerHTML});break;case"cRepeat":this.cRepeatList.push({which:t,type:r[n].name.split("-")[1],fn:r[n].value,ele:"["+g+'="'+e.getAttribute(g)+'"]',id:e.getAttribute(g)});break;case"cView":this.cViewList.push({which:t,type:r[n].name.split("-")[1],fn:r[n].value,ele:"["+g+'="'+e.getAttribute(g)+'"]',id:e.getAttribute(g)});break;default:this.eventList.push({which:t,type:r[n].name.split("-")[1],fn:r[n].value,ele:"["+g+'="'+e.getAttribute(g)+'"]',id:e.getAttribute(g)})}}},t.prototype.loopComponents=function(t,e,n,a){t.length&&void 0==n&&i.error("找不到组件为"+a+"的components属性");var u=this;t.forEach(function(t){function e(){return r(this,void 0,void 0,function(){var e;return o(this,function(n){switch(n.label){case 0:return[4,u.handelDataChange(t)];case 1:return n.sent(),[4,u.handelBeforeRender(t)];case 2:return e=n.sent(),[4,u.handelAfterRender(e,t)];case 3:return n.sent(),[2]}})})}void 0!=t&&(u.compareChildComponentAndInjectComponents(t.name,n),t.$data=c.default.$data,t.$http=d.default,t.$event=l.default,t.$router=u.$router,e())})},t.prototype.handelBeforeRender=function(t){return t.beforeRender&&(t.$el=void 0,t.$refs=void 0,t.componentStatus="beforeRender",t.beforeRender()),"beforeRenderIsDone"},t.prototype.handelAfterRender=function(t,e){function n(){return r(this,void 0,void 0,function(){var t,e,n,r,i,u,s;return o(this,function(o){switch(o.label){case 0:return[4,a()];case 1:return t=o.sent(),[4,c(t)];case 2:return e=o.sent(),[4,p(e)];case 3:return n=o.sent(),[4,l(n)];case 4:return r=o.sent(),[4,f(r)];case 5:return i=o.sent(),[4,d(i)];case 6:return u=o.sent(),[4,h(u)];case 7:return s=o.sent(),[2]}})})}function a(){return u.default.addStyle(y.theStyle(e),e),"done"}function c(t){if("done"==t){var n;if(e.name==y.root.name){2==y.oneRootComponent&&i.error("根组件"+y.root.name+"只能有一个");var r=u.default.q(y.selector);void 0==r&&i.error("节点"+y.selector+"不存在"),r.innerHTML=s.default(y.theTpl(y.root),y.root.data,{}),n=u.default.q("["+g+'="'+e.token+'"]'),y.oneRootComponent++}else{var o=y.loopNodes(e.name,u.default.create(y.theTpl(y.CObj[e.name])));n=u.default.q("["+g+'="'+e.token+'"]'),y.templateId[e.token]=o[0].outerHTML;var a=u.default.combineAttrAndProps(y.componentAttrs[e.token],y.CObj[e.name].props);n.innerHTML=y.getChangedData(o[0].outerHTML,y.CObj[e.name].data,a)}return n}}function p(t){return y.loopCforToDom(y.cForList,e),t}function l(t){return y.loopIfToDom(y.ifList,e),y.loopHtmlToDom(y.cHtmlList,e),t}function f(t){e.$el=t,e.$refs={};var n=y.cRefList.filter(function(t){return t.which==e.name});return n.forEach(function(t){e.$refs[t.fn]=u.default.q(t.ele)}),e.componentStatus="afterRender",e.render(),t}function d(t){if(e.name!=y.root.name){var n=y.findComponent(t.firstChild);n.length&&e.name&&y.loopComponents(n,e.data,e.components,e.name)}return t}function h(t){y.handelEventListener(e,t)}if("beforeRenderIsDone"==t){var y=this;e.render&&n()}},t.prototype.compareChildComponentAndInjectComponents=function(t,e){var n=this,r=!1;r=!!(t=this.root.name)||!(!e.length&&t!=this.root.name)&&e.some(function(e){if(e.name)return t!=n.root.name&&t==e.name}),r||i.error("名称为"+t+"的组件未找到")},t.prototype.handelEventListener=function(t,e){var n=u.default.getAttr(g,e),r=this.array_intersection(n,this.eventList);if(r.length){var o=r.filter(function(e){return e.which==t.name});o.forEach(function(e){if(document.querySelectorAll(e.ele))try{for(var n=0,r=document.querySelectorAll(e.ele);n<r.length;n++){var o=r[n];o.addEventListener(e.type,function(n){try{e.fn.toString().match(/\(\)$/)?t.hasOwnProperty(e.fn.toString().split("()")[0])?f.default.parse(e.fn)(t,{$event:n}):i.error("组件"+t.name+"中不存在方法"+e.fn):i.error("组件"+t.name+"中方法"+e.fn+"语法错误")}catch(t){console.log(t)}},!1)}}catch(t){i.error(t)}else i.error("属性为"+e.ele+"的节点不存在！")})}},t.prototype.handelDataChange=function(t,e){var n=this,r=function(e){p.default.listen(e,function(r){if(r.target==t.token&&JSON.stringify(r.oldVal)!=JSON.stringify(r.newVal)){var o=u.default.create(n.templateId[t.token]),i=n.dataPosition(e,o,t.name);n.updateData(e,r),u.default.q(a.default._cameCase(t.name))&&n.dataChangeToDom(o,i,r,t.name);
-}})};for(var o in t.data)r(o)},t.prototype.updateData=function(t,e){var n=e.which;this.CObj[n].data[t]=e.newVal},t.prototype.dataChangeToDom=function(t,e,n,r){this.loopTextToDom(t,e,n,r),this.loopAttrToDom(e,n,r)},t.prototype.loopTextToDom=function(t,e,n,r){var o=e.filter(function(t){return"text"==t.type});o.length&&o.forEach(function(e){var r=t[0].parentNode.querySelector(e.position).childNodes[e.item].textContent;document.querySelector(e.position).childNodes[e.item].textContent=s.default(r,n.new,n.props)})},t.prototype.loopAttrToDom=function(t,e,n){var r=this,o=this,i=t.filter(function(t){return"attr"==t.type});i.length&&i.forEach(function(i){function a(t){u.default.q(t.position).setAttribute(t.attr,e.newVal),o.componentAttrs[t.componentToken][t.attr]=e.newVal}function c(t){var e=o.dataPosition(t.attr,u.default.create(o.templateId[t.componentToken]),n),r=e.filter(function(t){return"text"==t.type});r.forEach(function(e){var n=o.CObj[t.componentName],r=n.props,i=n.data,a=t.attr,c=o.componentAttrs[t.componentToken][t.attr],p=o.combineChangedProps(a,c,r),l=u.default.create(o.templateId[t.componentToken]),f=l[0].parentNode.querySelector(e.position).childNodes[e.item].textContent;u.default.q(e.position).childNodes[e.item].textContent=s.default(f,i,p)});var i=e.filter(function(t){return"attr"==t.type});i.forEach(function(e){t.attr==e.value&&(e.value=t.value),u.default.q(e.position).setAttribute(e.attr,e.value),o.componentAttrs[e.componentToken][e.attr]=e.value,o.componentAttrs[e.componentToken][e.attr]=e.value,e.isComponent&&c(e)})}switch(i.attr){case"c-show":var p=u.default.boolToDisplay(f.default.parse(i.value)(e.new));u.default.q(i.position).style.display=p;break;case"c-if":var l=u.default.q(i.position);void 0!=l&&u.default.q(i.position).setAttribute(i.attr,e.newVal),r.handelIf(i,n);break;case"c-for":r.loopCforToDom(t,r.CObj[n],"dataChange");break;default:a(i)}i.isComponent&&c(i)})},t.prototype.loopCforToDom=function(t,e,n){var r=this,o=t.filter(function(t){return t.which==e.name}),c=this;o.forEach(function(t){var o=t.fn.match(/^\s*([\s\S]+?)\s+in\s+([\s\S]+?)\s*$/);o||i.error("c-for格式有误");var p=(o[1],o[2]),l=r.inComponent(p,e);l&&"array"==a.default.type(l)&&l.length?("dataChange"==n&&u.default.removeDomExpectWhich(0,'[c-for-id="'+u.default.q(t.ele).getAttribute("c-for-id")+'"]'),l.forEach(function(n,r){var i=u.default.q(t.ele).cloneNode(!0),p={};p[o[1]]=n,i.innerHTML=s.default(t.html,p,c.CObj[e.name].props||{});var l=c.loopNodes(e.name,u.default.create(i.outerHTML)),f=c.findComponent(l[0]);if(l[0].setAttribute("c-for-id",t.id),0==r)u.default.q(t.ele).innerHTML=l[0].innerHTML,u.default.q(t.ele).setAttribute("c-for-id",t.id);else{var d=document.querySelectorAll('[c-for-id="'+t.id+'"][c-for="'+t.fn+'"]');d[d.length-1].insertAdjacentElement("afterEnd",l[0])}f.length&&c.loopComponents(a.default.deepClone(f),p,[],e.name)})):i.error("组件"+e.name+"内c-for指令的格式不正确")})},t.prototype.loopIfToDom=function(t,e){var n=this,r=t.filter(function(t){return t.which==e.name});r.forEach(function(t){n.handelIf(t,e.name)})},t.prototype.handelIf=function(t,e){var n=u.default.q(t.ele||t.position);if(void 0!=n){var r=n.getAttribute("c-if");"true"==r&&(n.parentNode.replaceChild(u.default.addComment("c-if:"+t.id),n),this.ifTpl[t.id]=n.outerHTML)}void 0==n&&(u.default.replaceComment(u.default.q(a.default._cameCase(e)),t.attr+":"+t.id,u.default.create(this.ifTpl[t.id])[0]),u.default.attr(t.ele||t.position,"c-if",!1),u.default.q(t.ele||t.position).style.display="block")},t.prototype.loopHtmlToDom=function(t,e){var n=t.filter(function(t){return t.which==e.name});n.forEach(function(t){u.default.q(t.ele).innerHTML=u.default.attr(t.ele,"c-html")})},t.prototype.combineChangedProps=function(t,e,n){return n[t]&&(n[t].default=e),n},t.prototype.array_intersection=function(t,e){for(var n=[],r=0;r<e.length;r++)for(var o=e[r].id,i=0;i<t.length;i++)if(o===t[i]){n.push(e[r]);break}return n},t.prototype.isComponent=function(t){var e=u.default.parseName(t);return void 0!=this.CObj[e]},t.prototype.isComponentData=function(t,e){var n=new RegExp("{{\\s*([\\s\\S]*"+t+"[\\s\\S]*)\\s*}}","gm"),r=n.exec(e);if(null==r)return null;var o={"":!0,"+":!0,"-":!0,"*":!0,"/":!0,"(":!0,")":!0,".":!0,"[":!0,"]":!0,"!":!0,"!=":!0,"!==":!0,">":!0,">=":!0,">==":!0,"<":!0,"<=":!0,"<==":!0,"?":!0,":":!0},i=r[1].indexOf(t),a=r[1].charAt(i-1),u=r[1].charAt(i-2),s=r[1].charAt(i-3),c=r[1].charAt(i+1),p=r[1].charAt(i+2),l=r[1].charAt(i+3);return o[a]||o[u]||o[s]||o[c]||o[p]||o[l]?r[1]:null},t.prototype.dataPosition=function(t,e,n){function r(e){if("object"==typeof e&&e.length)for(var o=0;o<e.length;o++)if(1==e[o].nodeType&&e[o].hasAttributes()){for(var c=0,p=e[o].attributes;c<p.length;c++)if("c-for"==p[c].name){var l=p[c].value.match(/^\s*([\s\S]+?)\s+in\s+([\s\S]+?)\s*$/);l||i.error("组件"+n+"内的c-for指令表达式"+p[c]+"有误"),l[2]!=t||s.isComponent(e[o])||(a=a.concat({attr:p[c].name,fn:p[c].value,type:"attr",id:e[o].getAttribute(g),ele:"["+g+'="'+e[o].getAttribute(g)+'"]',item:o,isComponent:!1,html:e[o].innerHTML,which:n}))}else{var f=s.isComponentData(t,p[c].value);if(f){var d=s.isComponent(e[o]);a=d?a.concat({attr:p[c].name,value:t,type:"attr",id:e[o].getAttribute(g),position:"["+g+'="'+e[o].getAttribute(g)+'"]',item:o,isComponent:!0,componentName:u.default.parseName(e[o]),componentToken:e[o].getAttribute(g),which:n}):a.concat({attr:p[c].name,value:f,type:"attr",id:e[o].getAttribute(g),position:"["+g+'="'+e[o].getAttribute(g)+'"]',item:o,isComponent:!1,which:n})}}e[o].childNodes&&e[o].childNodes.length&&r(e[o].childNodes)}}function o(e){if("object"==typeof e&&e.length)for(var n=0;n<e.length;n++){if(3==e[n].nodeType){var r=e[n].textContent;s.isComponentData(t,r)&&(a=a.concat({value:t,type:"text",position:"["+g+'="'+e[n].parentNode.getAttribute(g)+'"]',item:n,isComponent:!1}))}e[n].childNodes&&e[n].childNodes.length&&o(e[n].childNodes)}}var a=[],s=this;return r(e),o(e),a},t.prototype.listToObj=function(t){var e={};return t.forEach(function(t){e[t.name]=t}),e},t.prototype.getComponentNameList=function(){var t=[];return this.CList.forEach(function(e){t.push(e.name)}),t},t.prototype.findComponent=function(t){function e(t){var o=r.normalizeDirective(u.default.getNodeName(t).toLowerCase());r.componentNames.includes(o)&&n.push(a.default.extend(r.CObj[o],{token:t.getAttribute(g)})),t.childNodes&&t.childNodes.length&&t.childNodes.forEach(function(t){3!=t.nodeType&&e(t)})}if(3!=t.nodeType){var n=[],r=this;return e(t),n}},t.prototype.getComponent=function(t,e){function n(t){var n=a.default.cameCase(u.default.getNodeName(t).toLowerCase());if(o.componentNames.includes(n)){r.push(n);for(var i={},c=0,p=t.attributes;c<p.length;c++)p[c].name!=g&&(i[p[c].name]=s.default(p[c].value,o.CObj[e].data,o.CObj[e].props));u.default.noOtherAttr(g,t)||(i.component=n,o.componentAttrs[t.getAttribute(g)]=i)}}var r=[],o=this;return n(t),r},t.prototype.directiveIsMulit=function(t){for(var e=0,n=this.CList;e<n.length;e++)if(n[e].name==t&&1==n[e].mulit)return!0;return!1},t.prototype.componentLayer=function(t,e){var n=e.layer-t.layer;return 0==n?t.name!=e.name?t.name<e.name?-1:1:t.cid-e.cid:n},t.prototype.getChangedData=function(t,e,n){return s.default(t,e,n)},t.prototype.normalizeDirective=function(t){return a.default.cameCase(t.replace(m,""))},t.prototype.inComponent=function(t,e){return e.data[t]||e.props.default[t]},t}();e.default=b},function(t,e){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=["constructor","__proto__","__defineGetter__","__defineSetter__","__lookupGetter__","__loopupSetter__"];e.PROPERTY=n;var r=["document","alert","location","setInterval"];e.WINDOW=r;var o=["nodeName","children"];e.NODE=o;var i=[Function.prototype.call,Function.prototype.apply,Function.prototype.bind];e.FUN=i},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=n(1),o=n(2),i=function(){function t(){this.BOOLEAN_ATTRS={selected:!0},this.BOOLEAN_ELEMENT={}}return t.prototype.q=function(t){return document.querySelector(t)},t.prototype.createDom=function(t){"string"!=r.default.type(t)&&o.error("组件模板"+t+"必须为字符串，请检查组件的template,templateId,templateUrl属性");var e=""+t;e=e.trim(),e=e.replace(/<!--[\s\S]*?-->/gm,""),e=e.replace(/>\s+([^\s<]*)\s+</gm,">$1<").trim();for(var n,i=/([^>]*)(<([a-z\/][-a-z0-9_:.]*)[^>\/]*(\/*)>)([^<]*)/gm,a=(Date.now(),[]);n=i.exec(e);){var u=(n[1],n[2],n[3]);n[4],n[5];a.push(u)}var s=document.createElement(a[0]);return s.innerHTML=t,s},t.prototype.create=function(t){var e=this.createDom(t);return e.childNodes},t.prototype.getNodeName=function(t){return t.nodeName?t.nodeName:t[0].nodeName},t.prototype.parseName=function(t){return r.default.cameCase(t.tagName.toLowerCase())},t.prototype.wrapDom=function(t,e){return"<"+e+">"+t+"</"+e+">"},t.prototype.getAttr=function(t,e){function n(e){for(var o=0;o<e.length;o++)1==e[o].nodeType&&e[o].getAttribute(t)&&r.push(e[o].getAttribute(t)),e[o].childNodes&&e[o].childNodes.length&&n(e[o].childNodes)}var r=[];return 1==e.nodeType&&e.getAttribute(t)&&r.push(e.getAttribute(t)),e.childNodes&&e.childNodes.length&&n(e.childNodes),r},t.prototype.combineAttrAndProps=function(t,e){if(r.default.isEmpty(t))return e;if(t){var n=r.default.expectSome(t,"component");for(var o in n)e&&e[o]&&(e[o].default=n[o])}return e},t.prototype.noOtherAttr=function(t,e){if(1==e.nodeType&&e.attributes){if(e.attributes.length>=2)return!1;if(1==e.attributes.length)return e.attributes[0].name==t}},t.prototype.boolToDisplay=function(t){return"true"==t||1==t?"block":"false"==t||0==t?"none":void 0},t.prototype.expectSomeAttr=function(t,e){var n={};if(t.attributes&&t.attributes.length)for(var r=0,o=t.attributes;r<o.length;r++)o[r].name!=e&&(n[o[r].name]=o[r].value);return n},t.prototype.addComment=function(t){var e=document.createComment(t);return e},t.prototype.replaceComment=function(t,e,n){for(var r=document.createNodeIterator(t,NodeFilter.SHOW_COMMENT,null,!1),o=r.nextNode();o;)o.nodeValue==e&&o.parentNode.replaceChild(n,o),o=r.nextNode()},t.prototype.attr=function(t,e,n){var r=this.q(t);if(void 0!=r&&(3==arguments.length&&r.setAttribute(e,n),2==arguments.length))return r.getAttribute(e)},t.prototype.hasHtml=function(t){if(a.q(t))return a.q(t).innerHTML},t.prototype.hasHtmlUrl=function(t){return t},t.prototype.addStyle=function(t,e){if(void 0==e.name&&o.error("找不到组件的name属性，无法添加style样式"),void 0!=t){var n=r.default._cameCase(e.name);switch(t.type){case"string":this.appendStyle(t.result,n);break;case"id":void 0==this.q(t.result)&&o.error("名称为"+e.name+"组件中，节点"+t.result+"不存在");var i=this.q(t.result).innerHTML;this.appendStyle(i,n);break;case"url":this.appendStyle(t.result,n)}}},t.prototype.appendStyle=function(t,e){var n=""+t;n=r.default.trimStr(n);var o=document.createElement("style");o.type="text/css",o.title=e,o.innerHTML=n,this.q("head").appendChild(o),this.addSelectorPrefix(e)},t.prototype.addSelectorPrefix=function(t){for(var e=document.styleSheets,n=0;n<e.length;n++)if(e[n].title==t)for(var r=0,o=e[n].cssRules;r<o.length;r++)o[r].selectorText=t+" "+o[r].selectorText},t.prototype.removeDomExpectWhich=function(t,e){for(var n=document.querySelectorAll(e),r=0;r<n.length;r++)r!=t&&n[r].parentNode.removeChild(n[r])},t.prototype.watch=function(t){var e=window.MutationObserver||window.WebKitMutationObserver||window.MozMutationObserver,n=document.querySelector(t),r=new e(function(t){}),o={childList:!0,attributes:!0,characterData:!0,subtree:!0,attributeOldValue:!0,characterDataOldValue:!0};r.observe(n,o)},t.prototype.booleanAttr=function(t,e){},t}(),a=new i;e.default=a},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=n(26),o=function(){function t(){}return t.prototype.ajax=function(t){var e=t.type,n=void 0===e?"get":e,o=t.url,i=void 0===o?"":o,a=t.data;return r.parseHttp(n,i,a)},t.prototype.get=function(t){return r.parseHttp("get",t,null)},t.prototype.post=function(t,e){return r.parseHttp("post",t,e)},t.prototype.put=function(t,e){return r.parseHttp("put",t,e)},t.prototype.delete=function(t,e){return r.parseHttp("delete",t,e)},t}(),i=new o;e.default=i},function(t,e,n){"use strict";function r(t,e,n){"string"==o.default.type(t)||a.includes(t.toLowerCase())||i.error("http请求类型必须为"+a+"中的一个"),"string"!=o.default.type(e)&&i.error("http请求的url参数需为字符"),n&&"object"!=o.default.type(n)&&i.error("http请求的data参数需为对象");var r=new Promise(function(r,o){function i(){4==this.readyState&&(200==this.status?r(this.response):o(new Error(this.statusText)))}var a=new XMLHttpRequest;a.open(t,e),a.onreadystatechange=i,a.responseType="json",a.setRequestHeader("Accept","application/json"),a.send(n||null)});return r}Object.defineProperty(e,"__esModule",{value:!0});var o=n(1),i=n(2),a=["get","post","put","delete","head","options"];e.parseHttp=r},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=n(6),o=n(7),i=n(1),a=function(){function t(t){this.lexer=t,this.tokens=[]}return t.prototype.ast=function(t){return this.tokens=this.lexer.lex(t),this.init()},t.prototype.init=function(){for(var t=[];;)if(this.tokens.length&&t.push(this.pipeBuilder()),!i.default.expect(this.tokens,";"))return r.ast_init.body={},r.ast_init.body=t,i.default.clone(r.ast_init)},t.prototype.agency=function(){var t;i.default.expect(this.tokens,"(")?(t=this.pipeBuilder(),i.default.consume(this.tokens,")")):i.default.expect(this.tokens,"[")?t=this.arrayBuilder():i.default.expect(this.tokens,"{")?t=this.objectBuilder():o.LETTER.hasOwnProperty(this.tokens[0].text)?"this"==this.tokens[0].text?t=i.default.clone(r.ast_this):(r.ast_constant.value=o.LETTER[i.default.consume(this.tokens).text],t=i.default.clone(r.ast_constant)):t=i.default.exitFirst(this.tokens).identifier?this.identifierBuilder():this.constantBuilder();for(var e;e=i.default.expect(this.tokens,".","[","(");)t=this.memberBuilder(e,t);return t},t.prototype.closingTags=function(t){var e=[],n=this;if(!i.default.exitFirst(this.tokens,t))do{if(i.default.exitFirst(this.tokens,t))break;e.push(n.agency())}while(i.default.expect(this.tokens,","));return i.default.consume(this.tokens,t),e},t.prototype.constantBuilder=function(){return r.ast_constant.value=i.default.consume(this.tokens).value,i.default.clone(r.ast_constant)},t.prototype.identifierBuilder=function(){return r.ast_identifier.value=i.default.consume(this.tokens).value,i.default.clone(r.ast_identifier)},t.prototype.arrayBuilder=function(){return r.ast_array.value=this.closingTags("]"),i.default.clone(r.ast_array)},t.prototype.objectBuilder=function(){var t=[];if(!i.default.exitFirst(this.tokens,"}"))do r.ast_json.key=this.constantBuilder(),i.default.consume(this.tokens,":"),r.ast_json.value=this.assignmentBuilder(),t.push(i.default.clone(r.ast_json));while(i.default.expect(this.tokens,","));return i.default.consume(this.tokens,"}"),r.ast_object.value=t,i.default.clone(r.ast_object)},t.prototype.memberBuilder=function(t,e){return"["===t.text&&(e={type:r.dataType[7],object:e,property:this.agency(),computed:!0},i.default.consume(this.tokens,"]")),"."===t.text&&(e={type:r.dataType[7],object:e,property:this.identifierBuilder(),computed:!1}),"("===t.text&&(e={type:r.ast_function.type,callee:e,arguments:this.closingTags(")"),pipe:!1}),e},t.prototype.assignmentBuilder=function(){var t=this.ternaryBuilder();if(i.default.expect(this.tokens,"=")){var e=this.ternaryBuilder();return r.ast_assignment.left=t,r.ast_assignment.right=e,i.default.clone(r.ast_assignment)}return t},t.prototype.unaryBuilder=function(){var t=i.default.expect(this.tokens,"+","!","-");return t?(r.ast_unary.operator=t.text,r.ast_unary.value=this.unaryBuilder(),i.default.clone(r.ast_unary)):t?void 0:this.agency()},t.prototype.multiplicativeBuilder=function(){for(var t,e=this.unaryBuilder();t=i.default.expect(this.tokens,"*","%","/");)r.ast_binary.operator=t.text,r.ast_binary.left=e,r.ast_binary.right=this.unaryBuilder(),e=i.default.clone(r.ast_binary);return e},t.prototype.additiveBuilder=function(){for(var t,e=this.multiplicativeBuilder();t=i.default.expect(this.tokens,"+","-");)e={type:r.ast_binary.type,operator:t.text,left:e,right:this.multiplicativeBuilder()};return e},t.prototype.relationalBuilder=function(){for(var t,e=this.additiveBuilder();t=i.default.expect(this.tokens,">","<",">=","<=");)e={type:r.ast_binary.type,operator:t.text,left:e,right:this.additiveBuilder()};return e},t.prototype.equalityBuilder=function(){for(var t,e=this.relationalBuilder();t=i.default.expect(this.tokens,"==","===","!=","!==");)e={type:r.ast_binary.type,operator:t.text,left:e,right:this.relationalBuilder()};return e},t.prototype.andBuilder=function(){for(var t,e=this.equalityBuilder();t=i.default.expect(this.tokens,"&&");)e={type:r.ast_logical.type,operator:t.text,left:e,right:this.equalityBuilder()};return e},t.prototype.orBuilder=function(){for(var t,e=this.andBuilder();t=i.default.expect(this.tokens,"||");)e={type:r.ast_logical.type,operator:t.text,left:e,right:this.andBuilder()};return e},t.prototype.ternaryBuilder=function(){var t=this.orBuilder();if(i.default.expect(this.tokens,"?")){var e=this.assignmentBuilder();if(i.default.consume(this.tokens,":")){var n=this.assignmentBuilder();return{type:r.ast_teranry.type,boolean_expression:t,true_value:e,error_value:n}}}return t},t.prototype.pipeBuilder=function(){for(var t=this.assignmentBuilder();i.default.expect(this.tokens,"|");){var e=[t];for(t={type:r.ast_function.type,callee:this.identifierBuilder(),arguments:e,pipe:!0};i.default.expect(this.tokens,":");)e.push(this.assignmentBuilder())}return t},t}();e.default=a},function(t,e,n){"use strict";function r(t){var e=p.PROPERTY.some(function(e){return e===t});e&&c.error(t+"存在编译风险")}function o(t){if(void 0!=t){var e=p.WINDOW.every(function(e){return t[e]}),n=p.NODE.every(function(e){return t[e]});return(e||n||t.constructor==t||t.getOwnPropertyDescriptor||t.getOwnPropertyNames)&&c.error(t+"存在编译风险"),t}}function i(t){var e=p.FUN.some(function(e){return e==t});(e||t.constructor==t)&&c.error(t+"存在编译风险")}function a(t,e){return void 0===e&&(e=0),"undefined"==typeof t?e:t}function u(t){return f[t]}Object.defineProperty(e,"__esModule",{value:!0});var s=n(6),c=n(2),p=n(23),l=n(1),f={},d=function(){function t(t,e){this.astBuilder=t,this.state={body:[],compileId:0,echo:[],pipes:{}},this.ast={},f=e}return t.prototype.compile=function(t){this.ast=this.astBuilder.ast(t),this.handelTree(this.ast),this.constantExpr(this.ast);var e=this.pipePrefix()+"var fn = function(scope, local){"+(this.state.echo.length?"var "+this.state.echo.join(",")+";":"")+this.state.body.join("")+"}; return fn;",n=new Function("safeProperty","safeObject","safeFunction","isUndefined","pipe",e)(r,o,i,a,u);return n.literal=this.isLiteral(),n.constant=this.ast.constant,n},t.prototype.handelTree=function(t,e,n){switch(void 0===e&&(e={context:void 0,name:void 0,computed:void 0}),t.type){case s.dataType[1]:this.initCompile(t);break;case s.dataType[2]:return this.metaCompile(t);case s.dataType[3]:return this.arrayCompile(t);case s.dataType[4]:return this.objectCompile(t);case s.dataType[5]:return this.identifierCompile(t,e,n);case s.dataType[6]:return this.thisCompile();case s.dataType[7]:return this.memberCompile(t,e,n);case s.dataType[8]:return this.functionCompile(t);case s.dataType[9]:return this.assigmentCompile(t);case s.dataType[10]:return this.unaryCompile(t);case s.dataType[11]:return this.binaryCompile(t);case s.dataType[12]:return this.logicalCompile(t);case s.dataType[13]:return this.ternaryCompile(t)}},t.prototype.initCompile=function(t){var e=this,n=l.default.clone(t.body),r=n.pop();n.forEach(function(t){e.state.body.push(e.handelTree(t))}),this.state.body.push("return ",this.handelTree(r),";")},t.prototype.metaCompile=function(t){return l.default.wrapString(t.value)},t.prototype.arrayCompile=function(t){var e=this,n=t.value.map(function(t){return e.handelTree(t)});return"["+n.join(",")+"]"},t.prototype.objectCompile=function(t){var e=this,n=t.value.map(function(t){var n=t.key.value,r=e.handelTree(t.value);return n+":"+r});return"{"+n.join(",")+"}"},t.prototype.identifierCompile=function(t,e,n){r(t.value);var o=this.incrementId();return l.default.conditionIsRight(this.state.body,l.default.hasProperty("local",t.value),l.default.concatCode(o,l.default.nonComputedMember("local",t.value))),n&&l.default.conditionIsRight(this.state.body,l.default.notExist(l.default.hasProperty("local",t.value))+" && scope && "+l.default.notExist(l.default.hasProperty("scope",t.value)),l.default.concatCode(l.default.nonComputedMember("scope",t.value),"{}")),l.default.conditionIsRight(this.state.body,l.default.notExist(l.default.hasProperty("local",t.value))+" && scope",l.default.concatCode(o,l.default.nonComputedMember("scope",t.value))),e&&(e.context=l.default.hasProperty("local",t.value)+"?local:scope",e.name=t.value,e.computed=!1),this.state.body.push("safeObject("+o+");"),o},t.prototype.thisCompile=function(){return"scope"},t.prototype.memberCompile=function(t,e,n){var o=this.incrementId(),i=this.handelTree(t.object,void 0,!0);if(e&&(e.context=i),t.computed){var a=this.handelTree(t.property);this.state.body.push("safeProperty("+a+");"),n&&l.default.conditionIsRight(this.state.body,l.default.notExist(l.default.computedMember(i,a)),l.default.concatCode(l.default.computedMember(i,a),"{}")),l.default.conditionIsRight(this.state.body,i,l.default.concatCode(o,"safeObject("+l.default.computedMember(i,a)+")")),e&&(e.name=a,e.computed=!0)}return t.computed||(r(t.property.value),n&&l.default.conditionIsRight(this.state.body,l.default.notExist(l.default.nonComputedMember(i,t.property.value)),l.default.concatCode(l.default.nonComputedMember(i,t.property.value),"{}")),l.default.conditionIsRight(this.state.body,i,l.default.concatCode(o,"safeObject("+l.default.nonComputedMember(i,t.property.value)+")")),e&&(e.name=t.property.value,e.computed=!1)),o},t.prototype.functionCompile=function(t){var e,n,r,o=this;return t.pipe?(n=this.pipeCompile(t.callee.value),r=t.arguments.map(function(t){return o.handelTree(t)}),n+"("+r.join(",")+")"):t.pipe?void 0:(e={context:void 0,name:void 0,computed:void 0},n=this.handelTree(t.callee,e),r=t.arguments.map(function(t){return"safeObject("+o.handelTree(t)+")"}),e.name&&(this.state.body.push("safeObject("+e.context+");"),n=e.computed?l.default.computedMember(e.context,e.name):l.default.nonComputedMember(e.context,e.name)),this.state.body.push("safeFunction("+n+");"),n+" && safeObject("+n+"("+r.join(",")+"))")},t.prototype.assigmentCompile=function(t){var e,n={context:void 0,name:void 0,computed:void 0};return this.handelTree(t.left,n,!0),e=n.computed?l.default.computedMember(n.context,n.name):l.default.nonComputedMember(n.context,n.name),l.default.concatCode(e,"safeObject("+this.handelTree(t.right)+")")},t.prototype.unaryCompile=function(t){return t.operator+"(isUndefined("+this.handelTree(t.value)+"))"},t.prototype.binaryCompile=function(t){return l.default.inStr(t.operator,"+-")?"(isUndefined("+this.handelTree(t.left)+")"+t.operator+"isUndefined("+this.handelTree(t.right)+"))":"("+this.handelTree(t.left)+t.operator+this.handelTree(t.right)+")"},t.prototype.logicalCompile=function(t){var e=this.incrementId();return this.state.body.push(l.default.concatCode(e,this.handelTree(t.left))),l.default.conditionIsRight(this.state.body,"&&"==t.operator?e:l.default.notExist(e),l.default.concatCode(e,this.handelTree(t.right))),e},t.prototype.ternaryCompile=function(t){var e=this.incrementId(),n=this.incrementId();return this.state.body.push(l.default.concatCode(n,this.handelTree(t.boolean_expression))),l.default.conditionIsRight(this.state.body,n,l.default.concatCode(e,this.handelTree(t.true_value))),l.default.conditionIsRight(this.state.body,l.default.notExist(n),l.default.concatCode(e,this.handelTree(t.error_value))),e},t.prototype.pipeCompile=function(t){var e=this.state.pipes;return e.hasOwnProperty("name")||(e[t]=this.incrementId(!0)),e[t]},t.prototype.pipePrefix=function(){var t=this.state.pipes;if("{}"==JSON.stringify(t))return"";var e=[];for(var n in t)e.push(t[n]+"=pipe("+l.default.wrapString(n)+")");return"var "+e.join(",")+";"},t.prototype.incrementId=function(t){var e=l.default.compileId(this.state.compileId,this.state.echo,t);return this.state.compileId++,e},t.prototype.isLiteral=function(){var t=this.ast.body;return!t.length||1===t.length&&(t[0].type===s.dataType[2]||t[0].type===s.dataType[3]||t[0].type===s.dataType[4]||t[0].type===s.dataType[5])},t.prototype.constantExpr=function(t){function e(e){e.forEach(function(t){i.constantExpr(t),r=r&&t.constant}),t.constant=r}function n(){i.constantExpr(t.left),i.constantExpr(t.right),t.constant=t.left.constant&&t.right.constant}var r,o=this,i=this;switch(t.type){case s.dataType[1]:r=!0,e(t.body);break;case s.dataType[2]:t.constant=!0;break;case s.dataType[3]:r=!0,e(t.value),t.constant=r;break;case s.dataType[4]:r=!0,t.value.forEach(function(t){o.constantExpr(t.value),r=r&&t.value.constant}),t.constant=r;break;case s.dataType[5]:case s.dataType[6]:t.constant=!1;break;case s.dataType[7]:this.constantExpr(t.object),t.computed&&this.constantExpr(t.property),t.constant=t.object.constant&&(!t.computed||t.property.constant);break;case s.dataType[8]:r=t.pipe,e(t.arguments),t.constant=r;break;case s.dataType[9]:n();break;case s.dataType[10]:this.constantExpr(t.value),t.constant=t.value.constant;break;case s.dataType[11]:case s.dataType[12]:n();break;case s.dataType[13]:this.constantExpr(t.boolean_expression),this.constantExpr(t.true_value),this.constantExpr(t.error_value),t.constant=t.boolean_expression.constant&&t.true_value.constant&&t.error_value.constant}},t}();e.default=d},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=n(2),o=n(1),i=n(7),a=function(){function t(){this.index=0,this.now=void 0,this.tokens=[],this.text=""}return t.prototype.lex=function(t){for(this.text=t;this.index<this.text.length;)this.now=this.text.charAt(this.index),"number"==o.default.whichType(this.now)||"."===this.now&&o.default.whichType(o.default.nextLeter(this.index,this.text))?this.loopNumber():"string"==o.default.whichType(this.now)?this.loopString(this.now):"letter"==o.default.whichType(this.now)?this.loopLetter():o.default.isWhiteSpace(this.now)?this.index++:o.default.inStr(this.now,"[],{}.:()?;")?this.pushObj():this.loopOperator();return this.tokens},t.prototype.pushObj=function(){this.tokens.push({text:this.now,value:this.now}),this.index++},t.prototype.nextStr=function(t){return void 0===t&&(t=1),this.index+t<this.text.length&&this.text.charAt(this.index+t)},t.prototype.loopNumber=function(){for(var t="";this.index<this.text.length;){var e=this.text.charAt(this.index).toLowerCase();if("number"==o.default.whichType(e)||"."===e)t+=e;else{var n=o.default.nextLeter(this.index,this.text),i=t.charAt(t.length-1);if("e"==e&&o.default.isExponent(n))t+=e;else if(o.default.isExponent(e)&&"e"===i&&n&&o.default.isNumber(n))t+=e;else{if(!o.default.isExponent(e)||"e"!==i||n&&o.default.isNumber(n))break;r.error("指数格式错误！")}}this.index++}this.tokens.push({text:t,value:Number(t)})},t.prototype.loopString=function(t){this.index++;for(var e="",n=t;this.index<this.text.length;){var o=this.text.charAt(this.index);if(n+=o,o==t)return this.index++,void this.tokens.push({text:n,value:e});e+=o==i.SPECIALS[o]?i.SPECIALS[o]:o,this.index++}r.error("无法匹配的符号")},t.prototype.loopLetter=function(){for(var t="";this.index<this.text.length;){var e=this.text.charAt(this.index);if(!o.default.isLetter(e)&&!o.default.isNumber(e))break;t+=e,this.index++}var n=i.LETTER.hasOwnProperty(t)?i.LETTER[t]:t;this.tokens.push({text:t,identifier:!0,value:n})},t.prototype.loopOperator=function(){var t=this.now,e=this.now+this.nextStr(1),n=this.now+this.nextStr(1)+this.nextStr(2),o=i.OPERATORS[t],a=i.OPERATORS[e],u=i.OPERATORS[n];if(o||a||u){var s=u?n:a?e:t;this.tokens.push({text:s,value:s}),this.index+=s.length}else r.error("未识别的字符"+this.now)},t}();e.default=a},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=n(27),o=n(28),i=function(){function t(t,e){this.lexer=t,this.astBuilder=new r.default(this.lexer),this.astCompile=new o.default(this.astBuilder,e)}return t.prototype.parse=function(t){return this.astCompile.compile(t)},t}();e.default=i},function(t,e,n){"use strict";function r(t){this.register=function(e,n){if("object"==i.default.type(e))for(var r in e)return this.register(r,e[r]);if("string"==i.default.type(e))return"function"!=i.default.type(n)&&o.error("注册的管道函数类型为function"),t.factory(e+"Pipe",n)},this.$get=["$injector",function(t){return function(e){return t.get(e+"Pipe")}}]}Object.defineProperty(e,"__esModule",{value:!0});var o=n(2),i=n(1),a=function(){function t(){this.pipes={}}return t.prototype.register=function(t,e){if("object"==i.default.type(t))for(var n in t)return this.register(n,t[n]);if("string"==i.default.type(t)){"function"!=i.default.type(e)&&o.error("注册的管道函数类型为function");var r=e();return this.pipes[t]=r,r}},t.prototype.pipe=function(t){return this.pipes[t]},t.prototype.returnPipes=function(){return this.pipes},t}();e.default=a,e.$pipeProvider=r,r.$inject=["$provider"]},function(t,e,n){"use strict";function r(t,e){i.get("routerConfig").forEach(function(n){n.path==t&&(n.params=e)}),i.data("routerConfig",i.get("routerConfig"))}Object.defineProperty(e,"__esModule",{value:!0});var o=n(4),i=new o.default,a=function(){function t(t,e){this.url=t,this.routers=this._parseRouters(e),this.nowRouter=this._getNowRouter(t,this.routers),this.params=this.nowRouter&&this.nowRouter.params?this.nowRouter.params:{}}return t.prototype._getNowRouter=function(t,e){return t.includes("?")&&(t=t.substr(0,t.lastIndexOf("?"))),e.filter(function(e){return t.match(e.info.regexp)})[0]},t.prototype._parseRouters=function(t){var e=this;return t.forEach(function(t){var n=e._pathToReg(t.path);null!=n&&(t.info=n,e.params=t.params||{})}),t},t.prototype._pathToReg=function(t){var e={originalPath:t,regexp:t},n=e.keys=[];return t=t.replace(/([().])/g,"\\$1").replace(/(\/)?:(\w+)(\*\?|[?*])?/g,function(t,e,r,o){var i="?"===o||"*?"===o?"?":null,a="*"===o||"*?"===o?"*":null;return n.push({name:r,optional:!!i}),e=e||"",""+(i?"":e)+"(?:"+(i?e:"")+(a&&"(.+?)"||"([^/]+)")+(i||"")+")"+(i||"")}).replace(/([\/$*])/g,"\\$1"),e.regexp=new RegExp("^"+t+"$",""),e},t.prototype.go=function(t){var e=t.path,n=void 0===e?"":e,o=t.params,i=void 0===o?{}:o;r(n,i),this.hash(n)},t.prototype.hash=function(t){return t?void(window.location.hash="#"+t):window.location.hash},t.prototype.reflesh=function(){var t=window.location.hash;window.location.hash="#",window.location.hash=t},t.prototype.back=function(){window.history.back()},t}();e.default=a},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=n(2),o=n(1),i=n(10),a=new i.default,u=/^function\s*[^\(]*\(\s*([^\)]*)\)/m,s=/^\s*(\S+)\s*$/,c=/(\/\*.*?\*\/)|(\/\/$)/gm,p=function(){function t(){}return t.prototype.inject=function(t,e){function n(t){return function(){var e=y.invoke(t);return"undefined"==o.default.type(e)&&r.error("factory函数必须有返回值"),e}}function i(t,e){function n(n){if(p(g),t.hasOwnProperty(n))return t[n];try{return t[n]=e(n)}finally{m&&delete t[n]}}function i(t,e,i,a){1==arguments.length&&(e=null);var u=l(t,a).map(function(t){return"string"==o.default.type(t)?i&&i.hasOwnProperty(t)?i[t]:n(t):void r.error("无效的标识符"+t+"，标识符应为字符串")});return"array"==o.default.type(t)&&(t=t.slice(-1)[0]),t.apply(e,u)}function a(t,e){var n="array"==o.default.type(t)?t.slice(-1)[0]:t,r=Object.create(n.prototype);return i(t,r,e),r}function u(t){return h.hasOwnProperty(t)||f.hasOwnProperty(t+"Provider")}return{has:u,get:n,invoke:i,annotate:l,instantiate:a}}function p(t){if(t.length&&t[t.length-1][1].includes(t[0][0])){var e=t.map(function(t){return t[0]});e.push(t[0][0]),m=!0,r.error("发现循环依赖"+e.join("->"))}}function l(t,n){var i=[];if("array"==o.default.type(t)&&(i=t.length?t.slice(0,t.length-1):[]),"function"==o.default.type(t))if(e)r.error("函数没有$inject属性，不能再严格模式下使用");else if(t.$inject)i=t.$inject;else{var a=t.toString().replace(c,"").match(u);i=o.default.arrayCompact(a[1].split(",")).map(function(t){
-return t.match(s)[1]}),null!=n&&g.push([n,i])}return i}"array"!=o.default.type(t)&&r.error("模块的名称的参数为数组");var f={$injector:void 0,$provider:{data:void 0,provider:void 0}},d=f.$injector=i(f,function(){}),h={$injector:void 0},y=h.$injector=i(h,function(t){var e=d.get(t+"Provider");return y.invoke(e.$get,e)}),v=new Map,m=!1,g=[],b=[];f.$provider={data:function(t,e){"hasOwnProperty"!=t&&"$injector"!=t&&"$provider"!=t||r.error(t+"不能用于标识符"),h[t]=e,f[t]=e},provider:function(t,e){"hasOwnProperty"!=t&&"$injector"!=t&&"$provider"!=t||r.error(t+"不能用于标识符"),"function"==o.default.type(e)&&(e=d.instantiate(e)),f[t+"Provider"]=e},factory:function(t,e){this.provider(t,{$get:n(e)})},value:function(t,e){this.factory(t,function(){return e})},service:function(t,e){this.factory(t,function(){return y.instantiate(e)})}};var _=function(t){t.forEach(function(t){var e=d.get(t[0]),n=t[1],r=t[2];e[n].apply(e,r)})};return t.forEach(function t(e){if(!v.get(e)){if(v.set(e,!0),"string"==o.default.type(e)){var n=a.module(e);n.requires.forEach(t),_(n._invokeQueue),_(n._configQueue),b=b.concat(n._runQueue)}"function"!=o.default.type(e)&&"array"!=o.default.type(e)||b.push(d.invoke(e))}}),o.default.arrayCompact(b).forEach(function(t){y.invoke(t)}),y},t}();e.default=p},function(t,e){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=function(){function t(){}return t.prototype.nonComputedMember=function(t,e){return"("+t+")."+e},t.prototype.computedMember=function(t,e){return"("+t+")["+e+"]"},t.prototype.notExist=function(t){return"!("+t+")"},t.prototype.concatCode=function(t,e){return t+"="+e+";"},t.prototype.conditionIsRight=function(t,e,n){t.push("if(",e,"){",n,"}")},t.prototype.compileId=function(t,e,n){var r="compileId"+t;return n||e.unshift(r),r},t}();e.default=n},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=n(2),o=function(){function t(){}return t.prototype.type=function(t){var e=Object.prototype.toString,n={"[object Boolean]":"boolean","[object Number]":"number","[object String]":"string","[object Function]":"function","[object Array]":"array","[object Date]":"date","[object RegExp]":"regExp","[object Undefined]":"undefined","[object Null]":"null","[object Object]":"object","[object Map]":"map","[object Set]":"set","[object Symbol]":"symbol"};return n[e.call(t)]},t.prototype.isNumber=function(t){return"string"==this.type(t)&&(t>="0"&&t<="9")},t.prototype.isExponent=function(t){return"+"===t||"-"===t||this.isNumber(t)},t.prototype.isLetter=function(t){var e=t.split("");return e.every(function(t){return t>="a"&&t<="z"||t>="A"&&t<="Z"||"_"===t||"$"===t})},t.prototype.isWhiteSpace=function(t){return" "===t||"\r"===t||"\t"===t||"\n"===t||"\v"===t||" "===t},t.prototype.whichType=function(t){return"string"!=this.type(t)&&r.error("数据类型错误"+t),this.isNumber(t)||"."===t?"number":"'"===t.charAt(0)||'"'===t.charAt(0)?"string":this.isLetter(t)?"letter":"["===t||"]"===t||","===t?"array":"{"===t||"}"===t||":"===t?"object":"("===t||")"===t?"function":"other"},t}();e.default=o},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=n(8),o=n(35),i=n(34),a=n(2),u=function(){function t(){}return t.prototype.isEqual=function(t,e){return JSON.stringify(t)===JSON.stringify(e)},t.prototype.areEqual=function(t,e,n){return n?this.compare(t,e):"NaN"==t.toString()||t===e},t.prototype.compare=function(t,e){var n=/undefined|number|string|boolean/,r=/^(function\s*)(\w*\b)/,o="constructor",i="childNodes",a="parentNode";if(n.test(typeof t)||n.test(typeof e)||null===t||null===e)return t===e||isNaN(t)&&isNaN(e);if(t[o]!==e[o])return!1;switch(t[o]){case Date:return t.valueOf()===e.valueOf();case Function:return t.toString().replace(r,"$1")===e.toString().replace(r,"$1");case Array:if(t.length!==e.length)return!1;for(var u=0;u<t.length;u++)t[u].toString()==e[u].toString();break;default:var s=0,c=0,p=void 0;if(t===e)return!0;if(t[i]||t[a]||e[i]||e[a])return t===e;for(p in t)s++;for(p in e)c++;if(s!==c)return!1;for(p in t)if(t[p].toString()!=e[p].toString())return!1}return!0},t.prototype.clone=function(t){return JSON.parse(JSON.stringify(t))},t.prototype.deepClone=function(t){var e,n,r,o=this.type(t);if("array"===o)e=[];else{if("object"!==o)return t;e={}}if("array"===o){for(n=0,r=t.length;n<r;n++)e.push(this.deepClone(t[n]));return e}if("object"===o){for(n in t)e[n]=this.deepClone(t[n]);return e}},t.prototype.repeatObj=function(t,e){switch("number"!=this.type(e)&&a.error("函数repeat的参数manyTime类型为number"),this.type(t)){case"string":return t.repeat(e);case"function":for(var n=new Array(e),r=0;r<n.length;r++)t();break;default:return null}},t.prototype.everyScope=function(t,e){return!!t(e)&&e.$children.every(function(n){return n.everyScope(t,e)})},t.prototype.handelEvent=function(t,e,n){var r=e[t]||function(){};try{r(n)}catch(t){a.error(t)}},t.prototype.objToMap=function(t){if("object"==this.type(t)){var e=new Map;for(var n in t)e.set(n,t[n]);return e}},t.prototype.mapToObj=function(t){if("map"==this.type(t)){var e={};return t.forEach(function(t,n){e[n]=t}),e}},t.prototype.nextLeter=function(t,e){return t<e.length-1&&e.charAt(t+1)},t.prototype.wrapString=function(t){return"string"==this.type(t)?"'"+t+"'":"null"==this.type(t)?"null":t},t.prototype.expect=function(t){function e(e){return o.exitFirst(t,e)}for(var n=[],r=1;r<arguments.length;r++)n[r-1]=arguments[r];var o=this;if(n.some(e))return t.shift()},t.prototype.consume=function(t,e){var n=this.expect(t,e);return n||a.error("词法解析错误"+e),n},t.prototype.exit=function(t,e){if("array"==this.type(e)&&e.length)for(var n=0;n<e.length;n++)if(t==e[n].text)return n},t.prototype.exitFirst=function(t,e){if("array"==this.type(t)&&t.length)return e&&e!=t[0].text?void 0:t[0]},t.prototype.uArray=function(t){var e=[],n=new Set(t);return n.forEach(function(t){e.push(t)}),e},t.prototype.arrayItem=function(t,e){if("array"==this.type(e)){for(var n=[],r=0;r<e.length;r++)e[r].toString()===t.toString()&&n.push(r);return n}},t.prototype.arrayItem2=function(t,e){if("array"==this.type(e)){for(var n,r=0;r<e.length;r++)e[r].name===t&&(n=r);return n}},t.prototype.arrayLastItem=function(t,e){if("array"==this.type(e)){var n;e=e.reverse();for(var r=0;r<e.length;r++)e[r]===t&&(n=r);return n}},t.prototype.arraySplice=function(t,e){if("array"==this.type(e)){for(var n=this.arrayItem(t,e),r=0;r<n.length;r++)e.splice(n[r],1);return e}},t.prototype.arrayCompact=function(t){var e=[];return t.forEach(function(t){""!=t&&null!=t&&void 0!=t&&e.push(t)}),e},t.prototype.intersection=function(t,e){return t.filter(function(t){return e.includes(t)})},t.prototype.parseString=function(t){if("string"==this.type(t))return new Function("return "+t)},t.prototype.hasProperty=function(t,e){return t+" && ("+this.wrapString(e)+" in "+t+")"},t.prototype.inStr=function(t,e){return e.includes(t)},t.prototype.objKey=function(t){var e=[];for(var n in t)e.push(n);return e},t.prototype.objVal=function(t){var e=[];for(var n in t)e.push(t[n]);return e},t.prototype.isEmpty=function(t){if("object"==this.type(t))return"{}"==JSON.stringify(t)},t.prototype.expectSome=function(t){for(var e=[],n=1;n<arguments.length;n++)e[n-1]=arguments[n];var r=this.clone(t);return e.forEach(function(t){delete r[t]}),r},t.prototype.cameCase=function(t){return t.replace(/\-(\w)/g,function(t){return t.slice(1).toUpperCase()})},t.prototype._cameCase=function(t){return t.replace(/([A-Z])/g,"-$1")},t.prototype.extend=function(t,e){for(var n in e)t[n]=e[n];return t},t.prototype.trimStr=function(t){var e=t.trim();return e=e.replace(/\s+/g,""),e=e.replace(/[\r\n]/g,"")},t.prototype.now=function(){var t=new Date,e=t.getFullYear().toString(),n=(t.getMonth()+1).toString(),r=t.getDate().toString();return n=parseInt(n)<10?"0"+n:n,e+n+r+"0"},t.prototype.page=function(){return{width:window.innerWidth,height:window.innerHeight}},t.prototype.classToJson=function(t,e){void 0===e&&(e=!1);var n,r={};t?n=new t:a.error("函数"+t+"未找到");for(var o=Object.create(n),i=o.__proto__,u=o.__proto__.__proto__,s=Object.entries(i).concat(Object.entries(u).slice(1)),c=Object.getOwnPropertyNames(u),p={},l=1;l<c.length;l++)p[c[l]]=u[c[l]];return s.forEach(function(t,n){p[t[0]]=t[1],e&&(r[t[0]]=t[1])}),{componentJson:p,rootComponent:r}},t}();e.util=u,r.applyMixins(u,[o.default,i.default])}])});
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else {
+		var a = factory();
+		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
+	}
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+/******/
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var compile_1 = __webpack_require__(1);
+	exports.Component = compile_1.Component;
+	var Dom_1 = __webpack_require__(30);
+	exports.Dom = Dom_1.default;
+	var store_1 = __webpack_require__(26);
+	var Store = new store_1.default('user');
+	exports.Store = Store;
+	var cookie_1 = __webpack_require__(36);
+	exports.Cookie = cookie_1.default;
+	exports.default = compile_1.default;
+	window.Cpage = new compile_1.default();
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var $log = __webpack_require__(2);
+	var util_1 = __webpack_require__(3);
+	var render_1 = __webpack_require__(8);
+	var componentGuard_1 = __webpack_require__(29);
+	var store_1 = __webpack_require__(26);
+	var store = new store_1.default();
+	store.data('componentList', []);
+	store.service('component', function () {
+	    this.ensureOneInvokeComponent = function (name, arr) {
+	        var res = {
+	            type: 'yes'
+	        }, rootName = [], names = [];
+	        for (var i = 0; i < arr.length; i++) {
+	            if (arr[i].name == name)
+	                rootName.push(name);
+	            names.push(arr[i].name);
+	        }
+	        if (rootName.length >= 2)
+	            res = {
+	                type: 'no',
+	                info: '只能有一个根组件，却发现' + rootName.length + '个' + name + '根组件'
+	            };
+	        return res;
+	    };
+	});
+	var CPage = /** @class */ (function () {
+	    function CPage() {
+	        this.CList = [];
+	        this.id = 0;
+	        this.id = 0;
+	    }
+	    /**
+	     * es6模式，渲染组件
+	     * @param selector id选择符，如果是class，则取第一个节点
+	     * @param fn 根组件函数
+	     */
+	    CPage.bootstrap = function (selector, fn) {
+	        var rootComponent = {};
+	        function componetList(fn, isRoot) {
+	            if (isRoot === void 0) { isRoot = false; }
+	            var classToJson = util_1.default.classToJson(fn, isRoot);
+	            var componentJson = classToJson.componentJson;
+	            if (isRoot) {
+	                rootComponent = classToJson.rootComponent;
+	            }
+	            componentGuard_1.default(componentJson);
+	            store.data('componentList', store.get('componentList').push(componentJson));
+	            if (componentJson.components && util_1.default.type(componentJson.components) == 'array' && componentJson.components.length) {
+	                componentJson.components.forEach(function (v) {
+	                    componetList(v);
+	                });
+	            }
+	        }
+	        componetList(fn, true);
+	        var r = new render_1.default(selector, rootComponent, store.get('componentList'));
+	        r.componentToDom();
+	    };
+	    /**
+	     * 路由
+	     * @param config 路由配置
+	     */
+	    CPage.router = function (config) {
+	        function check(str) {
+	            if (util_1.default.type(str) != 'array') {
+	                $log.error('路由配置项需为数组形式');
+	            }
+	        }
+	        check(config);
+	        config.forEach(function (v) {
+	            var classToJson = util_1.default.classToJson(v.component, false);
+	            v.component = classToJson.componentJson;
+	        });
+	        store.data('routerConfig', config);
+	    };
+	    CPage.prototype.directive = function (name, fn) {
+	        var conf = fn();
+	        conf.id = this.id;
+	        this.CList.push(conf);
+	        this.id++;
+	        var guard = store.get('component').ensureOneInvokeComponent(name, this.CList);
+	        if (guard.type == 'no') {
+	            $log.error(guard.info);
+	        }
+	        return conf;
+	    };
+	    /**
+	     * es5模式获取组建信息
+	     * @param obj
+	     */
+	    CPage.prototype.component = function (obj) {
+	        componentGuard_1.default(obj);
+	        var componentInfo = util_1.default.deepClone(obj);
+	        Object.defineProperties(componentInfo, {
+	            isRoot: {
+	                value: false,
+	                writable: true
+	            },
+	            $el: {
+	                value: undefined,
+	                writable: true
+	            },
+	            $props: {
+	                value: {},
+	                writable: true
+	            }
+	        });
+	        return this.directive(obj.name, function () {
+	            return componentInfo;
+	        });
+	    };
+	    /**
+	     * es5模式，将组件渲染到dom
+	     * @param selector id选择符，如果是class，则取第一个节点
+	     * @param root 根组件信息
+	     */
+	    CPage.prototype.bootstrap = function (selector, root) {
+	        if (util_1.default.type(selector) != 'string') {
+	            $log.error(selector + '应为字符串');
+	        }
+	        if (!document.querySelector(selector)) {
+	            $log.error('节点“' + selector + '”不存在');
+	        }
+	        if (util_1.default.type(root) != 'object') {
+	            $log.error(root + '应为json对象');
+	        }
+	        if (arguments.length == 2) {
+	            componentGuard_1.default(root);
+	            if (!root.name) {
+	                $log.error('找不到根组件的name属性');
+	            }
+	            store.data('rootComponent', root.name);
+	            var r = new render_1.default(selector, root, this.CList);
+	            r.componentToDom();
+	        }
+	    };
+	    CPage.version = '1.0.5';
+	    return CPage;
+	}());
+	exports.default = CPage;
+	/**
+	 * es6模式构建组件
+	 */
+	var Component = /** @class */ (function () {
+	    function Component() {
+	        this.components = [];
+	        this.name = '';
+	        this.template = '';
+	        this.data = {};
+	        this.props = {};
+	    }
+	    Component.prototype.render = function () {
+	        $log.error('render方法必须被继承');
+	    };
+	    return Component;
+	}());
+	exports.Component = Component;
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	function log(str) {
+	    console.log(str);
+	}
+	exports.log = log;
+	function info(str) {
+	    console.log(str);
+	}
+	exports.info = info;
+	function warn(str) {
+	    console.log(str);
+	}
+	exports.warn = warn;
+	function error(str) {
+	    throw new Error(str);
+	}
+	exports.error = error;
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var util_1 = __webpack_require__(4);
+	var Util = new util_1.util();
+	exports.default = Util;
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var mixins_1 = __webpack_require__(5);
+	var handelType_1 = __webpack_require__(6);
+	var handelCoding_1 = __webpack_require__(7);
+	var $log = __webpack_require__(2);
+	var util = /** @class */ (function () {
+	    function util() {
+	    }
+	    /**
+	     * 判断两个变量是否相等，只能匹配简单的数据类型
+	     * @param str1
+	     * @param str2
+	     * @returns {boolean}
+	     */
+	    util.prototype.isEqual = function (str1, str2) {
+	        return JSON.stringify(str1) === JSON.stringify(str2);
+	    };
+	    /**
+	     * 判断两个变量是否相等
+	     * @param newVal
+	     * @param oldVal
+	     * @param equalStatus 为TRUE,则深层次比较
+	     */
+	    util.prototype.areEqual = function (newVal, oldVal, equalStatus) {
+	        if (equalStatus) {
+	            return this.compare(newVal, oldVal);
+	        }
+	        else {
+	            // return (newVal === oldVal) && (typeof newVal == 'number' && typeof oldVal == 'number' && !isNaN(newVal) && !isNaN(oldVal)) && (newVal != NaN && oldVal != NaN);
+	            if (newVal.toString() == 'NaN') {
+	                return true;
+	            }
+	            else {
+	                return newVal === oldVal;
+	            }
+	        }
+	    };
+	    /**
+	     * 判断两个变量是否相等, 此方法用于相同数据类型的变量比较
+	     * @param a
+	     * @param b
+	     * @returns {boolean}
+	     */
+	    util.prototype.compare = function (a, b) {
+	        var pt = /undefined|number|string|boolean/, fn = /^(function\s*)(\w*\b)/, cr = "constructor", cn = "childNodes", pn = "parentNode";
+	        if (pt.test(typeof a) || pt.test(typeof b) || a === null || b === null) {
+	            return a === b || (isNaN(a) && isNaN(b)); //为了方便，此处假定NaN == NaN
+	        }
+	        if (a[cr] !== b[cr]) {
+	            return false;
+	        }
+	        switch (a[cr]) {
+	            case Date:
+	                return a.valueOf() === b.valueOf();
+	            case Function:
+	                return a.toString().replace(fn, '$1') === b.toString().replace(fn, '$1'); //硬编码中声明函数的方式会影响到toString的结果，因此用正则进行格式化
+	            case Array:
+	                if (a.length !== b.length) {
+	                    return false;
+	                }
+	                for (var i = 0; i < a.length; i++) {
+	                    // if(!ce(a[i],b[i])){
+	                    // 	return false;
+	                    // }
+	                    if (a[i].toString() == b[i].toString()) { }
+	                }
+	                break;
+	            default:
+	                var alen = 0, blen = 0, d = void 0;
+	                if (a === b) {
+	                    return true;
+	                }
+	                if (a[cn] || a[pn] || b[cn] || b[pn]) {
+	                    return a === b;
+	                }
+	                for (d in a) {
+	                    alen++;
+	                }
+	                for (d in b) {
+	                    blen++;
+	                }
+	                if (alen !== blen) {
+	                    return false;
+	                }
+	                for (d in a) {
+	                    if (a[d].toString() != b[d].toString()) {
+	                        return false;
+	                    }
+	                }
+	                break;
+	        }
+	        return true;
+	    };
+	    /**
+	     * 浅拷贝，才方法只针对普通对象{}和数组[]
+	     * @param str
+	     * @returns {any}
+	     */
+	    util.prototype.clone = function (str) {
+	        return JSON.parse(JSON.stringify(str));
+	    };
+	    util.prototype.deepClone = function (data) {
+	        var t = this.type(data), o, i, ni;
+	        if (t === 'array') {
+	            o = [];
+	        }
+	        else if (t === 'object') {
+	            o = {};
+	        }
+	        else {
+	            return data;
+	        }
+	        if (t === 'array') {
+	            for (i = 0, ni = data.length; i < ni; i++) {
+	                o.push(this.deepClone(data[i]));
+	            }
+	            return o;
+	        }
+	        else if (t === 'object') {
+	            for (i in data) {
+	                o[i] = this.deepClone(data[i]);
+	            }
+	            return o;
+	        }
+	    };
+	    /**
+	     * 字符串或函数的执行次数
+	     * @param obj:类型为Function, String
+	     */
+	    util.prototype.repeatObj = function (obj, manyTime) {
+	        if (this.type(manyTime) != 'number') {
+	            $log.error('函数repeat的参数manyTime类型为number');
+	        }
+	        switch (this.type(obj)) {
+	            case 'string':
+	                return obj.repeat(manyTime);
+	            case 'function':
+	                var arr = new Array(manyTime);
+	                for (var i = 0; i < arr.length; i++) {
+	                    obj();
+	                }
+	                break;
+	            default:
+	                return null;
+	        }
+	    };
+	    /**
+	     * 对每个scope的children进行遍历
+	     * @param cb
+	     * @param scope
+	     * @returns {boolean}
+	     */
+	    util.prototype.everyScope = function (cb, scope) {
+	        if (cb(scope)) {
+	            return scope.$children.every(function (child) {
+	                return child.everyScope(cb, scope);
+	            });
+	        }
+	        else {
+	            return false;
+	        }
+	    };
+	    /**
+	     * 处理scope的event事件
+	     * @param eventName
+	     * @param arr
+	     * @param scope
+	     */
+	    util.prototype.handelEvent = function (eventName, arr, scope) {
+	        // if(arr[eventName] == undefined){
+	        // 	$log.error('事件'+eventName+'不存在');
+	        // }
+	        // const event = {name: eventName};
+	        var listener = arr[eventName] || function () { };
+	        try {
+	            listener(scope);
+	        }
+	        catch (e) {
+	            $log.error(e);
+	        }
+	    };
+	    /**
+	     * 对象转map对象
+	     * @param obj
+	     * @returns {Map}
+	     */
+	    util.prototype.objToMap = function (obj) {
+	        if (this.type(obj) != 'object')
+	            return;
+	        var map = new Map();
+	        for (var i in obj) {
+	            map.set(i, obj[i]);
+	        }
+	        return map;
+	    };
+	    /**
+	     * map对象转普通对象
+	     * @param map
+	     * @returns {{}}
+	     */
+	    util.prototype.mapToObj = function (map) {
+	        if (this.type(map) != 'map')
+	            return;
+	        var obj = {};
+	        map.forEach(function (val, key) {
+	            obj[key] = val;
+	        });
+	        return obj;
+	    };
+	    /**
+	     * 此方法用于获取首位不写0浮点数的下一位字符
+	     * @param index
+	     * @param str
+	     * @returns {string|boolean}
+	     */
+	    util.prototype.nextLeter = function (index, str) {
+	        return (index < str.length - 1) ? str.charAt(index + 1) : false;
+	    };
+	    /**
+	     * 将string类型的数据外层包装\
+	     * @param str
+	     * @returns {any}
+	     */
+	    util.prototype.wrapString = function (str) {
+	        if (this.type(str) == 'string') {
+	            return '\'' + str + '\'';
+	        }
+	        else if (this.type(str) == 'null') {
+	            return 'null';
+	        }
+	        else {
+	            return str;
+	        }
+	    };
+	    /**
+	     * 判断数组第一个元素是否与有某个元素相等，如果是则将其移除
+	     * @param str
+	     * @param arr
+	     * @returns {any[]}
+	     */
+	    util.prototype.expect = function (arr) {
+	        var str = [];
+	        for (var _i = 1; _i < arguments.length; _i++) {
+	            str[_i - 1] = arguments[_i];
+	        }
+	        var that = this;
+	        function es(val) {
+	            return that.exitFirst(arr, val);
+	        }
+	        // console.log(str);
+	        if (str.some(es)) {
+	            return arr.shift();
+	        }
+	        // if(this.exitFirst(arr, str)) return arr.shift();
+	    };
+	    /**
+	     * 在expect函数基础上，如果目标元素不匹配报错
+	     * @param str
+	     * @param arr
+	     * @returns {any}
+	     */
+	    util.prototype.consume = function (arr, str) {
+	        var t = this.expect(arr, str);
+	        if (!t)
+	            $log.error('词法解析错误' + str);
+	        return t;
+	    };
+	    /**
+	     * 判断数组第一个元素是否与有某个元素相等，相等则返回首个数组首个元素
+	     * @param str
+	     * @param arr
+	     * @returns {number}
+	     */
+	    util.prototype.exit = function (str, arr) {
+	        if (this.type(arr) != 'array')
+	            return;
+	        if (!arr.length)
+	            return;
+	        for (var i = 0; i < arr.length; i++) {
+	            if (str == arr[i]['text']) {
+	                return i;
+	            }
+	        }
+	    };
+	    /**
+	     * 只针对对象的第一个元素
+	     * @param arr
+	     * @param str
+	     * @returns {any}
+	     */
+	    util.prototype.exitFirst = function (arr, str) {
+	        if (this.type(arr) != 'array')
+	            return;
+	        if (!arr.length)
+	            return;
+	        if (!str || (str == arr[0]['text'])) {
+	            return arr[0];
+	        }
+	    };
+	    /**
+	     * 数组去重，针对普通类型的数组
+	     * @param arr
+	     * @returns {Array}
+	     */
+	    util.prototype.uArray = function (arr) {
+	        var newArr = [];
+	        var set = new Set(arr);
+	        set.forEach(function (val) {
+	            newArr.push(val);
+	        });
+	        return newArr;
+	    };
+	    /**
+	     * 获取数组中某个元素的下标
+	     * @param data
+	     * @param array
+	     * @returns {any}
+	     */
+	    util.prototype.arrayItem = function (data, array) {
+	        if (this.type(array) != 'array')
+	            return;
+	        var item = [];
+	        for (var i = 0; i < array.length; i++) {
+	            if (array[i].toString() === data.toString())
+	                item.push(i);
+	        }
+	        // console.log(item,array);
+	        return item;
+	    };
+	    /**
+	     * 获取数组中某个对象元素的下标
+	     */
+	    util.prototype.arrayItem2 = function (data, array) {
+	        if (this.type(array) != 'array')
+	            return;
+	        var item;
+	        for (var i = 0; i < array.length; i++) {
+	            if (array[i]['name'] === data)
+	                item = i;
+	        }
+	        return item;
+	    };
+	    /**
+	     * 获取数组中某个重复元素的最后下标
+	     */
+	    util.prototype.arrayLastItem = function (data, array) {
+	        if (this.type(array) != 'array')
+	            return;
+	        var item;
+	        array = array.reverse();
+	        for (var i = 0; i < array.length; i++) {
+	            if (array[i] === data)
+	                item = i;
+	        }
+	        return item;
+	    };
+	    /**
+	     * 去除数组中的重复元素
+	     * @param data
+	     * @param array
+	     * @returns {Array}
+	     */
+	    util.prototype.arraySplice = function (data, array) {
+	        if (this.type(array) != 'array')
+	            return;
+	        var arr = this.arrayItem(data, array);
+	        for (var i = 0; i < arr.length; i++) {
+	            array.splice(arr[i], 1);
+	        }
+	        return array;
+	    };
+	    /**
+	     * 去除数组中的'',null,undefined
+	     */
+	    util.prototype.arrayCompact = function (arr) {
+	        var newArr = [];
+	        arr.forEach(function (v) {
+	            if (v != '' && v != null && v != undefined)
+	                newArr.push(v);
+	        });
+	        return newArr;
+	    };
+	    /**
+	     * 获取两个数组的交集
+	     * @param a
+	     * @param b
+	     */
+	    util.prototype.intersection = function (a, b) {
+	        return a.filter(function (v) { return b.includes(v); });
+	    };
+	    /**
+	     * 对字符串进行解析
+	     * @param str
+	     * @returns {Function}
+	     */
+	    util.prototype.parseString = function (str) {
+	        if (this.type(str) != 'string')
+	            return;
+	        return new Function("return " + str);
+	    };
+	    /**
+	     * 用于判断对象是否含有某个属性,并返回与表达式 ‘scope’ && （\‘a\’ in 'scope'）
+	     * @param obj
+	     * @param ele
+	     * @returns {any}
+	     */
+	    util.prototype.hasProperty = function (obj, ele) {
+	        return obj + ' && (' + this.wrapString(ele) + ' in ' + obj + ')';
+	    };
+	    /**
+	     * 判断所传字符串与目标字符串是否相等
+	     * @param target
+	     * @param str
+	     * @returns {any}
+	     */
+	    util.prototype.inStr = function (target, str) {
+	        return str.includes(target);
+	    };
+	    /**
+	     * 获取对象的键
+	     * @param obj
+	     */
+	    util.prototype.objKey = function (obj) {
+	        var arr = [];
+	        for (var i in obj) {
+	            arr.push(i);
+	        }
+	        return arr;
+	    };
+	    /**
+	     * 获取对象的值
+	     * @param obj
+	     */
+	    util.prototype.objVal = function (obj) {
+	        var arr = [];
+	        for (var i in obj) {
+	            arr.push(obj[i]);
+	        }
+	        return arr;
+	    };
+	    /**
+	     * 判断对象是否为空
+	     * @param obj 对象
+	     */
+	    util.prototype.isEmpty = function (obj) {
+	        if (this.type(obj) != 'object')
+	            return;
+	        if (JSON.stringify(obj) == '{}')
+	            return true;
+	        return false;
+	    };
+	    /**
+	     * 移除对象中某些元素
+	     * @param obj 对象
+	     * @param ...str  需要移除的元素
+	     */
+	    util.prototype.expectSome = function (obj) {
+	        var str = [];
+	        for (var _i = 1; _i < arguments.length; _i++) {
+	            str[_i - 1] = arguments[_i];
+	        }
+	        var newObj = this.clone(obj);
+	        str.forEach(function (v) {
+	            delete newObj[v];
+	        });
+	        return newObj;
+	    };
+	    /**
+	     * x-a转驼峰xA
+	     * @param str
+	     */
+	    util.prototype.cameCase = function (str) {
+	        return str.replace(/\-(\w)/g, function (x) { return x.slice(1).toUpperCase(); });
+	    };
+	    /**
+	     * 驼峰xA转x-a
+	     * @param str
+	     */
+	    util.prototype._cameCase = function (str) {
+	        return str.replace(/([A-Z])/g, "-$1");
+	    };
+	    /**
+	     * 合并对象
+	     * @param target
+	     * @param source
+	     */
+	    util.prototype.extend = function (target, source) {
+	        for (var i in source) {
+	            target[i] = source[i];
+	        }
+	        return target;
+	    };
+	    /**
+	     * 去除空格 回车 换行
+	     * @param str
+	     */
+	    util.prototype.trimStr = function (str) {
+	        var res = str.trim();
+	        res = res.replace(/\s+/g, '');
+	        res = res.replace(/[\r\n]/g, '');
+	        return res;
+	    };
+	    /**
+	     * 获取当前时间 20170516
+	     */
+	    util.prototype.now = function () {
+	        var date = new Date(), year = date.getFullYear().toString(), month = (date.getMonth() + 1).toString(), day = date.getDate().toString();
+	        month = parseInt(month) < 10 ? '0' + month : month;
+	        return year + month + day + '0';
+	    };
+	    util.prototype.page = function () {
+	        return {
+	            width: window.innerWidth,
+	            height: window.innerHeight
+	        };
+	    };
+	    /**
+	     * 将class转换为json
+	     * @param fn class函数
+	     * @param isRoot 是否为根组件
+	     */
+	    util.prototype.classToJson = function (fn, isRoot) {
+	        if (isRoot === void 0) { isRoot = false; }
+	        var app;
+	        var rootComponent = {};
+	        if (fn) {
+	            app = new fn();
+	        }
+	        else {
+	            $log.error('函数' + fn + '未找到');
+	        }
+	        var obj = Object.create(app);
+	        var propertyObj = obj.__proto__;
+	        var prototypeObj = obj.__proto__.__proto__;
+	        var arr = Object.entries(propertyObj).concat(Object.entries(prototypeObj).slice(1));
+	        var protoNames = Object.getOwnPropertyNames(prototypeObj);
+	        var componentJson = {};
+	        for (var i = 1; i < protoNames.length; i++) {
+	            componentJson[protoNames[i]] = prototypeObj[protoNames[i]];
+	        }
+	        arr.forEach(function (v, i) {
+	            componentJson[v[0]] = v[1];
+	            if (isRoot) {
+	                rootComponent[v[0]] = v[1];
+	            }
+	        });
+	        return {
+	            componentJson: componentJson, rootComponent: rootComponent
+	        };
+	    };
+	    return util;
+	}());
+	exports.util = util;
+	mixins_1.applyMixins(util, [handelType_1.default, handelCoding_1.default]);
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	function mixins() {
+	    var otherClass = [];
+	    for (var _i = 0; _i < arguments.length; _i++) {
+	        otherClass[_i] = arguments[_i];
+	    }
+	    return function (targetClass) {
+	        Object.assign.apply(Object, [targetClass.prototype].concat(otherClass));
+	    };
+	}
+	exports.mixins = mixins;
+	/**
+	 * 此方法用于实现class多继承
+	 * @param derivedCtor
+	 * @param baseCtors
+	 */
+	function applyMixins(derivedCtor, baseCtors) {
+	    baseCtors.forEach(function (baseCtor) {
+	        Object.getOwnPropertyNames(baseCtor.prototype).forEach(function (name) {
+	            derivedCtor.prototype[name] = baseCtor.prototype[name];
+	        });
+	    });
+	}
+	exports.applyMixins = applyMixins;
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var $log = __webpack_require__(2);
+	var HandelType = /** @class */ (function () {
+	    function HandelType() {
+	    }
+	    /**
+	     * 判断数据类型
+	     * @param str
+	     * @returns {any}
+	     */
+	    HandelType.prototype.type = function (str) {
+	        var toString = Object.prototype.toString, map = {
+	            '[object Boolean]': 'boolean',
+	            '[object Number]': 'number',
+	            '[object String]': 'string',
+	            '[object Function]': 'function',
+	            '[object Array]': 'array',
+	            '[object Date]': 'date',
+	            '[object RegExp]': 'regExp',
+	            '[object Undefined]': 'undefined',
+	            '[object Null]': 'null',
+	            '[object Object]': 'object',
+	            '[object Map]': 'map',
+	            '[object Set]': 'set',
+	            '[object Symbol]': 'symbol'
+	        };
+	        return map[toString.call(str)];
+	    };
+	    /**
+	     * 判断输入的内容是否在0~9之间
+	     * @param str
+	     * @returns {boolean}
+	     */
+	    HandelType.prototype.isNumber = function (str) {
+	        // if(Number(str).toString() != 'NaN') return true;
+	        // else return false;
+	        if (this.type(str) != 'string')
+	            return false;
+	        else
+	            return str >= '0' && str <= '9';
+	    };
+	    /**
+	     * 判断是否符合指数特征
+	     * @param ch
+	     * @returns {boolean|Boolean}
+	     */
+	    HandelType.prototype.isExponent = function (ch) {
+	        return ch === '+' || ch === '-' || this.isNumber(ch);
+	    };
+	    /**
+	     * 判断是否属于特定字符：字母，_, $
+	     * @param str
+	     * @returns {boolean}
+	     */
+	    HandelType.prototype.isLetter = function (str) {
+	        var arr = str.split('');
+	        return arr.every(function (i) {
+	            return (i >= 'a' && i <= 'z') || (i >= 'A' && i <= 'Z') || (i === '_') || (i === '$');
+	        });
+	    };
+	    /**
+	     * 判断字符是否属于空格
+	     * @param str
+	     * @returns {boolean}
+	     */
+	    HandelType.prototype.isWhiteSpace = function (str) {
+	        return str === ' ' || str === '\r' || str === '\t' || str === '\n' || str === '\v' || str === '\u00A0';
+	    };
+	    /**
+	     * 判断被解析的字符串属于那种数据类型
+	     * @param str
+	     * @returns {any}
+	     */
+	    HandelType.prototype.whichType = function (str) {
+	        if (this.type(str) != 'string')
+	            $log.error('数据类型错误' + str);
+	        // '12', '12.12', '0.12e2'
+	        if (this.isNumber(str) || str === '.')
+	            return 'number';
+	        else if (str.charAt(0) === "'" || str.charAt(0) === '"')
+	            return 'string';
+	        else if (this.isLetter(str))
+	            return 'letter';
+	        else if ((str === '[' || str === ']' || str === ','))
+	            return 'array';
+	        else if ((str === '{' || str === '}' || str === ':'))
+	            return 'object';
+	        else if (str === '(' || str === ')')
+	            return 'function';
+	        else
+	            return 'other';
+	    };
+	    return HandelType;
+	}());
+	exports.default = HandelType;
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var HandelCoding = /** @class */ (function () {
+	    function HandelCoding() {
+	    }
+	    /**
+	     * 组合对象属性语句，类似于a.b
+	     * @param left
+	     * @param right
+	     * @returns {any}
+	     */
+	    HandelCoding.prototype.nonComputedMember = function (left, right) {
+	        return '(' + left + ').' + right;
+	    };
+	    /**
+	     *
+	     * @param left
+	     * @param right
+	     * @returns {any}
+	     */
+	    HandelCoding.prototype.computedMember = function (left, right) {
+	        return '(' + left + ')[' + right + ']';
+	    };
+	    /**
+	     * 组合成条件不存在的语句 例如!(str)
+	     * @param expression any
+	     * @returns {any}
+	     */
+	    HandelCoding.prototype.notExist = function (expression) {
+	        return '!(' + expression + ')';
+	    };
+	    /**
+	     * 组合js表达式,例如组合成 var a = 123;
+	     * @param token
+	     * @param value
+	     * @returns {any}
+	     */
+	    HandelCoding.prototype.concatCode = function (token, value) {
+	        return token + '=' + value + ';';
+	    };
+	    /**
+	    * 此方法用于模拟if语句，判断参数是否成立，并组装成if语句
+	    * @param condition
+	    * @param statement
+	    */
+	    HandelCoding.prototype.conditionIsRight = function (array, condition, statement) {
+	        array.push('if(', condition, '){', statement, '}');
+	    };
+	    /**
+	     * 该函数每次被调用，参数id递增
+	     * @param id
+	     * @return {string}
+	     */
+	    HandelCoding.prototype.compileId = function (id, arr, flag) {
+	        var uid = 'compileId' + id;
+	        if (!flag) {
+	            arr.unshift(uid);
+	        }
+	        return uid;
+	    };
+	    return HandelCoding;
+	}());
+	exports.default = HandelCoding;
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+	    return new (P || (P = Promise))(function (resolve, reject) {
+	        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+	        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+	        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+	        step((generator = generator.apply(thisArg, _arguments || [])).next());
+	    });
+	};
+	var __generator = (this && this.__generator) || function (thisArg, body) {
+	    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+	    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+	    function verb(n) { return function (v) { return step([n, v]); }; }
+	    function step(op) {
+	        if (f) throw new TypeError("Generator is already executing.");
+	        while (_) try {
+	            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
+	            if (y = 0, t) op = [0, t.value];
+	            switch (op[0]) {
+	                case 0: case 1: t = op; break;
+	                case 4: _.label++; return { value: op[1], done: false };
+	                case 5: _.label++; y = op[1]; op = [0]; continue;
+	                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+	                default:
+	                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+	                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+	                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+	                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+	                    if (t[2]) _.ops.pop();
+	                    _.trys.pop(); continue;
+	            }
+	            op = body.call(thisArg, _);
+	        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+	        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+	    }
+	};
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var $log = __webpack_require__(2);
+	var util_1 = __webpack_require__(3);
+	var dom_1 = __webpack_require__(9);
+	var parseTpl_1 = __webpack_require__(10);
+	var HandelData_1 = __webpack_require__(20);
+	var HandelEventer_1 = __webpack_require__(21);
+	var HandelEvent_1 = __webpack_require__(22);
+	var index_1 = __webpack_require__(11);
+	var http_1 = __webpack_require__(23);
+	var router_1 = __webpack_require__(25);
+	var store_1 = __webpack_require__(26);
+	var store = new store_1.default();
+	var PREFIX_DIRECTIVE = /(x[\:\-_]|data[\:\-_])/i;
+	var ID = 'c-data-id';
+	var ID_FOR = 'c-for-id';
+	var ID_REPEAT = 'c-repeat-id';
+	var renderComponents = /** @class */ (function () {
+	    function renderComponents(selector, root, CList) {
+	        this.selector = selector;
+	        this.root = root;
+	        this.CList = CList;
+	        this.CObj = this.listToObj(CList);
+	        this.eventList = [];
+	        this.cRefList = [];
+	        this.showList = [];
+	        this.ifList = [];
+	        this.ifTpl = {};
+	        this.cHtmlList = [];
+	        this.cForList = [];
+	        this.cRepeatList = [];
+	        this.cViewList = [];
+	        this.dataId = parseInt(util_1.default.now());
+	        this.componentToken = [];
+	        this.componentNames = this.getComponentNameList();
+	        this.componentAttrs = {};
+	        this.templateId = {};
+	        this.oneRootComponent = 1;
+	        this.$router = undefined;
+	        this.$routerCache = {};
+	    }
+	    /**
+	     * 组件渲染到dom节点
+	     */
+	    renderComponents.prototype.componentToDom = function () {
+	        var self = this, node, components = [], rootTpl = dom_1.default.wrapDom(this.theTpl(this.root), util_1.default._cameCase(this.root.name).toLowerCase());
+	        function handelComponent() {
+	            return __awaiter(this, void 0, void 0, function () {
+	                return __generator(this, function (_a) {
+	                    switch (_a.label) {
+	                        case 0: return [4 /*yield*/, invokeLooopNodes()];
+	                        case 1:
+	                            _a.sent();
+	                            return [4 /*yield*/, invokeLoopComponents()];
+	                        case 2:
+	                            _a.sent();
+	                            return [4 /*yield*/, invokeRouter()];
+	                        case 3:
+	                            _a.sent();
+	                            return [2 /*return*/];
+	                    }
+	                });
+	            });
+	        }
+	        handelComponent();
+	        // 遍历节点
+	        function invokeLooopNodes() {
+	            node = self.loopNodes(self.root.name, dom_1.default.create(rootTpl), components);
+	        }
+	        // 遍历组件
+	        function invokeLoopComponents() {
+	            self.root.template = node[0].outerHTML;
+	            self.root.isRoot = true;
+	            self.templateId[node[0].getAttribute(ID)] = node[0].outerHTML;
+	            self.loopComponents(components, self.root.data, self.root.components, self.root.name);
+	        }
+	        // 处理路由
+	        function invokeRouter() {
+	            if (store.has('routerConfig')) {
+	                handelRouter();
+	            }
+	            function handelRouter() {
+	                setTimeout(function () {
+	                    if (window.document.readyState == "complete") {
+	                        var hash = window.location.hash;
+	                        if (hash == '') {
+	                            var index = pathIndex();
+	                            if (util_1.default.type(index) == 'object') {
+	                                handelView(index);
+	                            }
+	                        }
+	                        else {
+	                            var r = getNowRouter(hash.substr(1));
+	                            if (r != undefined) {
+	                                handelView(r);
+	                            }
+	                        }
+	                    }
+	                    window.addEventListener('hashchange', function (data) {
+	                        var nowPath = '';
+	                        if (data.newURL.includes('/#')) {
+	                            nowPath = data.newURL.split('/#')[1];
+	                        }
+	                        var r = getNowRouter(nowPath);
+	                        if (r != undefined) {
+	                            handelView(r);
+	                        }
+	                    }, false);
+	                    function handelView(obj) {
+	                        var name = obj.component.name;
+	                        var delay = obj.delay || 0;
+	                        setTimeout(function () {
+	                            self.cViewList.forEach(function (v) {
+	                                if (!dom_1.default.q(v.ele))
+	                                    return;
+	                                if (obj.cache && self.$routerCache.hasOwnProperty(name)) {
+	                                    dom_1.default.q(v.ele).innerHTML = self.$routerCache[name];
+	                                    self.handelEventListener(self.CObj[name], dom_1.default.q(v.ele).firstChild);
+	                                }
+	                                else {
+	                                    dom_1.default.q(v.ele).innerHTML = '';
+	                                    dom_1.default.q(v.ele).insertAdjacentHTML('afterbegin', '<' + util_1.default._cameCase(name) + '></' + util_1.default._cameCase(name) + '>');
+	                                    self.loopNodes(name, dom_1.default.q(v.ele).childNodes, []);
+	                                    self.loopComponents([self.CObj[name]], self.CObj[v.which].data || {}, [], v.which);
+	                                    setTimeout(function () {
+	                                        self.$routerCache[name] = dom_1.default.q(util_1.default._cameCase(name)).outerHTML;
+	                                    }, 0);
+	                                }
+	                            });
+	                        }, delay);
+	                    }
+	                }, 0);
+	            }
+	        }
+	        // 获取当前路由
+	        function getNowRouter(path) {
+	            var router = new router_1.default(path, store.get('routerConfig'));
+	            self.$router = router;
+	            return router.nowRouter;
+	        }
+	        // 默认路径
+	        function pathIndex() {
+	            var obj = undefined;
+	            store.get('routerConfig').forEach(function (v) {
+	                if (v.path == '/') {
+	                    obj = v;
+	                }
+	            });
+	            return obj;
+	        }
+	    };
+	    /**
+	     * 组件的template, templateId, templateUrl
+	     * @param component 组件
+	     */
+	    renderComponents.prototype.theTpl = function (component) {
+	        // hasHtmlUrl, webpack打包需要引入html-loader
+	        return (component.template ? component.template.trim() : undefined) || dom_1.default.hasHtml(component.templateId) || dom_1.default.hasHtmlUrl(component.templateUrl);
+	    };
+	    /**
+	     * 组件的style, styleId, styleUrl
+	     * @param component 组件
+	     */
+	    renderComponents.prototype.theStyle = function (component) {
+	        // component.style
+	        function handelString(str) {
+	            if (str != undefined) {
+	                return {
+	                    type: 'string',
+	                    result: str
+	                };
+	            }
+	            return false;
+	        }
+	        // component.styleId
+	        function handelId(id) {
+	            if (dom_1.default.q(id) != undefined) {
+	                return {
+	                    type: 'id',
+	                    result: id
+	                };
+	            }
+	            return false;
+	        }
+	        // component.styleUrl, webpack打包需要引入css-loader
+	        function handelUrl(url) {
+	            if (url != undefined) {
+	                // 针对import * as css from '';
+	                if (util_1.default.type(url) == 'object') {
+	                    url = url[0][1];
+	                }
+	                // 针对require('../xx.css')
+	                if (util_1.default.type(url) == 'array') {
+	                    url = url[1];
+	                }
+	                return {
+	                    type: 'url',
+	                    result: url
+	                };
+	            }
+	            return false;
+	        }
+	        return handelString(component.style) || handelId(component.styleId) || handelUrl(component.styleUrl);
+	    };
+	    /**
+	     * 遍历dom节点
+	     * @param name 组件名称
+	     * @param node dom节点
+	     * @param components 组件列表
+	     */
+	    renderComponents.prototype.loopNodes = function (name, node, components) {
+	        var _this = this;
+	        for (var i = 0; i < node.length; i++) {
+	            if (node[i].nodeType == 1) {
+	                node[i].setAttribute("c-data-id", this.dataId);
+	                var cs = this.getComponent(node[i], name);
+	                cs.forEach(function (v) {
+	                    if (components) {
+	                        components.push(util_1.default.deepClone(util_1.default.extend(_this.CObj[v], { token: _this.dataId })));
+	                        // components.push(Util.extend(this.CObj[v], {token: this.dataId}));
+	                    }
+	                });
+	                this.dataId++;
+	                // 添加eventList, showList...等集合
+	                this.addDirectiveList(name, node[i]);
+	                if (node[i].childNodes && node[i].childNodes.length) {
+	                    this.loopNodes(name, node[i].childNodes, components);
+	                }
+	            }
+	        }
+	        return node;
+	    };
+	    /**
+	     * 添加eventList, showList...等集合
+	     * @param name 组件名称
+	     * @param node 节点
+	     */
+	    renderComponents.prototype.addDirectiveList = function (name, node) {
+	        for (var j = 0, len = node.attributes; j < len.length; j++) {
+	            var attrName = this.normalizeDirective(len[j].name);
+	            if (attrName.match(/^cClick|cDbclick|cMouseover|cMousedown|cMouseup|cMousemove|cMouseout|cMouseleave|cBlur|cFocus|cChange|cInput|cDrag|cDragend|cDragenter|cDragleave|cDragover|cDragstart|cDrop|cFocus|cKeydown|cKeypress|cKeyup|cScroll|cSelect|cSubmit|cTtoggle|cResize|cWaiting|cProgress|cLoadstart|cDurationchange|cLoadedmetadata|cLoadeddata|cCanplay|cCanplaythrough|cPlay|cPause|cRef|cShow|cIf|cHtml|cFor|cRepeat|cView$/g)) {
+	                switch (attrName) {
+	                    case 'cRef':
+	                        this.cRefList.push({
+	                            which: name,
+	                            type: len[j].name.split('-')[1],
+	                            fn: len[j].value,
+	                            ele: '[' + ID + '="' + node.getAttribute(ID) + '"]',
+	                            id: node.getAttribute(ID)
+	                        });
+	                        break;
+	                    case 'cShow':
+	                        this.showList.push({
+	                            which: name,
+	                            type: len[j].name.split('-')[1],
+	                            fn: len[j].value,
+	                            ele: '[' + ID + '="' + node.getAttribute(ID) + '"]',
+	                            id: node.getAttribute(ID),
+	                            directive: attrName
+	                        });
+	                        // 在组件渲染前面处理display
+	                        var displayStatus = dom_1.default.boolToDisplay(parseTpl_1.default(len[j].value, this.CObj[name].data, this.CObj[name].props));
+	                        node.style.display = displayStatus;
+	                        break;
+	                    case 'cIf':
+	                        this.ifList.push({
+	                            which: name,
+	                            type: len[j].name.split('-')[1],
+	                            fn: len[j].value,
+	                            ele: '[' + ID + '="' + node.getAttribute(ID) + '"]',
+	                            id: node.getAttribute(ID),
+	                            directive: attrName,
+	                            html: node.outerHTML
+	                        });
+	                        var ifInfo = parseTpl_1.default(len[j].value, this.CObj[name].data, this.CObj[name].props);
+	                        if (ifInfo == 'true') {
+	                            node.style.display = 'none';
+	                        }
+	                        break;
+	                    case 'cHtml':
+	                        this.cHtmlList.push({
+	                            which: name,
+	                            type: len[j].name.split('-')[1],
+	                            fn: len[j].value,
+	                            ele: '[' + ID + '="' + node.getAttribute(ID) + '"]',
+	                            id: node.getAttribute(ID),
+	                            directive: attrName,
+	                            html: node.outerHTML
+	                        });
+	                        break;
+	                    case 'cFor':
+	                        this.cForList.push({
+	                            which: name,
+	                            type: len[j].name.split('-')[1],
+	                            fn: len[j].value,
+	                            ele: '[' + ID + '="' + node.getAttribute(ID) + '"]',
+	                            id: node.getAttribute(ID),
+	                            html: node.innerHTML
+	                        });
+	                        break;
+	                    case 'cRepeat':
+	                        this.cRepeatList.push({
+	                            which: name,
+	                            type: len[j].name.split('-')[1],
+	                            fn: len[j].value,
+	                            ele: '[' + ID + '="' + node.getAttribute(ID) + '"]',
+	                            id: node.getAttribute(ID)
+	                        });
+	                        break;
+	                    case 'cView':
+	                        this.cViewList.push({
+	                            which: name,
+	                            type: len[j].name.split('-')[1],
+	                            fn: len[j].value,
+	                            ele: '[' + ID + '="' + node.getAttribute(ID) + '"]',
+	                            id: node.getAttribute(ID)
+	                        });
+	                        break;
+	                    default:
+	                        this.eventList.push({
+	                            which: name,
+	                            type: len[j].name.split('-')[1],
+	                            fn: len[j].value,
+	                            ele: '[' + ID + '="' + node.getAttribute(ID) + '"]',
+	                            id: node.getAttribute(ID)
+	                        });
+	                        break;
+	                }
+	            }
+	        }
+	    };
+	    /**
+	     * 遍历组件
+	     * @param components 模板中的组件集合
+	     * @param fatherData 父组件data数据
+	     * @param componentArr 注入的组件集合
+	     * @param componentName 父组件名称
+	     */
+	    renderComponents.prototype.loopComponents = function (components, fatherData, componentArr, componentName) {
+	        if (components.length && componentArr == undefined) {
+	            $log.error('找不到组件为' + componentName + '的components属性');
+	        }
+	        var self = this;
+	        components.forEach(function (v) {
+	            if (v == undefined)
+	                return;
+	            // “模板中的组件” 与 “注入的组件” 对比
+	            self.compareChildComponentAndInjectComponents(v.name, componentArr);
+	            // 给组件赋能
+	            v.$data = HandelData_1.default.$data;
+	            v.$http = http_1.default;
+	            v.$event = HandelEvent_1.default;
+	            v.$router = self.$router;
+	            function handelCC() {
+	                return __awaiter(this, void 0, void 0, function () {
+	                    var before;
+	                    return __generator(this, function (_a) {
+	                        switch (_a.label) {
+	                            case 0: return [4 /*yield*/, self.handelDataChange(v)];
+	                            case 1:
+	                                _a.sent(); // 监听data数据改变
+	                                return [4 /*yield*/, self.handelBeforeRender(v)];
+	                            case 2:
+	                                before = _a.sent();
+	                                return [4 /*yield*/, self.handelAfterRender(before, v)];
+	                            case 3:
+	                                _a.sent(); //在组件渲染之后执行
+	                                return [2 /*return*/];
+	                        }
+	                    });
+	                });
+	            }
+	            handelCC();
+	        });
+	    };
+	    /**
+	     * 在组建渲染之前执行
+	     * @param v 组件
+	     */
+	    renderComponents.prototype.handelBeforeRender = function (v) {
+	        if (v.beforeRender) {
+	            v.$el = undefined;
+	            v.$refs = undefined;
+	            v.componentStatus = 'beforeRender';
+	            v.beforeRender();
+	        }
+	        return 'beforeRenderIsDone';
+	    };
+	    /**
+	     * 在组件渲染之后执行
+	     * @param status handelBeforeRender()的返回值
+	     * @param v 组件
+	     */
+	    renderComponents.prototype.handelAfterRender = function (status, v) {
+	        if (status != 'beforeRenderIsDone') {
+	            return;
+	        }
+	        var self = this;
+	        function invokeAfterRender() {
+	            return __awaiter(this, void 0, void 0, function () {
+	                var step1, step2, step3, step4, step5, step6, step7;
+	                return __generator(this, function (_a) {
+	                    switch (_a.label) {
+	                        case 0: return [4 /*yield*/, addStyle()];
+	                        case 1:
+	                            step1 = _a.sent();
+	                            return [4 /*yield*/, renderOnce(step1)];
+	                        case 2:
+	                            step2 = _a.sent();
+	                            return [4 /*yield*/, handelCforDirective(step2)];
+	                        case 3:
+	                            step3 = _a.sent();
+	                            return [4 /*yield*/, handelOtherDirective(step3)];
+	                        case 4:
+	                            step4 = _a.sent();
+	                            return [4 /*yield*/, handelRenderFn(step4)];
+	                        case 5:
+	                            step5 = _a.sent();
+	                            return [4 /*yield*/, loopChildComponent(step5)];
+	                        case 6:
+	                            step6 = _a.sent();
+	                            return [4 /*yield*/, handelClickDirective(step6)];
+	                        case 7:
+	                            step7 = _a.sent();
+	                            return [2 /*return*/];
+	                    }
+	                });
+	            });
+	        }
+	        if (v.render) {
+	            invokeAfterRender();
+	        }
+	        function addStyle() {
+	            // head添加style
+	            dom_1.default.addStyle(self.theStyle(v), v);
+	            return 'done';
+	        }
+	        function renderOnce(status) {
+	            if (status != 'done') {
+	                return;
+	            }
+	            var node;
+	            // 根组件单独渲染
+	            if (v.name == self.root.name) {
+	                if (self.oneRootComponent == 2) {
+	                    $log.error('根组件' + self.root.name + '只能有一个');
+	                }
+	                var dom = dom_1.default.q(self.selector);
+	                if (dom == undefined) {
+	                    $log.error('节点' + self.selector + '不存在');
+	                }
+	                dom.innerHTML = parseTpl_1.default(self.theTpl(self.root), self.root.data, {});
+	                node = dom_1.default.q('[' + ID + '="' + v.token + '"]');
+	                self.oneRootComponent++;
+	            }
+	            else {
+	                var newNode = self.loopNodes(v.name, dom_1.default.create(self.theTpl(self.CObj[v.name])));
+	                node = dom_1.default.q('[' + ID + '="' + v.token + '"]');
+	                self.templateId[v.token] = newNode[0].outerHTML;
+	                // 编译组件属性，父组件的data值覆盖子组件的props值（组件的attr值与props对比，有则覆盖）
+	                var newProps = dom_1.default.combineAttrAndProps(self.componentAttrs[v.token], self.CObj[v.name].props);
+	                node.innerHTML = self.getChangedData(newNode[0].outerHTML, self.CObj[v.name].data, newProps);
+	            }
+	            return node;
+	        }
+	        function handelCforDirective(node) {
+	            // 处理c-for
+	            self.loopCforToDom(self.cForList, v);
+	            return node;
+	        }
+	        function handelOtherDirective(node) {
+	            // 处理c-if
+	            self.loopIfToDom(self.ifList, v);
+	            // 处理c-html
+	            self.loopHtmlToDom(self.cHtmlList, v);
+	            return node;
+	        }
+	        function handelRenderFn(node) {
+	            v.$el = node;
+	            // 处理c-ref
+	            v.$refs = {};
+	            var currentRefs = self.cRefList.filter(function (rfs) {
+	                return rfs.which == v.name;
+	            });
+	            currentRefs.forEach(function (r) {
+	                v.$refs[r.fn] = dom_1.default.q(r.ele);
+	            });
+	            v.componentStatus = 'afterRender';
+	            v.render();
+	            return node;
+	        }
+	        function loopChildComponent(node) {
+	            // 遍历组件子节点
+	            if (v.name != self.root.name) {
+	                var arr = self.findComponent(node.firstChild);
+	                if (arr.length) {
+	                    if (v.name) {
+	                        // self.loopComponents(arr, v.data, Util.deepClone(v.components), v.name)
+	                        self.loopComponents(arr, v.data, v.components, v.name);
+	                    }
+	                }
+	            }
+	            return node;
+	        }
+	        function handelClickDirective(node) {
+	            //绑定事件
+	            self.handelEventListener(v, node);
+	        }
+	    };
+	    /**
+	     * “模板中的组件” 与 “注入的组件” 对比
+	     * @param child 模板中的单个组件
+	     * @param arr 注入的组件集合
+	     */
+	    renderComponents.prototype.compareChildComponentAndInjectComponents = function (child, arr) {
+	        var self = this, flag = false;
+	        if (child = this.root.name) {
+	            flag = true;
+	        }
+	        else if (!arr.length && child != this.root.name) {
+	            flag = false;
+	        }
+	        else {
+	            flag = arr.some(function (v) {
+	                if (v.name) {
+	                    return child != self.root.name && child == v.name;
+	                }
+	            });
+	        }
+	        if (!flag)
+	            $log.error('名称为' + child + '的组件未找到');
+	    };
+	    /**
+	     * 组件渲染后的事件绑定
+	     * @param v 组件对象
+	     * @param node 节点
+	     */
+	    renderComponents.prototype.handelEventListener = function (v, node) {
+	        // 获取当前组件的事件集合
+	        var attrArr = dom_1.default.getAttr(ID, node);
+	        var newAttrArr = this.array_intersection(attrArr, this.eventList);
+	        // 事件绑定处理
+	        if (newAttrArr.length) {
+	            var arr = newAttrArr.filter(function (ev) {
+	                return ev.which == v.name;
+	            });
+	            arr.forEach(function (val) {
+	                if (document.querySelectorAll(val.ele)) {
+	                    try {
+	                        for (var _i = 0, _a = document.querySelectorAll(val.ele); _i < _a.length; _i++) {
+	                            var dq = _a[_i];
+	                            dq.addEventListener(val.type, function (event) {
+	                                try {
+	                                    if (val.fn.toString().match(/\(\)$/)) {
+	                                        if (v.hasOwnProperty(val.fn.toString().split('()')[0])) {
+	                                            index_1.default.parse(val.fn)(v, { $event: event });
+	                                        }
+	                                        else {
+	                                            $log.error('组件' + v.name + '中不存在方法' + val.fn);
+	                                        }
+	                                    }
+	                                    else {
+	                                        $log.error('组件' + v.name + '中方法' + val.fn + '语法错误');
+	                                    }
+	                                }
+	                                catch (e) {
+	                                    console.log(e);
+	                                }
+	                            }, false);
+	                        }
+	                    }
+	                    catch (e) {
+	                        $log.error(e);
+	                    }
+	                }
+	                else {
+	                    $log.error('属性为' + val.ele + '的节点不存在！');
+	                }
+	            });
+	        }
+	    };
+	    /**
+	     * 监听data数据改变
+	     * @param v 组件对象
+	     */
+	    renderComponents.prototype.handelDataChange = function (v, type) {
+	        var _this = this;
+	        var _loop_1 = function (i) {
+	            HandelEventer_1.default.listen(i, function (info) {
+	                if (info.target == v.token && JSON.stringify(info.oldVal) != JSON.stringify(info.newVal)) {
+	                    // 获取组件原始的tpl，将其转为dom
+	                    var parseNode = dom_1.default.create(_this.templateId[v.token]);
+	                    var dataPos = _this.dataPosition(i, parseNode, v.name);
+	                    // 在dom渲染之前执行，更新data数据
+	                    _this.updateData(i, info);
+	                    if (dom_1.default.q(util_1.default._cameCase(v.name))) {
+	                        // data数据改变重新渲染对象的节点
+	                        _this.dataChangeToDom(parseNode, dataPos, info, v.name);
+	                    }
+	                }
+	            });
+	        };
+	        for (var i in v.data) {
+	            _loop_1(i);
+	        }
+	    };
+	    /**
+	     * 在dom渲染之前执行，更新data数据
+	     * @param key data的key
+	     * @param info 更改的信息
+	     */
+	    renderComponents.prototype.updateData = function (key, info) {
+	        // 所属组件
+	        var component = info.which;
+	        this.CObj[component].data[key] = info.newVal;
+	    };
+	    /**
+	     * data数据改变重新渲染对象的节点
+	     * @param parseNode 原始的dom节点
+	     * @param dataPos 改变的数据集合
+	     * @param info data的变化信息
+	     * @param component 所属组件
+	     */
+	    renderComponents.prototype.dataChangeToDom = function (parseNode, dataPos, info, component) {
+	        // 文本类型
+	        this.loopTextToDom(parseNode, dataPos, info, component);
+	        // 属性类型
+	        this.loopAttrToDom(dataPos, info, component);
+	    };
+	    /**
+	     * 文本改变渲染对应的dom节点
+	     * @param parseNode 编译的节点
+	     * @param dataPos 改变的数据集合
+	     * @param info data的变化信息
+	     * @param component 所属组件
+	     */
+	    renderComponents.prototype.loopTextToDom = function (parseNode, dataPos, info, component) {
+	        var textData = dataPos.filter(function (df) {
+	            return df.type == 'text';
+	        });
+	        if (textData.length) {
+	            textData.forEach(function (dp) {
+	                var originNode = parseNode[0].parentNode.querySelector(dp.position).childNodes[dp.item].textContent;
+	                document.querySelector(dp.position).childNodes[dp.item].textContent = parseTpl_1.default(originNode, info.new, info.props);
+	            });
+	        }
+	    };
+	    /**
+	     * 属性改变渲染对应的dom节点
+	     * @param dataPos 改变的数据集合
+	     * @param info data的变化信息
+	     * @param component 所属组件
+	     */
+	    renderComponents.prototype.loopAttrToDom = function (dataPos, info, component) {
+	        var _this = this;
+	        var self = this;
+	        var attrData = dataPos.filter(function (df) {
+	            return df.type == 'attr';
+	        });
+	        if (attrData.length) {
+	            attrData.forEach(function (dp) {
+	                // 处理指令
+	                switch (dp.attr) {
+	                    case 'c-show':
+	                        var newAttr = dom_1.default.boolToDisplay(index_1.default.parse(dp.value)(info.new));
+	                        dom_1.default.q(dp.position).style.display = newAttr;
+	                        break;
+	                    case 'c-if':
+	                        var dom = dom_1.default.q(dp.position);
+	                        if (dom != undefined) {
+	                            dom_1.default.q(dp.position).setAttribute(dp.attr, info.newVal);
+	                        }
+	                        _this.handelIf(dp, component);
+	                        break;
+	                    case 'c-for':
+	                        _this.loopCforToDom(dataPos, _this.CObj[component], 'dataChange');
+	                        break;
+	                    default:
+	                        changeAttr(dp);
+	                }
+	                function changeAttr(dp) {
+	                    dom_1.default.q(dp.position).setAttribute(dp.attr, info.newVal);
+	                    // 更新componentAttrs
+	                    self.componentAttrs[dp.componentToken][dp.attr] = info.newVal;
+	                }
+	                //父组件的属性改变
+	                function handelComponent(dp) {
+	                    var childChangePos = self.dataPosition(dp.attr, dom_1.default.create(self.templateId[dp.componentToken]), component);
+	                    // 文本类型
+	                    var childChangePosText = childChangePos.filter(function (df) {
+	                        return df.type == 'text';
+	                    });
+	                    childChangePosText.forEach(function (chItem) {
+	                        var changedComponent = self.CObj[dp.componentName], changedOriginComponentProps = changedComponent.props, changedComponentData = changedComponent.data, changedPropKey = dp.attr, changedPropVal = self.componentAttrs[dp.componentToken][dp.attr], changedComponentProps = self.combineChangedProps(changedPropKey, changedPropVal, changedOriginComponentProps);
+	                        var changedOrginNode = dom_1.default.create(self.templateId[dp.componentToken]);
+	                        var changedOrginText = changedOrginNode[0].parentNode.querySelector(chItem.position).childNodes[chItem.item].textContent;
+	                        dom_1.default.q(chItem.position).childNodes[chItem.item].textContent = parseTpl_1.default(changedOrginText, changedComponentData, changedComponentProps);
+	                    });
+	                    // 属性类型
+	                    var childChangePosAttr = childChangePos.filter(function (df) {
+	                        return df.type == 'attr';
+	                    });
+	                    childChangePosAttr.forEach(function (chItem) {
+	                        // 父组件的attr值与子组件的props值进行联动
+	                        if (dp.attr == chItem.value) {
+	                            chItem.value = dp.value;
+	                        }
+	                        dom_1.default.q(chItem.position).setAttribute(chItem.attr, chItem.value);
+	                        // 更新componentAttrs
+	                        self.componentAttrs[chItem.componentToken][chItem.attr] = chItem.value;
+	                        self.componentAttrs[chItem.componentToken][chItem.attr] = chItem.value;
+	                        if (chItem.isComponent) {
+	                            handelComponent(chItem);
+	                        }
+	                    });
+	                }
+	                if (dp.isComponent) {
+	                    handelComponent(dp);
+	                }
+	            });
+	        }
+	    };
+	    /**
+	     * 处理c-for指令
+	     * @param arr c-for 集合
+	     * @param component 指令所在组件
+	     */
+	    renderComponents.prototype.loopCforToDom = function (arr, component, reRender) {
+	        var _this = this;
+	        var currentRepeat = arr.filter(function (rVal) {
+	            return rVal.which == component.name;
+	        });
+	        var self = this;
+	        currentRepeat.forEach(function (re) {
+	            // 解析指令，获取重复次数
+	            var match2 = re.fn.match(/^\s*([\s\S]+?)\s+in\s+([\s\S]+?)\s*$/);
+	            if (!match2) {
+	                $log.error('c-for格式有误');
+	            }
+	            var itemExp = match2[1];
+	            var itemsExp = match2[2];
+	            var items = _this.inComponent(itemsExp, component);
+	            if (items && util_1.default.type(items) == 'array' && items.length) {
+	                if (reRender == 'dataChange') {
+	                    dom_1.default.removeDomExpectWhich(0, '[c-for-id="' + dom_1.default.q(re.ele).getAttribute('c-for-id') + '"]');
+	                }
+	                // 渲染单个有c-for指令的模板
+	                items.forEach(function (item, i) {
+	                    // 克隆节点，重复次数
+	                    var newn = dom_1.default.q(re.ele).cloneNode(true);
+	                    var data = {};
+	                    data[match2[1]] = item;
+	                    newn.innerHTML = parseTpl_1.default(re.html, data, self.CObj[component.name]['props'] || {});
+	                    var newNode = self.loopNodes(component.name, dom_1.default.create(newn.outerHTML));
+	                    var innerComponents = self.findComponent(newNode[0]);
+	                    newNode[0].setAttribute('c-for-id', re.id);
+	                    // 重新编译节点
+	                    if (i == 0) {
+	                        dom_1.default.q(re.ele).innerHTML = newNode[0].innerHTML;
+	                        dom_1.default.q(re.ele).setAttribute('c-for-id', re.id);
+	                    }
+	                    else {
+	                        var el = document.querySelectorAll('[c-for-id="' + re.id + '"][c-for="' + re.fn + '"]');
+	                        el[el.length - 1].insertAdjacentElement('afterEnd', newNode[0]);
+	                    }
+	                    if (innerComponents.length) {
+	                        self.loopComponents(util_1.default.deepClone(innerComponents), data, [], component.name);
+	                    }
+	                });
+	            }
+	            else {
+	                $log.error('组件' + component.name + '内c-for指令的格式不正确');
+	            }
+	        });
+	    };
+	    /**
+	     * 处理c-if指令
+	     * @param arr c-if 集合
+	     * @param component 指令所在组件
+	     */
+	    renderComponents.prototype.loopIfToDom = function (arr, component) {
+	        var _this = this;
+	        var currentIf = arr.filter(function (ifVal) {
+	            return ifVal.which == component.name;
+	        });
+	        currentIf.forEach(function (cIf) {
+	            _this.handelIf(cIf, component.name);
+	        });
+	    };
+	    /**
+	     * 移除c-if指令所在的节点
+	     * @param cIf c-if指令所绑定的节点信息
+	     */
+	    renderComponents.prototype.handelIf = function (cIf, componentName) {
+	        var ifDom = dom_1.default.q(cIf.ele || cIf.position);
+	        // 节点存在，移除节点
+	        if (ifDom != undefined) {
+	            var ifInfo = ifDom.getAttribute('c-if');
+	            if (ifInfo == 'true') {
+	                ifDom.parentNode.replaceChild(dom_1.default.addComment('c-if:' + cIf.id + ''), ifDom);
+	                this.ifTpl[cIf.id] = ifDom.outerHTML;
+	            }
+	        }
+	        // 已经被移除，还原节点
+	        if (ifDom == undefined) {
+	            dom_1.default.replaceComment(dom_1.default.q(util_1.default._cameCase(componentName)), cIf.attr + ':' + cIf.id, dom_1.default.create(this.ifTpl[cIf.id])[0]);
+	            // 更改属性
+	            dom_1.default.attr((cIf.ele || cIf.position), 'c-if', false);
+	            dom_1.default.q(cIf.ele || cIf.position).style.display = 'block';
+	        }
+	    };
+	    /**
+	     * 处理c-html指令
+	     * @param arr c-html指令集合
+	     * @param component 所属组件
+	     */
+	    renderComponents.prototype.loopHtmlToDom = function (arr, component) {
+	        var currentHtml = arr.filter(function (h) {
+	            return h.which == component.name;
+	        });
+	        currentHtml.forEach(function (h) {
+	            dom_1.default.q(h.ele).innerHTML = dom_1.default.attr(h.ele, 'c-html');
+	        });
+	    };
+	    /**
+	     * 组合经过改变的组件的props值
+	     * @param key
+	     * @param val
+	     * @param props
+	     */
+	    renderComponents.prototype.combineChangedProps = function (key, val, props) {
+	        if (props[key]) {
+	            props[key]['default'] = val;
+	        }
+	        return props;
+	    };
+	    /**
+	     * 数组去重
+	     * @param a
+	     * @param b
+	     */
+	    renderComponents.prototype.array_intersection = function (a, b) {
+	        var result = [];
+	        for (var i = 0; i < b.length; i++) {
+	            var temp = b[i].id;
+	            for (var j = 0; j < a.length; j++) {
+	                if (temp === a[j]) {
+	                    result.push(b[i]);
+	                    break;
+	                }
+	            }
+	        }
+	        return result;
+	    };
+	    /**
+	     * 判断dom节点是组件
+	     * @param node dom节点
+	     */
+	    renderComponents.prototype.isComponent = function (node) {
+	        var name = dom_1.default.parseName(node);
+	        return this.CObj[name] != undefined;
+	    };
+	    /**
+	     * 判断表达式内的字符是否在组件的data中
+	     * @param name data属性名称
+	     * @param expression '{{xxx}}'
+	     * @returns 存在返回{{ }}内的表达式，否在返回null
+	     */
+	    renderComponents.prototype.isComponentData = function (name, expression) {
+	        var regExp = new RegExp("{{\\s*([\\s\\S]*" + name + "[\\s\\S]*)\\s*}}", "gm");
+	        var res = regExp.exec(expression);
+	        if (res == null) {
+	            return null;
+	        }
+	        var exp = {
+	            '': true,
+	            '+': true,
+	            '-': true,
+	            '*': true,
+	            '/': true,
+	            '(': true,
+	            ')': true,
+	            '.': true,
+	            '[': true,
+	            ']': true,
+	            '!': true,
+	            '!=': true,
+	            '!==': true,
+	            '>': true,
+	            '>=': true,
+	            '>==': true,
+	            '<': true,
+	            '<=': true,
+	            '<==': true,
+	            '?': true,
+	            ':': true
+	        };
+	        var nameIndex = res[1].indexOf(name), prev1 = res[1].charAt(nameIndex - 1), prev2 = res[1].charAt(nameIndex - 2), prev3 = res[1].charAt(nameIndex - 3), next1 = res[1].charAt(nameIndex + 1), next2 = res[1].charAt(nameIndex + 2), next3 = res[1].charAt(nameIndex + 3);
+	        if (exp[prev1] || exp[prev2] || exp[prev3] || exp[next1] || exp[next2] || exp[next3]) {
+	            return res[1];
+	        }
+	        return null;
+	    };
+	    /**
+	     * 获取某个data属性名在节点中的位置
+	     * @param name data属性名称
+	     * @param node dom节点
+	     * @param component 所属组件
+	     */
+	    renderComponents.prototype.dataPosition = function (name, node, component) {
+	        var res = [], self = this;
+	        // 属性
+	        function loopAttr(node) {
+	            if (typeof node == 'object' && node.length) {
+	                for (var i = 0; i < node.length; i++) {
+	                    if (node[i].nodeType == 1 && node[i].hasAttributes()) {
+	                        for (var j = 0, len = node[i].attributes; j < len.length; j++) {
+	                            if (len[j].name == 'c-for') {
+	                                var match2 = len[j].value.match(/^\s*([\s\S]+?)\s+in\s+([\s\S]+?)\s*$/);
+	                                if (!match2) {
+	                                    $log.error('组件' + component + '内的c-for指令表达式' + len[j] + '有误');
+	                                }
+	                                if (match2[2] == name && !self.isComponent(node[i])) {
+	                                    res = res.concat({
+	                                        attr: len[j].name,
+	                                        fn: len[j].value,
+	                                        type: 'attr',
+	                                        id: node[i].getAttribute(ID),
+	                                        ele: '[' + ID + '="' + node[i].getAttribute(ID) + '"]',
+	                                        item: i,
+	                                        isComponent: false,
+	                                        html: node[i].innerHTML,
+	                                        which: component //所属组件
+	                                    });
+	                                }
+	                            }
+	                            else {
+	                                var attrVal = self.isComponentData(name, len[j].value);
+	                                if (attrVal) {
+	                                    var isCs = self.isComponent(node[i]);
+	                                    if (isCs) {
+	                                        res = res.concat({
+	                                            attr: len[j].name,
+	                                            value: name,
+	                                            type: 'attr',
+	                                            id: node[i].getAttribute(ID),
+	                                            position: '[' + ID + '="' + node[i].getAttribute(ID) + '"]',
+	                                            item: i,
+	                                            isComponent: true,
+	                                            componentName: dom_1.default.parseName(node[i]),
+	                                            componentToken: node[i].getAttribute(ID),
+	                                            which: component //所属组件
+	                                        });
+	                                    }
+	                                    else {
+	                                        res = res.concat({
+	                                            attr: len[j].name,
+	                                            value: attrVal,
+	                                            type: 'attr',
+	                                            id: node[i].getAttribute(ID),
+	                                            position: '[' + ID + '="' + node[i].getAttribute(ID) + '"]',
+	                                            item: i,
+	                                            isComponent: false,
+	                                            which: component //所属组件
+	                                        });
+	                                    }
+	                                }
+	                            }
+	                        }
+	                        if (node[i].childNodes && node[i].childNodes.length) {
+	                            loopAttr(node[i].childNodes);
+	                        }
+	                    }
+	                }
+	            }
+	        }
+	        loopAttr(node);
+	        // textContent
+	        function loopText(node) {
+	            if (typeof node == 'object' && node.length) {
+	                for (var i = 0; i < node.length; i++) {
+	                    if (node[i].nodeType == 3) {
+	                        var text = node[i].textContent;
+	                        if (self.isComponentData(name, text)) {
+	                            res = res.concat({
+	                                value: name,
+	                                type: 'text',
+	                                position: '[' + ID + '="' + node[i].parentNode.getAttribute(ID) + '"]',
+	                                item: i,
+	                                isComponent: false
+	                            });
+	                        }
+	                    }
+	                    if (node[i].childNodes && node[i].childNodes.length) {
+	                        loopText(node[i].childNodes);
+	                    }
+	                }
+	            }
+	        }
+	        loopText(node);
+	        return res;
+	    };
+	    /**
+	     * 组件集合转json对象
+	     * @param arr
+	     */
+	    renderComponents.prototype.listToObj = function (arr) {
+	        var obj = {};
+	        arr.forEach(function (v) {
+	            obj[v.name] = v;
+	        });
+	        return obj;
+	    };
+	    /**
+	     * 获取组件的名称集合
+	     */
+	    renderComponents.prototype.getComponentNameList = function () {
+	        var arr = [];
+	        this.CList.forEach(function (v) {
+	            arr.push(v.name);
+	        });
+	        return arr;
+	    };
+	    /**
+	     * 根据dom节点获取component， 遍历子节点
+	     * @param node dom节点
+	     */
+	    renderComponents.prototype.findComponent = function (node) {
+	        if (node.nodeType == 3) {
+	            return;
+	        }
+	        var arr = [];
+	        var self = this;
+	        // tag标签
+	        function loopTagNode(node) {
+	            var normalizedNodeName = self.normalizeDirective(dom_1.default.getNodeName(node).toLowerCase());
+	            if (self.componentNames.includes(normalizedNodeName)) {
+	                // arr.push(Util.deepClone(Util.extend(self.CObj[normalizedNodeName], {token: node.getAttribute(ID)})));
+	                arr.push(util_1.default.extend(self.CObj[normalizedNodeName], { token: node.getAttribute(ID) }));
+	            }
+	            if (node.childNodes && node.childNodes.length) {
+	                node.childNodes.forEach(function (v) {
+	                    if (v.nodeType != 3) {
+	                        loopTagNode(v);
+	                    }
+	                });
+	            }
+	        }
+	        loopTagNode(node);
+	        return arr;
+	    };
+	    /**
+	     * 根据dom节点获取component， 不遍历子节点
+	     * @param node dom节点
+	     * @param name 组件名称
+	     */
+	    renderComponents.prototype.getComponent = function (node, name) {
+	        var arr = [];
+	        var self = this;
+	        // tag标签
+	        function loopTagNode(node) {
+	            var normalizedNodeName = util_1.default.cameCase(dom_1.default.getNodeName(node).toLowerCase());
+	            if (self.componentNames.includes(normalizedNodeName)) {
+	                arr.push(normalizedNodeName);
+	                var obj = {};
+	                for (var i = 0, len = node.attributes; i < len.length; i++) {
+	                    if (len[i].name != ID) {
+	                        obj[len[i].name] = parseTpl_1.default(len[i].value, self.CObj[name].data, self.CObj[name].props);
+	                    }
+	                }
+	                if (!dom_1.default.noOtherAttr(ID, node)) {
+	                    obj['component'] = normalizedNodeName;
+	                    self.componentAttrs[node.getAttribute(ID)] = obj;
+	                }
+	            }
+	        }
+	        loopTagNode(node);
+	        return arr;
+	    };
+	    /**
+	     * 判断指令是否含有mulit属性
+	     * @param name
+	     */
+	    renderComponents.prototype.directiveIsMulit = function (name) {
+	        for (var i = 0, len = this.CList; i < len.length; i++) {
+	            if (len[i]['name'] == name && len[i].mulit == true) {
+	                return true;
+	            }
+	        }
+	        return false;
+	    };
+	    /**
+	     * 组件指令的层级关系
+	     * @param a
+	     * @param b
+	     */
+	    renderComponents.prototype.componentLayer = function (a, b) {
+	        var sort = b.layer - a.layer;
+	        if (sort == 0) {
+	            if (a.name != b.name) {
+	                return a.name < b.name ? -1 : 1;
+	            }
+	            else {
+	                return a.cid - b.cid;
+	            }
+	        }
+	        else {
+	            return sort;
+	        }
+	    };
+	    /**
+	     * 获取data数据改变后的模板
+	     * @param html
+	     * @param data
+	     */
+	    renderComponents.prototype.getChangedData = function (html, data, props) {
+	        return parseTpl_1.default(html, data, props);
+	    };
+	    /**
+	     * 序列化指令
+	     * @param name
+	     */
+	    renderComponents.prototype.normalizeDirective = function (name) {
+	        return util_1.default.cameCase(name.replace(PREFIX_DIRECTIVE, ''));
+	    };
+	    /**
+	     * 判断变量是否在组件的data,props之中, 并返回结果
+	     * @param exp 变量
+	     * @param component 组件
+	     */
+	    renderComponents.prototype.inComponent = function (exp, component) {
+	        return component.data[exp] || component.props.default[exp];
+	    };
+	    return renderComponents;
+	}());
+	exports.default = renderComponents;
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var util_1 = __webpack_require__(3);
+	var $log = __webpack_require__(2);
+	var HandelDom = /** @class */ (function () {
+	    function HandelDom() {
+	        this.BOOLEAN_ATTRS = {
+	            selected: true
+	        };
+	        this.BOOLEAN_ELEMENT = {};
+	    }
+	    /**
+	     * 获取dom节点
+	     * @param str 节点标识,class,id...
+	     */
+	    HandelDom.prototype.q = function (str) {
+	        return document.querySelector(str);
+	    };
+	    /**
+	     * 根据字符串创建dom节点，返回dom节点
+	     * @param str
+	     */
+	    HandelDom.prototype.createDom = function (str) {
+	        if (util_1.default.type(str) != 'string') {
+	            $log.error('组件模板' + str + '必须为字符串，请检查组件的template,templateId,templateUrl属性');
+	        }
+	        var html = "" + str;
+	        html = html.trim();
+	        html = html.replace(/<!--[\s\S]*?-->/gm, ''); //去除html注释
+	        html = html.replace(/>\s+([^\s<]*)\s+</gm, '>$1<').trim(); //去除html标签间的多余空白
+	        var pattern = /([^>]*)(<([a-z/][-a-z0-9_:.]*)[^>/]*(\/*)>)([^<]*)/gm, matchArr, start = Date.now();
+	        var arr = [];
+	        while ((matchArr = pattern.exec(html))) {
+	            var textBefore = matchArr[1], //获取排在标签前的文本
+	            elem = matchArr[2], //获取整个开标签或闭标签
+	            elemName = matchArr[3], //获取标签名
+	            closeSign = matchArr[4], //判断是否为自闭合标签标记
+	            textAfter = matchArr[5]; //获取排在标签后的文本
+	            arr.push(elemName);
+	        }
+	        var dom = document.createElement(arr[0]);
+	        dom.innerHTML = str;
+	        return dom;
+	    };
+	    /**
+	     * 根据字符串创建dom节点，返回dom的子节点
+	     * @param str
+	     */
+	    HandelDom.prototype.create = function (str) {
+	        var div = this.createDom(str);
+	        return div.childNodes;
+	    };
+	    /**
+	    * 获取节点名称
+	    * @param node
+	    */
+	    HandelDom.prototype.getNodeName = function (node) {
+	        return node.nodeName ? node.nodeName : node[0].nodeName;
+	    };
+	    /**
+	     * 获取节点的驼峰名称
+	     * @param node
+	     */
+	    HandelDom.prototype.parseName = function (node) {
+	        return util_1.default.cameCase(node.tagName.toLowerCase());
+	    };
+	    /**
+	     * 包括dom节点
+	     * @param str 节点字符串
+	     * @param wrap 包括的tag标签
+	     */
+	    HandelDom.prototype.wrapDom = function (str, wrap) {
+	        return "<" + wrap + ">" + str + "</" + wrap + ">";
+	    };
+	    /**
+	     * 获取某个属性的集合
+	     * @param attr 属性名
+	     * @param node 节点
+	     */
+	    HandelDom.prototype.getAttr = function (attr, node) {
+	        var arr = [];
+	        if (node.nodeType == 1 && node.getAttribute(attr)) {
+	            arr.push(node.getAttribute(attr));
+	        }
+	        if (node.childNodes && node.childNodes.length) {
+	            getA(node.childNodes);
+	        }
+	        function getA(node) {
+	            for (var i = 0; i < node.length; i++) {
+	                if (node[i].nodeType == 1 && node[i].getAttribute(attr)) {
+	                    arr.push(node[i].getAttribute(attr));
+	                }
+	                if (node[i].childNodes && node[i].childNodes.length) {
+	                    getA(node[i].childNodes);
+	                }
+	            }
+	        }
+	        return arr;
+	    };
+	    /**
+	     * 父组件的data值覆盖子组件的props值（组件的attr值与props对比，有则覆盖）
+	     * @param attr {component:'hello', 'width': 100}
+	     * @param props { 'width': { default:50, type:Number } }
+	     */
+	    HandelDom.prototype.combineAttrAndProps = function (attr, props) {
+	        if (util_1.default.isEmpty(attr))
+	            return props;
+	        if (attr) {
+	            var newAttr = util_1.default.expectSome(attr, 'component');
+	            for (var i in newAttr) {
+	                if (props && props[i]) {
+	                    props[i].default = newAttr[i];
+	                }
+	            }
+	        }
+	        return props;
+	    };
+	    /**
+	     * 节点没有除了attr以外的其他属性
+	     * @param attr 属性
+	     * @param node 节点
+	     */
+	    HandelDom.prototype.noOtherAttr = function (attr, node) {
+	        if (node.nodeType == 1) {
+	            if (node.attributes) {
+	                if (node.attributes.length >= 2)
+	                    return false;
+	                if (node.attributes.length == 1) {
+	                    if (node.attributes[0].name == attr)
+	                        return true;
+	                    else
+	                        return false;
+	                }
+	            }
+	        }
+	    };
+	    /**
+	     * 根据bool值转化成display
+	     * @param bool true, false
+	     */
+	    HandelDom.prototype.boolToDisplay = function (bool) {
+	        if (bool == 'true' || bool == true)
+	            return 'block';
+	        if (bool == 'false' || bool == false)
+	            return 'none';
+	    };
+	    /**
+	     * 获取节点除了某些属性外的其他属性
+	     * @param node 节点
+	     * @param attr 属性
+	     */
+	    HandelDom.prototype.expectSomeAttr = function (node, attr) {
+	        var obj = {};
+	        if (node.attributes && node.attributes.length) {
+	            for (var i = 0, len = node.attributes; i < len.length; i++) {
+	                if (len[i].name != attr) {
+	                    obj[len[i].name] = len[i].value;
+	                }
+	            }
+	        }
+	        return obj;
+	    };
+	    /**
+	     * 添加注释节点
+	     * @param str 注释内容
+	     */
+	    HandelDom.prototype.addComment = function (str) {
+	        var dom = document.createComment(str);
+	        return dom;
+	    };
+	    /**
+	     * 替换注释节点
+	     * @param node 父节点
+	     * @param text 注释内容
+	     * @param newNode 新的节点
+	     */
+	    HandelDom.prototype.replaceComment = function (node, text, newNode) {
+	        var iterator = document.createNodeIterator(node, NodeFilter.SHOW_COMMENT, null, false);
+	        var n = iterator.nextNode();
+	        while (n) {
+	            if (n.nodeValue == text) {
+	                n.parentNode.replaceChild(newNode, n);
+	            }
+	            n = iterator.nextNode();
+	        }
+	    };
+	    /**
+	     * 更改节点属性
+	     * @param str 节点
+	     * @param key 属性名
+	     * @param val 属性值
+	     */
+	    HandelDom.prototype.attr = function (str, key, val) {
+	        var dom = this.q(str);
+	        if (dom != undefined) {
+	            if (arguments.length == 3) {
+	                dom.setAttribute(key, val);
+	            }
+	            if (arguments.length == 2) {
+	                return dom.getAttribute(key);
+	            }
+	        }
+	    };
+	    /**
+	     * 返回节点的html
+	     * @param str 节点标识
+	     */
+	    HandelDom.prototype.hasHtml = function (str) {
+	        if (DOM.q(str)) {
+	            return DOM.q(str).innerHTML;
+	        }
+	        return undefined;
+	    };
+	    /**
+	     * 返回require,import 的html
+	     * @param str 节点标识
+	     */
+	    HandelDom.prototype.hasHtmlUrl = function (str) {
+	        return str;
+	    };
+	    /**
+	     * head添加style
+	     * @param res style所属类型
+	     * @param component style所属组件
+	     */
+	    HandelDom.prototype.addStyle = function (res, component) {
+	        if (component.name == undefined) {
+	            $log.error('找不到组件的name属性，无法添加style样式');
+	        }
+	        if (res == undefined) {
+	            return;
+	        }
+	        // 组件的标签名称
+	        var tag = util_1.default._cameCase(component.name);
+	        switch (res.type) {
+	            case 'string':
+	                this.appendStyle(res.result, tag);
+	                break;
+	            case 'id':
+	                if (this.q(res.result) == undefined) {
+	                    $log.error('名称为' + component.name + '组件中，节点' + res.result + '不存在');
+	                }
+	                var inner = this.q(res.result).innerHTML;
+	                this.appendStyle(inner, tag);
+	                break;
+	            case 'url':
+	                this.appendStyle(res.result, tag);
+	                break;
+	        }
+	    };
+	    /**
+	     * 将样式表添加到head里面
+	     * @param inner 样式表内容
+	     * @param title style的title属性，也是组件tag标签
+	     */
+	    HandelDom.prototype.appendStyle = function (inner, title) {
+	        var style = "" + inner;
+	        style = util_1.default.trimStr(style);
+	        var newStyle = document.createElement('style');
+	        newStyle.type = 'text/css';
+	        newStyle.title = title;
+	        newStyle.innerHTML = style;
+	        this.q('head').appendChild(newStyle);
+	        // 给选择符设置前缀
+	        this.addSelectorPrefix(title);
+	    };
+	    /**
+	     * 给选择符设置前缀
+	     * @param title style的title属性
+	     */
+	    HandelDom.prototype.addSelectorPrefix = function (title) {
+	        var stylesheet = document.styleSheets;
+	        for (var i = 0; i < stylesheet.length; i++) {
+	            if (stylesheet[i].title == title) {
+	                for (var j = 0, cr = stylesheet[i].cssRules; j < cr.length; j++) {
+	                    cr[j].selectorText = title + ' ' + cr[j].selectorText;
+	                }
+	            }
+	        }
+	    };
+	    /**
+	     * 移除具有相同属性的节点，第item个除外
+	     * @param item 索引
+	     * @param selector 节点选择器
+	     */
+	    HandelDom.prototype.removeDomExpectWhich = function (item, selector) {
+	        var nodes = document.querySelectorAll(selector);
+	        for (var i = 0; i < nodes.length; i++) {
+	            if (i != item) {
+	                nodes[i].parentNode.removeChild(nodes[i]);
+	            }
+	        }
+	    };
+	    HandelDom.prototype.watch = function (node) {
+	        // 观察dom数据变化
+	        var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+	        var target = document.querySelector(node);
+	        var observer = new MutationObserver(function (mu) {
+	            // console.log(mu)
+	        });
+	        var config = { childList: true, attributes: true, characterData: true, subtree: true, attributeOldValue: true, characterDataOldValue: true };
+	        observer.observe(target, config);
+	    };
+	    HandelDom.prototype.booleanAttr = function (node, nodeName) {
+	    };
+	    return HandelDom;
+	}());
+	var DOM = new HandelDom();
+	exports.default = DOM;
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var $log = __webpack_require__(2);
+	var util_1 = __webpack_require__(3);
+	var parse_1 = __webpack_require__(11);
+	var ParseTpl = /** @class */ (function () {
+	    function ParseTpl(text, data, props) {
+	        this.text = text;
+	        this.data = data;
+	        this.props = props;
+	    }
+	    /**
+	     * 组合data和props属性
+	     * @param data
+	     * @param props
+	     */
+	    ParseTpl.prototype.combineData = function (data, props) {
+	        if (data === void 0) { data = {}; }
+	        if (props === void 0) { props = {}; }
+	        if (util_1.default.type(data) != 'object')
+	            $log.error('组件是属性data必须为对象');
+	        if (util_1.default.type(props) != 'object')
+	            $log.error('组件是属性props必须为对象');
+	        if (util_1.default.isEmpty(props))
+	            return data;
+	        for (var i in props) {
+	            data[i] = props[i].default;
+	        }
+	        return data;
+	    };
+	    // 渲染模板
+	    ParseTpl.prototype.tpl = function () {
+	        var self = this;
+	        var index = 0, parts = [], startIndex, endIndex, exp, expFn;
+	        if (this.text == undefined) {
+	            return;
+	        }
+	        while (index < this.text.length) {
+	            startIndex = this.text.indexOf('{{', index);
+	            if (startIndex != -1) {
+	                endIndex = this.text.indexOf('}}', startIndex + 2);
+	            }
+	            if (startIndex != -1 && endIndex != -1) {
+	                if (startIndex != index) {
+	                    parts.push(this.text.substring(index, startIndex));
+	                }
+	                exp = this.text.substring(startIndex + 2, endIndex);
+	                expFn = parse_1.default.parse(exp);
+	                parts.push(expFn);
+	                index = endIndex + 2;
+	            }
+	            else {
+	                parts.push(this.text.substring(index));
+	                break;
+	            }
+	        }
+	        // console.log(parts)
+	        return parts.reduce(function (prev, cur) {
+	            if (util_1.default.type(cur) == 'function') {
+	                return prev + self.expectNullUndefined(cur(self.combineData(self.data, self.props)));
+	            }
+	            else {
+	                return prev + cur;
+	            }
+	        }, '');
+	    };
+	    /**
+	     * 判断表达式是否为null或者undefined，是则返回''
+	     * @param str
+	     */
+	    ParseTpl.prototype.expectNullUndefined = function (str) {
+	        if (util_1.default.type(str) == 'null' || util_1.default.type(str) == 'undefined') {
+	            return '';
+	        }
+	        else if (typeof str == 'object') {
+	            return JSON.stringify(str);
+	        }
+	        else {
+	            return '' + str;
+	        }
+	    };
+	    return ParseTpl;
+	}());
+	function tpl(text, data, props) {
+	    var parseTpl = new ParseTpl(text, data, props);
+	    return parseTpl.tpl();
+	}
+	exports.default = tpl;
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var lexer_1 = __webpack_require__(12);
+	var parser_1 = __webpack_require__(14);
+	var pipe_1 = __webpack_require__(19);
+	var ps = new pipe_1.default();
+	var util_1 = __webpack_require__(3);
+	var Parse = /** @class */ (function () {
+	    function Parse() {
+	        this.pipes = ps.pipes;
+	    }
+	    /**
+	     * 注册管道
+	     * @param name
+	     * @param factory
+	     */
+	    Parse.prototype.register = function (name, factory) {
+	        ps.register(name, factory);
+	        return this;
+	    };
+	    Parse.prototype.pipe = function (name) {
+	        return ps.pipe(name);
+	    };
+	    /**
+	     * 词法解析
+	     * @param str
+	     */
+	    Parse.prototype.parse = function (str) {
+	        var that = this;
+	        function parse(expression, pipes) {
+	            switch (util_1.default.type(expression)) {
+	                case 'string':
+	                    var lexer = new lexer_1.default();
+	                    var parser = new parser_1.default(lexer, pipes);
+	                    var oneTime = false;
+	                    //单次检测
+	                    if (expression.charAt(0) == ':' && expression.charAt(1) == ':') {
+	                        oneTime = true;
+	                        expression = expression.substring(2);
+	                    }
+	                    var parseFn = parser.parse(expression);
+	                    if (parseFn.constant) {
+	                        parseFn.$$handelWatch = that.constantHandelWatch;
+	                    }
+	                    if (oneTime) {
+	                        parseFn.$$handelWatch = parseFn.literal ? that.oneTimeLiteralHandelWatch : that.oneTimeHandelWatch;
+	                    }
+	                    if (parseFn.inputs) {
+	                        parseFn.$$handelWatch = that.inputsHandelWatch;
+	                    }
+	                    return parseFn;
+	                case 'function':
+	                    return expression;
+	            }
+	        }
+	        return parse(str, this.pipes);
+	    };
+	    /**
+	     * 处理参数为常量的状况
+	     * @param state
+	     * @param listenerFn
+	     * @param valueEq
+	     * @param watchFn
+	     */
+	    Parse.prototype.constantHandelWatch = function (state, listenerFn, valueEq, watchFn) {
+	        var cancel = state.$watch(function () {
+	            return watchFn(state);
+	        }, function (newVal, oldVal, state) {
+	            if (util_1.default.type(listenerFn) == 'function') {
+	                listenerFn.apply(this, arguments);
+	            }
+	        }, valueEq);
+	        return cancel;
+	    };
+	    /**
+	     * 处理单次检测问题
+	     * @param state
+	     * @param listenerFn
+	     * @param valueEq
+	     * @param watchFn
+	     */
+	    Parse.prototype.oneTimeHandelWatch = function (state, listenerFn, valueEq, watchFn) {
+	        var lastVal;
+	        var cancel = state.$watch(function () {
+	            return watchFn(state);
+	        }, function (newVal, oldVal, state) {
+	            lastVal = newVal;
+	            if (util_1.default.type(listenerFn) == 'function') {
+	                listenerFn.apply(this, arguments);
+	            }
+	            if (util_1.default.type(newVal) != 'undefined') {
+	                state.$afterDigest(function () {
+	                    if (util_1.default.type(lastVal) != 'undefined') {
+	                        cancel();
+	                    }
+	                });
+	            }
+	        }, valueEq);
+	        return cancel;
+	    };
+	    /**
+	     * 处理数组或对象的变量问题
+	     * @param state
+	     * @param listenerFn
+	     * @param valueEq
+	     * @param watchFn
+	     */
+	    Parse.prototype.oneTimeLiteralHandelWatch = function (state, listenerFn, valueEq, watchFn) {
+	        var lastVal;
+	        var cancel = state.$watch(function () {
+	            return watchFn(state);
+	        }, function (newVal, oldVal, state) {
+	            lastVal = newVal;
+	            if (util_1.default.type(listenerFn) == 'function') {
+	                listenerFn.apply(this, arguments);
+	            }
+	            if (util_1.default.type(newVal) != 'undefined') {
+	                state.$afterDigest(function () {
+	                    if (util_1.default.type(lastVal) != 'undefined') {
+	                        cancel();
+	                    }
+	                });
+	            }
+	        }, valueEq);
+	        return cancel;
+	    };
+	    Parse.prototype.inputsHandelWatch = function (state, listenerFn, valueEq, watchFn) {
+	        var inputExpr = watchFn.inputs;
+	        return state.$watch(function () {
+	        }, listenerFn, valueEq);
+	    };
+	    return Parse;
+	}());
+	var parse = new Parse();
+	exports.default = parse;
+	// 默认管道函数--开始
+	var newParse = new Parse();
+	newParse.register('filter', defaultFilter);
+	function defaultFilter() {
+	    return function (array, filterExp) {
+	        var predicateFn;
+	        switch (util_1.default.type(filterExp)) {
+	            case 'function':
+	                predicateFn = filterExp;
+	                break;
+	            case 'string':
+	            case 'number':
+	            case 'boolean':
+	            case 'null':
+	            case 'undefined':
+	            case 'object':
+	                predicateFn = createPredicateFn(filterExp);
+	                break;
+	            default:
+	                return array;
+	        }
+	        return array.filter(predicateFn);
+	    };
+	}
+	// 如果pipe后面非函数表达式就生成一个
+	function createPredicateFn(exp) {
+	    // item指数组元素
+	    return function predicateFn(item) {
+	        return deepCompareValues(item, exp, compareValues);
+	    };
+	}
+	// source值数组的元素，target值pipe表达式冒号后面的字符，pipe:"a"
+	function compareValues(source, target) {
+	    if (util_1.default.type(source) == 'null' || util_1.default.type(target) == 'null') {
+	        return source === target;
+	    }
+	    // 不对undefined处理
+	    if (util_1.default.type(source) == 'undefined')
+	        return false;
+	    source = ('' + source).toLowerCase();
+	    target = ('' + target).toLowerCase();
+	    return source.includes(target);
+	}
+	// 如果数组元素是对象进行深度比较
+	function deepCompareValues(source, target, compare) {
+	    if (util_1.default.type(target) == 'string' && target.startsWith('!')) {
+	        return !deepCompareValues(source, target.substring(1), compare);
+	    }
+	    if (util_1.default.type(source) == 'object') {
+	        if (util_1.default.type(target) == 'object') {
+	            for (var i in target) {
+	                return deepCompareValues(source[i], target[i], compare);
+	            }
+	        }
+	        var arr = util_1.default.objVal(source);
+	        return arr.some(function (val) {
+	            return deepCompareValues(val, target, compare);
+	        });
+	    }
+	    return compare(source, target);
+	}
+	// 注册管道函数--结束
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var $log = __webpack_require__(2);
+	var util_1 = __webpack_require__(3);
+	var lexer_config_1 = __webpack_require__(13);
+	/**
+	 * 此法解析器，用于解析{{a + b}} 之类的插值运算
+	 */
+	var Lexer = /** @class */ (function () {
+	    function Lexer() {
+	        this.index = 0;
+	        this.now = undefined;
+	        this.tokens = [];
+	        this.text = '';
+	    }
+	    /**
+	     * 词法解析函数
+	     * @param text
+	     * @returns {Array<any>}
+	     */
+	    Lexer.prototype.lex = function (text) {
+	        this.text = text;
+	        while (this.index < this.text.length) {
+	            this.now = this.text.charAt(this.index);
+	            if (util_1.default.whichType(this.now) == 'number' ||
+	                (this.now === '.' && util_1.default.whichType(util_1.default.nextLeter(this.index, this.text)))) {
+	                this.loopNumber();
+	            }
+	            else if (util_1.default.whichType(this.now) == 'string') {
+	                this.loopString(this.now);
+	            }
+	            else if (util_1.default.whichType(this.now) == 'letter') {
+	                this.loopLetter();
+	            }
+	            else if (util_1.default.isWhiteSpace(this.now)) {
+	                this.index++;
+	            }
+	            else if (util_1.default.inStr(this.now, '[],{}.:()?;')) {
+	                this.pushObj();
+	            }
+	            else {
+	                this.loopOperator();
+	            }
+	        }
+	        return this.tokens;
+	    };
+	    /**
+	     * 添加词法解析对象
+	     */
+	    Lexer.prototype.pushObj = function () {
+	        this.tokens.push({
+	            text: this.now,
+	            value: this.now
+	        });
+	        this.index++;
+	    };
+	    /**
+	     * 获取下一个字符
+	     * @param n
+	     * @returns {string|boolean}
+	     */
+	    Lexer.prototype.nextStr = function (n) {
+	        if (n === void 0) { n = 1; }
+	        return (this.index + n < this.text.length) ?
+	            this.text.charAt(this.index + n) :
+	            false;
+	    };
+	    /**
+	     * 遍历数字类
+	     */
+	    Lexer.prototype.loopNumber = function () {
+	        var number = '';
+	        while (this.index < this.text.length) {
+	            var now = this.text.charAt(this.index).toLowerCase();
+	            if (util_1.default.whichType(now) == 'number' || now === '.') {
+	                number += now;
+	            }
+	            else {
+	                var next = util_1.default.nextLeter(this.index, this.text);
+	                var prev = number.charAt(number.length - 1);
+	                if (now == 'e' && util_1.default.isExponent(next)) {
+	                    number += now;
+	                }
+	                else if (util_1.default.isExponent(now) && prev === 'e' && next && util_1.default.isNumber(next)) {
+	                    number += now;
+	                }
+	                else if (util_1.default.isExponent(now) && prev === 'e' && (!next || !util_1.default.isNumber(next))) {
+	                    $log.error("指数格式错误！");
+	                }
+	                else {
+	                    break;
+	                }
+	            }
+	            this.index++;
+	        }
+	        this.tokens.push({
+	            text: number,
+	            value: Number(number)
+	        });
+	    };
+	    /**
+	     * 遍历字符串类，'"abc"'
+	     */
+	    Lexer.prototype.loopString = function (quote) {
+	        this.index++;
+	        var string = '', 
+	        //避免单独的操作符匹配错误，例如'"!"'
+	        raw = quote;
+	        while (this.index < this.text.length) {
+	            var now = this.text.charAt(this.index);
+	            raw += now;
+	            if (now == quote) {
+	                this.index++;
+	                this.tokens.push({
+	                    text: raw,
+	                    value: string
+	                });
+	                return;
+	            }
+	            else if (now == lexer_config_1.SPECIALS[now]) {
+	                string += lexer_config_1.SPECIALS[now];
+	            }
+	            else {
+	                string += now;
+	            }
+	            this.index++;
+	        }
+	        $log.error('无法匹配的符号');
+	    };
+	    /**
+	     * 字符类, 'abc_$'
+	     */
+	    Lexer.prototype.loopLetter = function () {
+	        var letter = '';
+	        while (this.index < this.text.length) {
+	            var now = this.text.charAt(this.index);
+	            if (util_1.default.isLetter(now) || util_1.default.isNumber(now)) {
+	                letter += now;
+	            }
+	            else {
+	                break;
+	            }
+	            this.index++;
+	        }
+	        // 针对boolean,null,undefined
+	        var v = lexer_config_1.LETTER.hasOwnProperty(letter) ? lexer_config_1.LETTER[letter] : letter;
+	        this.tokens.push({
+	            text: letter,
+	            identifier: true,
+	            value: v
+	        });
+	    };
+	    /**
+	     * 操作符，+- ！==
+	     */
+	    Lexer.prototype.loopOperator = function () {
+	        var str = this.now, str2 = this.now + this.nextStr(1), str3 = this.now + this.nextStr(1) + this.nextStr(2), op = lexer_config_1.OPERATORS[str], op2 = lexer_config_1.OPERATORS[str2], op3 = lexer_config_1.OPERATORS[str3];
+	        if (op || op2 || op3) {
+	            var ct = op3 ? str3 : (op2 ? str2 : str);
+	            this.tokens.push({
+	                text: ct,
+	                value: ct
+	            });
+	            this.index += ct.length;
+	        }
+	        else {
+	            $log.error('未识别的字符' + this.now);
+	        }
+	    };
+	    return Lexer;
+	}());
+	exports.default = Lexer;
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	// js特殊字符
+	var SPECIALS = {
+	    '\'': '\'',
+	    '\"': '\"',
+	    '&': '\&',
+	    '\\': '\\',
+	    'n': '\n',
+	    'r': '\r',
+	    't': '\t',
+	    'b': '\b',
+	    'f': '\f',
+	};
+	exports.SPECIALS = SPECIALS;
+	//词法解析中关于字符的配置对象
+	var LETTER = {
+	    'null': null,
+	    'true': true,
+	    'false': false,
+	    'undefined': undefined,
+	    'this': undefined
+	};
+	exports.LETTER = LETTER;
+	//运算符
+	var OPERATORS = {
+	    '+': true,
+	    '!': true,
+	    '-': true,
+	    '*': true,
+	    '%': true,
+	    '/': true,
+	    '=': true,
+	    '>': true,
+	    '<': true,
+	    '>=': true,
+	    '<=': true,
+	    '==': true,
+	    '===': true,
+	    '!=': true,
+	    '!==': true,
+	    '&&': true,
+	    '||': true,
+	    '|': true
+	};
+	exports.OPERATORS = OPERATORS;
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var astBuilder_1 = __webpack_require__(15);
+	var astCompile_1 = __webpack_require__(17);
+	var Parser = /** @class */ (function () {
+	    function Parser(lexer, pipes) {
+	        this.lexer = lexer;
+	        this.astBuilder = new astBuilder_1.default(this.lexer);
+	        this.astCompile = new astCompile_1.default(this.astBuilder, pipes);
+	    }
+	    Parser.prototype.parse = function (text) {
+	        return this.astCompile.compile(text);
+	    };
+	    return Parser;
+	}());
+	exports.default = Parser;
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var AST = __webpack_require__(16);
+	var LEXER = __webpack_require__(13);
+	var util_1 = __webpack_require__(3);
+	/**
+	 * 抽象语法结构树
+	 [{ type: 'ASTBuilder.Program',
+	  body:
+	   { type: 'ASTBuilder.Binary',
+	     boolean_expression:
+	      { type: 'ASTBuilder.Binary',
+	        operator: '>',
+	        left: { type: 'ASTBuilder.Identifier', value: 'a' },
+	        right: { type: 'ASTBuilder.MetaData', value: 2 } },
+	     true_value: { type: 'ASTBuilder.MetaData', value: 1 },
+	     error_value: { type: 'ASTBuilder.MetaData', value: 0 } } }]
+	 */
+	var ASTBuilder = /** @class */ (function () {
+	    function ASTBuilder(lexer) {
+	        this.lexer = lexer;
+	        this.tokens = [];
+	    }
+	    /**
+	     * 生成抽象语法结构树
+	     * @param text
+	     * @returns {Object}
+	     */
+	    ASTBuilder.prototype.ast = function (text) {
+	        this.tokens = this.lexer.lex(text);
+	        return this.init();
+	    };
+	    /**
+	     * 结构树形式, ';'看作是多个表达式的组合，故词法树的body有对象进化为对象数组Array<object>
+	     * @returns {{type: string, body: {}}}
+	     */
+	    ASTBuilder.prototype.init = function () {
+	        var body = [];
+	        while (true) {
+	            if (this.tokens.length) {
+	                body.push(this.pipeBuilder());
+	            }
+	            if (!util_1.default.expect(this.tokens, ';')) {
+	                AST.ast_init['body'] = {};
+	                AST.ast_init['body'] = body;
+	                return util_1.default.clone(AST.ast_init);
+	            }
+	        }
+	    };
+	    /**
+	     * 中介函数
+	     * @returns {any}
+	     */
+	    ASTBuilder.prototype.agency = function () {
+	        var agency;
+	        if (util_1.default.expect(this.tokens, '(')) {
+	            agency = this.pipeBuilder();
+	            util_1.default.consume(this.tokens, ')');
+	        }
+	        else if (util_1.default.expect(this.tokens, '[')) {
+	            agency = this.arrayBuilder();
+	        }
+	        else if (util_1.default.expect(this.tokens, '{')) {
+	            agency = this.objectBuilder();
+	        }
+	        else if (LEXER.LETTER.hasOwnProperty(this.tokens[0]['text'])) {
+	            if (this.tokens[0]['text'] == "this") {
+	                agency = util_1.default.clone(AST.ast_this);
+	            }
+	            else {
+	                AST.ast_constant['value'] = LEXER.LETTER[util_1.default.consume(this.tokens)['text']];
+	                agency = util_1.default.clone(AST.ast_constant);
+	            }
+	        }
+	        else if (util_1.default.exitFirst(this.tokens).identifier) {
+	            agency = this.identifierBuilder();
+	        }
+	        else {
+	            agency = this.constantBuilder();
+	        }
+	        /**
+	         * 处理带有 '.', '[' 的标识符
+	         * 结构树：{"type":"ASTBuilder.Member","object":{"type":"ASTBuilder.Member","object":{"type":"ASTBuilder.Identifier","value":"a"},"property":{"type":"ASTBuilder.Identifier","value":"b"}},"property":{"type":"ASTBuilder.Identifier","value":"c"}}
+	         */
+	        var type;
+	        while (type = util_1.default.expect(this.tokens, '.', '[', '(')) {
+	            agency = this.memberBuilder(type, agency);
+	        }
+	        // console.log(JSON.stringify(agency));
+	        return agency;
+	    };
+	    /**
+	     * 遍历'[]','{}','()'等对称标识符
+	     */
+	    ASTBuilder.prototype.closingTags = function (quote) {
+	        var arr = [], that = this;
+	        if (!util_1.default.exitFirst(this.tokens, quote)) {
+	            do {
+	                if (util_1.default.exitFirst(this.tokens, quote))
+	                    break;
+	                arr.push(that.agency());
+	            } while (util_1.default.expect(this.tokens, ','));
+	        }
+	        util_1.default.consume(this.tokens, quote);
+	        return arr;
+	    };
+	    /**
+	     * 结构树的常量部分
+	     * @returns {{type: string, value: {}}}
+	     */
+	    ASTBuilder.prototype.constantBuilder = function () {
+	        AST.ast_constant['value'] = util_1.default.consume(this.tokens)['value'];
+	        return util_1.default.clone(AST.ast_constant);
+	    };
+	    /**
+	    * 结构树的标识符部分
+	    * @returns {{type: string, value: {}}}
+	    */
+	    ASTBuilder.prototype.identifierBuilder = function () {
+	        AST.ast_identifier['value'] = util_1.default.consume(this.tokens)['value'];
+	        return util_1.default.clone(AST.ast_identifier);
+	    };
+	    /**
+	     * 结构树的数组部分
+	     * @returns {{type: string, value: {}}}
+	     */
+	    ASTBuilder.prototype.arrayBuilder = function () {
+	        AST.ast_array['value'] = this.closingTags(']');
+	        return util_1.default.clone(AST.ast_array);
+	    };
+	    /**
+	     * 结构树的对象部分
+	     * @returns {{type: string, value: {}}}
+	     */
+	    ASTBuilder.prototype.objectBuilder = function () {
+	        var arr = [];
+	        if (!util_1.default.exitFirst(this.tokens, '}')) {
+	            do {
+	                AST.ast_json['key'] = this.constantBuilder();
+	                util_1.default.consume(this.tokens, ':');
+	                AST.ast_json['value'] = this.assignmentBuilder();
+	                arr.push(util_1.default.clone(AST.ast_json));
+	            } while (util_1.default.expect(this.tokens, ','));
+	        }
+	        util_1.default.consume(this.tokens, '}');
+	        AST.ast_object['value'] = arr;
+	        return util_1.default.clone(AST.ast_object);
+	    };
+	    /**
+	     * 结构树的对象取值部分，a.b  a["b"]，a() 等
+	     * @param type
+	     * @param agency
+	     * @returns {{type: string, value: {}}}
+	     */
+	    ASTBuilder.prototype.memberBuilder = function (type, agency) {
+	        if (type.text === '[') {
+	            agency = {
+	                type: AST.dataType['7'],
+	                object: agency,
+	                property: this.agency(),
+	                computed: true
+	            };
+	            util_1.default.consume(this.tokens, ']');
+	        }
+	        if (type.text === '.') {
+	            agency = {
+	                type: AST.dataType['7'],
+	                object: agency,
+	                property: this.identifierBuilder(),
+	                computed: false
+	            };
+	        }
+	        if (type.text === '(') {
+	            agency = {
+	                type: AST.ast_function['type'],
+	                callee: agency,
+	                arguments: this.closingTags(')'),
+	                pipe: false
+	            };
+	        }
+	        return agency;
+	    };
+	    /**
+	     * 含有‘=’等符号
+	     * @returns {any}
+	     */
+	    ASTBuilder.prototype.assignmentBuilder = function () {
+	        var left = this.ternaryBuilder();
+	        if (util_1.default.expect(this.tokens, '=')) {
+	            var right = this.ternaryBuilder();
+	            AST.ast_assignment['left'] = left;
+	            AST.ast_assignment['right'] = right;
+	            return util_1.default.clone(AST.ast_assignment);
+	        }
+	        return left;
+	    };
+	    /**
+	     * 一元运算符
+	     * @returns {any}
+	     */
+	    ASTBuilder.prototype.unaryBuilder = function () {
+	        var ue = util_1.default.expect(this.tokens, '+', '!', '-');
+	        if (ue) {
+	            AST.ast_unary['operator'] = ue.text;
+	            AST.ast_unary['value'] = this.unaryBuilder();
+	            return util_1.default.clone(AST.ast_unary);
+	        }
+	        if (!ue)
+	            return this.agency();
+	    };
+	    /**
+	     *乘法运算
+	     * @returns {Object}
+	     */
+	    ASTBuilder.prototype.multiplicativeBuilder = function () {
+	        var left = this.unaryBuilder(), ue;
+	        while (ue = util_1.default.expect(this.tokens, '*', '%', '/')) {
+	            AST.ast_binary['operator'] = ue.text;
+	            AST.ast_binary['left'] = left;
+	            AST.ast_binary['right'] = this.unaryBuilder();
+	            left = util_1.default.clone(AST.ast_binary);
+	        }
+	        return left;
+	    };
+	    /**
+	     * 加法运算
+	     * @returns {Object}
+	     */
+	    ASTBuilder.prototype.additiveBuilder = function () {
+	        var left = this.multiplicativeBuilder(), ue;
+	        while (ue = util_1.default.expect(this.tokens, '+', '-')) {
+	            left = {
+	                type: AST.ast_binary['type'],
+	                operator: ue.text,
+	                left: left,
+	                right: this.multiplicativeBuilder()
+	            };
+	        }
+	        return left;
+	    };
+	    /**
+	     * 关系运算符，‘>’
+	     * @returns {Object}
+	     */
+	    ASTBuilder.prototype.relationalBuilder = function () {
+	        var left = this.additiveBuilder(), ue;
+	        while (ue = util_1.default.expect(this.tokens, '>', '<', '>=', '<=')) {
+	            left = {
+	                type: AST.ast_binary['type'],
+	                operator: ue.text,
+	                left: left,
+	                right: this.additiveBuilder()
+	            };
+	        }
+	        return left;
+	    };
+	    /**
+	     * 等法运算符，‘==’
+	     * @returns {Object}
+	     */
+	    ASTBuilder.prototype.equalityBuilder = function () {
+	        var left = this.relationalBuilder(), ue;
+	        while (ue = util_1.default.expect(this.tokens, '==', '===', '!=', '!==')) {
+	            left = {
+	                type: AST.ast_binary['type'],
+	                operator: ue.text,
+	                left: left,
+	                right: this.relationalBuilder()
+	            };
+	        }
+	        return left;
+	    };
+	    /**
+	     * && 运算符， &&高于||
+	     * @returns {Object}
+	     */
+	    ASTBuilder.prototype.andBuilder = function () {
+	        var left = this.equalityBuilder(), ue;
+	        while (ue = util_1.default.expect(this.tokens, '&&')) {
+	            left = {
+	                type: AST.ast_logical['type'],
+	                operator: ue.text,
+	                left: left,
+	                right: this.equalityBuilder()
+	            };
+	        }
+	        return left;
+	    };
+	    /**
+	     * || 运算符， &&高于||
+	     * @returns {Object}
+	     */
+	    ASTBuilder.prototype.orBuilder = function () {
+	        var left = this.andBuilder(), ue;
+	        while (ue = util_1.default.expect(this.tokens, '||')) {
+	            left = {
+	                type: AST.ast_logical['type'],
+	                operator: ue.text,
+	                left: left,
+	                right: this.andBuilder()
+	            };
+	        }
+	        return left;
+	    };
+	    /**
+	     * 三元运算符
+	     * @returns {Object}
+	     */
+	    ASTBuilder.prototype.ternaryBuilder = function () {
+	        var boolean_expression = this.orBuilder();
+	        if (util_1.default.expect(this.tokens, '?')) {
+	            var true_value = this.assignmentBuilder();
+	            if (util_1.default.consume(this.tokens, ':')) {
+	                var error_value = this.assignmentBuilder();
+	                return {
+	                    type: AST.ast_teranry['type'],
+	                    boolean_expression: boolean_expression,
+	                    true_value: true_value,
+	                    error_value: error_value
+	                };
+	            }
+	        }
+	        return boolean_expression;
+	    };
+	    /**
+	     * 管道处理
+	     */
+	    ASTBuilder.prototype.pipeBuilder = function () {
+	        var pipes = this.assignmentBuilder();
+	        while (util_1.default.expect(this.tokens, '|')) {
+	            var args = [pipes];
+	            pipes = {
+	                type: AST.ast_function['type'],
+	                callee: this.identifierBuilder(),
+	                arguments: args,
+	                pipe: true
+	            };
+	            while (util_1.default.expect(this.tokens, ':')) {
+	                args.push(this.assignmentBuilder());
+	            }
+	        }
+	        return pipes;
+	    };
+	    return ASTBuilder;
+	}());
+	exports.default = ASTBuilder;
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	//数据类型
+	exports.dataType = {
+	    '1': 'ASTBuilder.Init',
+	    '2': 'ASTBuilder.MetaData',
+	    '3': 'ASTBuilder.Array',
+	    '4': 'ASTBuilder.Object',
+	    '5': 'ASTBuilder.Identifier',
+	    '6': 'ASTBuilder.This',
+	    '7': 'ASTBuilder.Member',
+	    '8': 'ASTBuilder.Function',
+	    '9': 'ASTBuilder.Assignment',
+	    '10': 'ASTBuilder.Unary',
+	    '11': 'ASTBuilder.Binary',
+	    '12': 'ASTBuilder.Logical',
+	    '13': 'ASTBuilder.Teranry'
+	};
+	// astBuilder的词法解析匹配模式
+	exports.ast_init = {
+	    type: exports.dataType['1'],
+	    body: {}
+	};
+	//常量
+	exports.ast_constant = {
+	    type: exports.dataType['2'],
+	    value: undefined
+	};
+	//数组
+	exports.ast_array = {
+	    type: exports.dataType['3'],
+	    value: undefined
+	};
+	/**
+	 * 对象
+	 * {"type":"ASTBuilder.Object","value":[{"type":"ASTBuilder.Identifier","key":{"type":"ASTBuilder.MetaData","value":"id"},"value":{"type"
+	:"ASTBuilder.MetaData","value":1}}]}
+	 */
+	exports.ast_object = {
+	    type: exports.dataType['4'],
+	    value: undefined //数组，指向ast_json
+	};
+	exports.ast_json = {
+	    type: exports.dataType['5'],
+	    key: undefined,
+	    value: undefined
+	};
+	// 标识符
+	exports.ast_identifier = {
+	    type: exports.dataType['5'],
+	    value: undefined
+	};
+	// this
+	exports.ast_this = {
+	    type: exports.dataType['6']
+	};
+	// 对象属性表达式，a.b a['b']
+	exports.ast_member = {
+	    type: exports.dataType['7'],
+	    object: undefined,
+	    property: undefined,
+	    computed: undefined
+	};
+	// 函数表达式
+	exports.ast_function = {
+	    type: exports.dataType['8'],
+	    callee: undefined,
+	    arguments: undefined,
+	    pipe: Boolean
+	};
+	// 赋值表达式
+	exports.ast_assignment = {
+	    type: exports.dataType['9'],
+	    left: undefined,
+	    right: undefined
+	};
+	// 一元运算符
+	exports.ast_unary = {
+	    type: exports.dataType['10'],
+	    operator: '+',
+	    value: undefined
+	};
+	// 二元运算符
+	exports.ast_binary = {
+	    type: exports.dataType['11'],
+	    left: undefined,
+	    operator: undefined,
+	    right: undefined
+	};
+	// 逻辑运算符
+	exports.ast_logical = {
+	    type: exports.dataType['12'],
+	    left: undefined,
+	    operator: undefined,
+	    right: undefined
+	};
+	// 三元运算符
+	exports.ast_teranry = {
+	    type: exports.dataType['13'],
+	    boolean_expression: undefined,
+	    true_value: undefined,
+	    error_value: undefined
+	};
+
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var ast_config_1 = __webpack_require__(16);
+	var $log = __webpack_require__(2);
+	var K = __webpack_require__(18);
+	var util_1 = __webpack_require__(3);
+	var ps = {}; //管道集合
+	var ASTCompile = /** @class */ (function () {
+	    function ASTCompile(astBuilder, pipes) {
+	        this.astBuilder = astBuilder;
+	        this.state = {
+	            body: [],
+	            compileId: 0,
+	            echo: [],
+	            pipes: {} //管道过滤器
+	        };
+	        this.ast = {};
+	        ps = pipes;
+	    }
+	    /**
+	     * 词法树的最终解析执行函数
+	     * @param text
+	     * @returns {Function}
+	     */
+	    ASTCompile.prototype.compile = function (text) {
+	        this.ast = this.astBuilder.ast(text);
+	        this.handelTree(this.ast);
+	        this.constantExpr(this.ast);
+	        var fn = this.pipePrefix() + 'var fn = function(scope, local){'
+	            + (this.state.echo.length ? 'var ' + this.state.echo.join(',') + ';' : '')
+	            + this.state.body.join('') + '}; return fn;';
+	        var fns = new Function('safeProperty', 'safeObject', 'safeFunction', 'isUndefined', 'pipe', fn)(safeProperty, safeObject, safeFunction, isUndefined, pipe);
+	        fns.literal = this.isLiteral(); // 定义字面量
+	        fns.constant = this.ast.constant; // 定义常亮
+	        return fns;
+	    };
+	    /**
+	     * 递归解析词法树
+	     * @param ast 词法结构树
+	     * @param context 针对函数的上下文
+	     * @param createNewElement 布尔值，如果属性不存在就动态创建一个
+	     * @returns {any}
+	     */
+	    ASTCompile.prototype.handelTree = function (ast, context, createNewElement) {
+	        if (context === void 0) { context = { context: undefined, name: undefined, computed: undefined }; }
+	        switch (ast.type) {
+	            case ast_config_1.dataType['1']://'ASTBuilder.Init'
+	                this.initCompile(ast);
+	                break;
+	            case ast_config_1.dataType['2']://'ASTBuilder.MetaData'
+	                return this.metaCompile(ast);
+	            case ast_config_1.dataType['3']://'ASTBuilder.Array'
+	                return this.arrayCompile(ast);
+	            case ast_config_1.dataType['4']://'ASTBuilder.Object'
+	                return this.objectCompile(ast);
+	            case ast_config_1.dataType['5']://'ASTBuilder.Identifier'
+	                return this.identifierCompile(ast, context, createNewElement);
+	            case ast_config_1.dataType['6']://'ASTBuilder.This'
+	                return this.thisCompile();
+	            case ast_config_1.dataType['7']://'ASTBuilder.Member'
+	                return this.memberCompile(ast, context, createNewElement);
+	            case ast_config_1.dataType['8']://'ASTBuilder.Function'
+	                return this.functionCompile(ast);
+	            case ast_config_1.dataType['9']://'ASTBuilder.Assignment'
+	                return this.assigmentCompile(ast);
+	            case ast_config_1.dataType['10']://'ASTBuilder.Unary'
+	                return this.unaryCompile(ast);
+	            case ast_config_1.dataType['11']://'ASTBuilder.Binary'
+	                return this.binaryCompile(ast);
+	            case ast_config_1.dataType['12']://'ASTBuilder.Logical'
+	                return this.logicalCompile(ast);
+	            case ast_config_1.dataType['13']://'ASTBuilder.Ternary'
+	                return this.ternaryCompile(ast);
+	        }
+	    };
+	    /**
+	     * 初始化词法编译器
+	     * @param ast
+	     */
+	    ASTCompile.prototype.initCompile = function (ast) {
+	        var _this = this;
+	        var arr = util_1.default.clone(ast.body);
+	        var last = arr.pop();
+	        arr.forEach(function (val) {
+	            _this.state.body.push(_this.handelTree(val));
+	        });
+	        this.state.body.push('return ', this.handelTree(last), ';');
+	    };
+	    /**
+	     * 基础类数据编译
+	     * @param ast
+	     * @returns {any}
+	     */
+	    ASTCompile.prototype.metaCompile = function (ast) {
+	        return util_1.default.wrapString(ast.value);
+	    };
+	    /**
+	     * 数组类词法树编译
+	     * @param ast
+	     * @returns {string}
+	     */
+	    ASTCompile.prototype.arrayCompile = function (ast) {
+	        var _this = this;
+	        var arr = ast.value.map(function (val) {
+	            return _this.handelTree(val);
+	        });
+	        return '[' + arr.join(',') + ']';
+	    };
+	    /**
+	     * 对象类词法树编译
+	     * @param ast
+	     * @returns {string}
+	     */
+	    ASTCompile.prototype.objectCompile = function (ast) {
+	        var _this = this;
+	        var arrJson = ast.value.map(function (val) {
+	            var key = val['key']['value'];
+	            var value = _this.handelTree(val['value']);
+	            return key + ':' + value;
+	        });
+	        return '{' + arrJson.join(',') + '}';
+	    };
+	    /**
+	     * 标识符词法树编译
+	     * @param ast
+	     * @param context
+	     * @param createNewElement
+	     * @returns {string}
+	     */
+	    ASTCompile.prototype.identifierCompile = function (ast, context, createNewElement) {
+	        //判断是否是安全的属性名
+	        safeProperty(ast.value);
+	        var id = this.incrementId();
+	        // 存在本地属性local
+	        util_1.default.conditionIsRight(this.state.body, util_1.default.hasProperty('local', ast.value), util_1.default.concatCode(id, util_1.default.nonComputedMember('local', ast.value)));
+	        // 创建空对象
+	        if (createNewElement) {
+	            util_1.default.conditionIsRight(this.state.body, util_1.default.notExist(util_1.default.hasProperty('local', ast.value)) + ' && scope && ' + util_1.default.notExist(util_1.default.hasProperty('scope', ast.value)), util_1.default.concatCode(util_1.default.nonComputedMember('scope', ast.value), '{}'));
+	        }
+	        //不存在本地属性，只有scope属性
+	        util_1.default.conditionIsRight(this.state.body, util_1.default.notExist(util_1.default.hasProperty('local', ast.value)) + ' && scope', util_1.default.concatCode(id, util_1.default.nonComputedMember('scope', ast.value)));
+	        // 处理函数上下文
+	        if (context) {
+	            context.context = util_1.default.hasProperty('local', ast.value) + '?local:scope';
+	            context.name = ast.value;
+	            context.computed = false;
+	        }
+	        this.state.body.push('safeObject(' + id + ');');
+	        return id;
+	    };
+	    /**
+	     * 含有this的编译
+	     * @returns {string}
+	     */
+	    ASTCompile.prototype.thisCompile = function () {
+	        return 'scope';
+	    };
+	    /**
+	     * 对象属性操作类词法树编译，如a.b, a["b"]
+	     * @param ast
+	     * @param context
+	     * @param createNewElement
+	     * @returns {string}
+	     */
+	    ASTCompile.prototype.memberCompile = function (ast, context, createNewElement) {
+	        var id = this.incrementId();
+	        var noComp = this.handelTree(ast.object, undefined, true);
+	        if (context) {
+	            context.context = noComp;
+	        }
+	        if (ast.computed) {
+	            var comp = this.handelTree(ast.property);
+	            this.state.body.push('safeProperty(' + comp + ');');
+	            //处理空对象
+	            if (createNewElement) {
+	                util_1.default.conditionIsRight(this.state.body, util_1.default.notExist(util_1.default.computedMember(noComp, comp)), util_1.default.concatCode(util_1.default.computedMember(noComp, comp), '{}'));
+	            }
+	            util_1.default.conditionIsRight(this.state.body, noComp, util_1.default.concatCode(id, 'safeObject(' + util_1.default.computedMember(noComp, comp) + ')'));
+	            if (context) {
+	                context.name = comp;
+	                context.computed = true;
+	            }
+	        }
+	        if (!ast.computed) {
+	            safeProperty(ast.property.value);
+	            if (createNewElement) {
+	                util_1.default.conditionIsRight(this.state.body, util_1.default.notExist(util_1.default.nonComputedMember(noComp, ast.property.value)), util_1.default.concatCode(util_1.default.nonComputedMember(noComp, ast.property.value), '{}'));
+	            }
+	            util_1.default.conditionIsRight(this.state.body, noComp, util_1.default.concatCode(id, 'safeObject(' + util_1.default.nonComputedMember(noComp, ast.property.value) + ')'));
+	            if (context) {
+	                context.name = ast.property.value;
+	                context.computed = false;
+	            }
+	        }
+	        return id;
+	    };
+	    /**
+	     * 函数类词法树编译
+	     * @param ast
+	     * @returns {string}
+	     */
+	    ASTCompile.prototype.functionCompile = function (ast) {
+	        var _this = this;
+	        var callContext, callee, args;
+	        if (ast.pipe) {
+	            callee = this.pipeCompile(ast.callee.value);
+	            args = ast.arguments.map(function (val) {
+	                return _this.handelTree(val);
+	            });
+	            return callee + '(' + args.join(',') + ')';
+	        }
+	        if (!ast.pipe) {
+	            callContext = { context: undefined, name: undefined, computed: undefined };
+	            callee = this.handelTree(ast.callee, callContext);
+	            args = ast.arguments.map(function (val) {
+	                return 'safeObject(' + _this.handelTree(val) + ')'; //检测函数参数是否安全
+	            });
+	            // console.log(callContext);
+	            if (callContext.name) {
+	                this.state.body.push('safeObject(' + callContext.context + ');');
+	                if (callContext.computed) {
+	                    callee = util_1.default.computedMember(callContext.context, callContext.name);
+	                }
+	                else {
+	                    callee = util_1.default.nonComputedMember(callContext.context, callContext.name);
+	                }
+	            }
+	            //检测函数是否安全
+	            this.state.body.push('safeFunction(' + callee + ');');
+	            //safeObject 检测函数返回值是否安全
+	            return callee + ' && safeObject(' + callee + '(' + args.join(',') + '))';
+	        }
+	    };
+	    /**
+	     *含有等号等符号类词法树编译
+	     * @param ast
+	     * @returns {any}
+	     */
+	    ASTCompile.prototype.assigmentCompile = function (ast) {
+	        var left, leftCon = { context: undefined, name: undefined, computed: undefined };
+	        this.handelTree(ast.left, leftCon, true);
+	        if (leftCon.computed) {
+	            left = util_1.default.computedMember(leftCon.context, leftCon.name);
+	        }
+	        else {
+	            left = util_1.default.nonComputedMember(leftCon.context, leftCon.name);
+	        }
+	        // console.log(leftCon, left);
+	        //safeObject 用于检测表达式右侧是否安全
+	        return util_1.default.concatCode(left, 'safeObject(' + this.handelTree(ast.right) + ')');
+	    };
+	    /**
+	     * 含有一元运算符的编译
+	     * @param ast
+	     * @returns {string}
+	     */
+	    ASTCompile.prototype.unaryCompile = function (ast) {
+	        return ast.operator + '(' + 'isUndefined(' + this.handelTree(ast.value) + '))';
+	    };
+	    /**
+	     * 二元运算符编译
+	     * @param ast
+	     * @returns {string}
+	     */
+	    ASTCompile.prototype.binaryCompile = function (ast) {
+	        if (util_1.default.inStr(ast.operator, '+-')) {
+	            return '(isUndefined(' + this.handelTree(ast.left) + ')' + ast.operator + 'isUndefined(' + this.handelTree(ast.right) + '))';
+	        }
+	        return '(' + this.handelTree(ast.left) + ast.operator + this.handelTree(ast.right) + ')';
+	    };
+	    /**
+	     * 逻辑运算符编译
+	     * @param ast
+	     * @returns {string}
+	     */
+	    ASTCompile.prototype.logicalCompile = function (ast) {
+	        var id = this.incrementId();
+	        this.state.body.push(util_1.default.concatCode(id, this.handelTree(ast.left)));
+	        util_1.default.conditionIsRight(this.state.body, ast.operator == '&&' ? id : util_1.default.notExist(id), util_1.default.concatCode(id, this.handelTree(ast.right)));
+	        return id;
+	    };
+	    /**
+	     * 三元运算符编译
+	     * @param ast
+	     * @returns {string}
+	     */
+	    ASTCompile.prototype.ternaryCompile = function (ast) {
+	        var id = this.incrementId();
+	        var id2 = this.incrementId();
+	        this.state.body.push(util_1.default.concatCode(id2, this.handelTree(ast.boolean_expression)));
+	        util_1.default.conditionIsRight(this.state.body, id2, util_1.default.concatCode(id, this.handelTree(ast.true_value)));
+	        util_1.default.conditionIsRight(this.state.body, util_1.default.notExist(id2), util_1.default.concatCode(id, this.handelTree(ast.error_value)));
+	        return id;
+	    };
+	    /**
+	     * 管道编译
+	     * @param name
+	     */
+	    ASTCompile.prototype.pipeCompile = function (name) {
+	        var ps = this.state.pipes;
+	        if (!ps.hasOwnProperty('name')) {
+	            ps[name] = this.incrementId(true);
+	        }
+	        return ps[name];
+	    };
+	    /**
+	     * 判断pipes是否存在
+	     */
+	    ASTCompile.prototype.pipePrefix = function () {
+	        var ps = this.state.pipes;
+	        if (JSON.stringify(ps) == '{}') {
+	            return '';
+	        }
+	        var arr = [];
+	        for (var k in ps) {
+	            arr.push(ps[k] + '=' + 'pipe(' + util_1.default.wrapString(k) + ')');
+	        }
+	        // console.log(arr);
+	        return 'var ' + arr.join(',') + ';';
+	    };
+	    /**
+	     * compileId自增
+	     */
+	    ASTCompile.prototype.incrementId = function (flag) {
+	        var id = util_1.default.compileId(this.state.compileId, this.state.echo, flag);
+	        this.state.compileId++;
+	        return id;
+	    };
+	    /**
+	     * 字面量
+	     */
+	    ASTCompile.prototype.isLiteral = function () {
+	        var arr = this.ast.body;
+	        return !arr.length || ((arr.length === 1) &&
+	            (arr[0].type === ast_config_1.dataType['2'] ||
+	                arr[0].type === ast_config_1.dataType['3'] ||
+	                arr[0].type === ast_config_1.dataType['4'] ||
+	                arr[0].type === ast_config_1.dataType['5']));
+	    };
+	    /**
+	     * 常量
+	     * @param ast
+	     */
+	    ASTCompile.prototype.constantExpr = function (ast) {
+	        var _this = this;
+	        var cons, that = this;
+	        switch (ast.type) {
+	            case ast_config_1.dataType['1']://ASTBuilder.Init
+	                cons = true;
+	                arrayLike(ast.body);
+	                break;
+	            case ast_config_1.dataType['2']://ASTBuilder.MetaData
+	                ast.constant = true;
+	                break;
+	            case ast_config_1.dataType['3']://ASTBuilder.Array
+	                cons = true;
+	                arrayLike(ast.value);
+	                ast.constant = cons;
+	                break;
+	            case ast_config_1.dataType['4']://ASTBuilder.Object
+	                cons = true;
+	                ast.value.forEach(function (val) {
+	                    _this.constantExpr(val.value);
+	                    cons = cons && val.value.constant;
+	                });
+	                ast.constant = cons;
+	                break;
+	            case ast_config_1.dataType['5']: //ASTBuilder.Identifier
+	            case ast_config_1.dataType['6']://ASTBuilder.This
+	                ast.constant = false;
+	                break;
+	            case ast_config_1.dataType['7']://ASTBuilder.Member
+	                this.constantExpr(ast.object);
+	                if (ast.computed) {
+	                    this.constantExpr(ast.property);
+	                }
+	                ast.constant = ast.object.constant && (!ast.computed || ast.property.constant);
+	                break;
+	            case ast_config_1.dataType['8']://ASTBuilder.Function
+	                cons = ast.pipe;
+	                arrayLike(ast.arguments);
+	                ast.constant = cons;
+	                break;
+	            case ast_config_1.dataType['9']://ASTBuilder.Assignment
+	                leftRight();
+	                break;
+	            case ast_config_1.dataType['10']://ASTBuilder.Unary
+	                this.constantExpr(ast.value);
+	                ast.constant = ast.value.constant;
+	                break;
+	            case ast_config_1.dataType['11']: //ASTBuilder.Binary
+	            case ast_config_1.dataType['12']://ASTBuilder.Logical
+	                leftRight();
+	                break;
+	            case ast_config_1.dataType['13']://ASTBuilder.Teranry
+	                this.constantExpr(ast.boolean_expression);
+	                this.constantExpr(ast.true_value);
+	                this.constantExpr(ast.error_value);
+	                ast.constant = ast.boolean_expression.constant && ast.true_value.constant && ast.error_value.constant;
+	                break;
+	        }
+	        function arrayLike(array) {
+	            array.forEach(function (val) {
+	                that.constantExpr(val);
+	                cons = cons && val.constant;
+	            });
+	            ast.constant = cons;
+	        }
+	        function leftRight() {
+	            that.constantExpr(ast.left);
+	            that.constantExpr(ast.right);
+	            ast.constant = ast.left.constant && ast.right.constant;
+	        }
+	    };
+	    return ASTCompile;
+	}());
+	exports.default = ASTCompile;
+	/**
+	 * 检测是否是安全的属性名，例如constructor, __defineGetter__等
+	 * @param str
+	 */
+	function safeProperty(str) {
+	    var f = K.PROPERTY.some(function (val) {
+	        return val === str;
+	    });
+	    if (f)
+	        $log.error(str + '存在编译风险');
+	}
+	/**
+	 * 检测是否是安全的对象
+	 * @param obj
+	 */
+	function safeObject(obj) {
+	    if (obj == undefined)
+	        return;
+	    var f = K.WINDOW.every(function (val) {
+	        return obj[val];
+	    });
+	    var f2 = K.NODE.every(function (val) {
+	        return obj[val];
+	    });
+	    if (f || f2 || obj.constructor == obj || obj.getOwnPropertyDescriptor || obj.getOwnPropertyNames)
+	        $log.error(obj + '存在编译风险');
+	    return obj;
+	}
+	/**
+	 * 检查函数是否安全
+	 * @param fun
+	 */
+	function safeFunction(fun) {
+	    var f = K.FUN.some(function (val) {
+	        return val == fun;
+	    });
+	    if (f || fun.constructor == fun)
+	        $log.error(fun + '存在编译风险');
+	}
+	/**
+	 * 判断目标是否为undefined
+	 * @param target
+	 * @param value
+	 * @returns {any}
+	 */
+	function isUndefined(target, value) {
+	    if (value === void 0) { value = 0; }
+	    return typeof target === 'undefined' ? value : target;
+	}
+	/**
+	 * 根据管道名称返回管道处理函数
+	 * @param name 管道名称
+	 */
+	function pipe(name) {
+	    // console.log(ps);
+	    return ps[name];
+	}
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	//对象属性
+	var PROPERTY = ['constructor', '__proto__', '__defineGetter__', '__defineSetter__', '__lookupGetter__', '__loopupSetter__'];
+	exports.PROPERTY = PROPERTY;
+	//window对象
+	var WINDOW = ['document', 'alert', 'location', 'setInterval'];
+	exports.WINDOW = WINDOW;
+	//dom节点
+	var NODE = ['nodeName', 'children'];
+	exports.NODE = NODE;
+	//函数
+	var FUN = [Function.prototype.call, Function.prototype.apply, Function.prototype.bind];
+	exports.FUN = FUN;
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var $log = __webpack_require__(2);
+	var util_1 = __webpack_require__(3);
+	/**
+	 * 执行管道过滤操作
+	 */
+	var Pipe = /** @class */ (function () {
+	    function Pipe() {
+	        this.pipes = {};
+	    }
+	    /**
+	     * 注册管道函数
+	     * @param name 字符串或者对象
+	     * @param factory
+	     */
+	    Pipe.prototype.register = function (name, factory) {
+	        // this.pipes = {};
+	        //允许对象方式注册多个pipe
+	        if (util_1.default.type(name) == 'object') {
+	            for (var i in name) {
+	                return this.register(i, name[i]);
+	            }
+	        }
+	        if (util_1.default.type(name) == 'string') {
+	            if (util_1.default.type(factory) != 'function')
+	                $log.error('注册的管道函数类型为function');
+	            var pipe = factory();
+	            this.pipes[name] = pipe;
+	            return pipe;
+	        }
+	    };
+	    /**
+	     * 管道执行函数
+	     * @param name
+	     */
+	    Pipe.prototype.pipe = function (name) {
+	        return this.pipes[name];
+	    };
+	    Pipe.prototype.returnPipes = function () {
+	        return this.pipes;
+	    };
+	    return Pipe;
+	}());
+	exports.default = Pipe;
+	// const pipe = new Pipe();
+	function $pipeProvider($provider) {
+	    var pipes = {};
+	    this.register = function (name, factory) {
+	        //允许对象方式注册多个pipe
+	        if (util_1.default.type(name) == 'object') {
+	            for (var i in name) {
+	                return this.register(i, name[i]);
+	            }
+	        }
+	        if (util_1.default.type(name) == 'string') {
+	            if (util_1.default.type(factory) != 'function')
+	                $log.error('注册的管道函数类型为function');
+	            return $provider.factory(name + 'Pipe', factory);
+	        }
+	    };
+	    this.$get = ['$injector', function ($injector) {
+	            return function (name) {
+	                return $injector.get(name + 'Pipe');
+	            };
+	        }];
+	}
+	exports.$pipeProvider = $pipeProvider;
+	$pipeProvider.$inject = ['$provider'];
+
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var HandelEventer_1 = __webpack_require__(21);
+	var util_1 = __webpack_require__(3);
+	/**
+	 * 监听组件的data数据变化
+	 */
+	var HandelData = /** @class */ (function () {
+	    function HandelData() {
+	        this.data = {};
+	        this.name = '';
+	        this.token = undefined;
+	        this.props = {};
+	        this.componentStatus = '';
+	    }
+	    HandelData.prototype.$data = function (key, val) {
+	        var n = arguments.length;
+	        switch (n) {
+	            case 0:
+	                return this.data;
+	            case 1:
+	                return this.data[key];
+	            case 2:
+	                var oldData = util_1.default.deepClone(this.data);
+	                this.data[key] = val;
+	                var newData = this.data;
+	                HandelEventer_1.default.trigger(key, util_1.default.clone({
+	                    target: this.token,
+	                    which: this.name,
+	                    old: oldData,
+	                    new: newData,
+	                    oldVal: oldData[key],
+	                    newVal: newData[key],
+	                    props: this.props == undefined ? {} : this.props,
+	                    componentStatus: this.componentStatus
+	                }));
+	                break;
+	        }
+	    };
+	    return HandelData;
+	}());
+	var Data = new HandelData();
+	exports.default = Data;
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var HandelEventer = /** @class */ (function () {
+	    function HandelEventer() {
+	        this.eventList = {};
+	    }
+	    /**
+	     * 触发事件
+	     * @param name
+	     * @param msg
+	     */
+	    HandelEventer.prototype.trigger = function (name, msg) {
+	        var key = Array.prototype.shift.call(arguments);
+	        var fns = this.eventList[key];
+	        if (!fns || fns.length === 0) {
+	            return false;
+	        }
+	        ;
+	        for (var i = 0, fn; fn = fns[i++];) {
+	            fn.apply(this, arguments);
+	        }
+	    };
+	    /**
+	     * 监听事件
+	     * @param name
+	     * @param fn
+	     */
+	    HandelEventer.prototype.listen = function (name, fn) {
+	        if (!this.eventList[name]) {
+	            this.eventList[name] = [];
+	        }
+	        ;
+	        this.eventList[name].push(fn);
+	    };
+	    HandelEventer.prototype.remove = function (key, fn) {
+	        var fns = this.eventList[key];
+	        // key对应的消息没有被人订阅
+	        if (!fns) {
+	            return false;
+	        }
+	        // 没有传入fn(具体的回调函数), 表示取消key对应的所有订阅
+	        if (!fn) {
+	            fns && (fns.length = 0);
+	        }
+	        else {
+	            // 反向遍历
+	            for (var i = fns.length - 1, _fn = fns[i]; i >= 0; i--) {
+	                if (_fn === fn) {
+	                    // 删除订阅回调函数
+	                    fns.splice(i, 1);
+	                }
+	            }
+	        }
+	    };
+	    return HandelEventer;
+	}());
+	var Eventer = new HandelEventer();
+	exports.default = Eventer;
+
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var HandelEventer_1 = __webpack_require__(21);
+	/**
+	 * 组件事件监听函数
+	 */
+	var HandelEvent = /** @class */ (function () {
+	    function HandelEvent() {
+	    }
+	    /**
+	     * 触发事件
+	     * @param name 事件名称
+	     * @param msg 信息
+	     */
+	    HandelEvent.prototype.trigger = function (name, msg) {
+	        HandelEventer_1.default.trigger(name, msg);
+	    };
+	    /**
+	     * 监听事件
+	     * @param name 事件名称
+	     * @param fn 回调函数，返回触发的信息
+	     */
+	    HandelEvent.prototype.listen = function (name, fn) {
+	        HandelEventer_1.default.listen(name, fn);
+	    };
+	    return HandelEvent;
+	}());
+	var handelEvent = new HandelEvent();
+	exports.default = handelEvent;
+
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var parseHttp_1 = __webpack_require__(24);
+	var Http = /** @class */ (function () {
+	    function Http() {
+	    }
+	    /**
+	     * ajax请求方式，全配置
+	     * @param param0
+	     */
+	    Http.prototype.ajax = function (_a) {
+	        var _b = _a.type, type = _b === void 0 ? 'get' : _b, _c = _a.url, url = _c === void 0 ? '' : _c, data = _a.data;
+	        return parseHttp_1.parseHttp(type, url, data);
+	    };
+	    /**
+	     * get请求方式
+	     * @param url
+	     */
+	    Http.prototype.get = function (url) {
+	        return parseHttp_1.parseHttp('get', url, null);
+	    };
+	    /**
+	     * post请求
+	     * @param url
+	     * @param data
+	     */
+	    Http.prototype.post = function (url, data) {
+	        return parseHttp_1.parseHttp('post', url, data);
+	    };
+	    /**
+	     * put请求
+	     * @param url
+	     * @param data
+	     */
+	    Http.prototype.put = function (url, data) {
+	        return parseHttp_1.parseHttp('put', url, data);
+	    };
+	    /**
+	     * delete请求
+	     * @param url
+	     * @param data
+	     */
+	    Http.prototype.delete = function (url, data) {
+	        return parseHttp_1.parseHttp('delete', url, data);
+	    };
+	    return Http;
+	}());
+	var http = new Http();
+	exports.default = http;
+
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var util_1 = __webpack_require__(3);
+	var $log = __webpack_require__(2);
+	var httpType = ['get', 'post', 'put', 'delete', 'head', 'options'];
+	/**
+	 * 解析http请求
+	 * @param type 请求类型
+	 * @param url
+	 * @param data
+	 */
+	function parseHttp(type, url, data) {
+	    if (util_1.default.type(type) != 'string' && !httpType.includes(type.toLowerCase())) {
+	        $log.error('http请求类型必须为' + httpType + '中的一个');
+	    }
+	    if (util_1.default.type(url) != 'string') {
+	        $log.error('http请求的url参数需为字符');
+	    }
+	    if (data && util_1.default.type(data) != 'object') {
+	        $log.error('http请求的data参数需为对象');
+	    }
+	    var promise = new Promise(function (resolve, reject) {
+	        var xhr = new XMLHttpRequest();
+	        xhr.open(type, url);
+	        xhr.onreadystatechange = handel;
+	        xhr.responseType = 'json';
+	        xhr.setRequestHeader('Accept', 'application/json');
+	        xhr.send(data || null);
+	        function handel() {
+	            if (this.readyState != 4) {
+	                return;
+	            }
+	            if (this.status == 200) {
+	                resolve(this.response);
+	            }
+	            else {
+	                reject(new Error(this.statusText));
+	            }
+	        }
+	    });
+	    return promise;
+	}
+	exports.parseHttp = parseHttp;
+
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var store_1 = __webpack_require__(26);
+	var store = new store_1.default();
+	var Router = /** @class */ (function () {
+	    function Router(url, routers) {
+	        this.url = url;
+	        this.routers = this._parseRouters(routers);
+	        this.nowRouter = this._getNowRouter(url, this.routers);
+	        this.params = this.nowRouter ? (this.nowRouter.params ? this.nowRouter.params : {}) : {};
+	    }
+	    /**
+	     * 获取当前路由
+	     * @param url 浏览器pathname
+	     * @param routers 路由集合
+	     */
+	    Router.prototype._getNowRouter = function (url, routers) {
+	        if (url.includes('?')) {
+	            url = url.substr(0, url.lastIndexOf('?'));
+	        }
+	        return routers.filter(function (v) {
+	            return url.match(v.info.regexp);
+	        })[0];
+	    };
+	    Router.prototype._parseRouters = function (routers) {
+	        var _this = this;
+	        routers.forEach(function (v) {
+	            var r = _this._pathToReg(v.path);
+	            if (r != null) {
+	                v.info = r;
+	                _this.params = v.params || {};
+	            }
+	        });
+	        return routers;
+	    };
+	    /**
+	     * 转换路径为正则
+	     * @param path 路径
+	     */
+	    Router.prototype._pathToReg = function (path) {
+	        var ret = {
+	            originalPath: path,
+	            regexp: path
+	        }, keys = ret.keys = [];
+	        path = path
+	            .replace(/([().])/g, '\\$1')
+	            .replace(/(\/)?:(\w+)(\*\?|[?*])?/g, function (_, slash, key, option) {
+	            var optional = (option === '?' || option === '*?') ? '?' : null;
+	            var star = (option === '*' || option === '*?') ? '*' : null;
+	            keys.push({ name: key, optional: !!optional });
+	            slash = slash || '';
+	            return ''
+	                + (optional ? '' : slash)
+	                + '(?:'
+	                + (optional ? slash : '')
+	                + (star && '(.+?)' || '([^/]+)')
+	                + (optional || '')
+	                + ')'
+	                + (optional || '');
+	        })
+	            .replace(/([/$*])/g, '\\$1');
+	        ret.regexp = new RegExp('^' + path + '$', '');
+	        return ret;
+	    };
+	    /**
+	     * 跳转到已存在的路由页面
+	     * @param path 需要跳转的路径
+	     */
+	    Router.prototype.go = function (_a) {
+	        var _b = _a.path, path = _b === void 0 ? '' : _b, _c = _a.params, params = _c === void 0 ? {} : _c;
+	        updateRouterConfig(path, params);
+	        this.hash(path);
+	    };
+	    /**
+	     * url的hash
+	     * @param path
+	     */
+	    Router.prototype.hash = function (path) {
+	        if (!path) {
+	            return window.location.hash;
+	        }
+	        window.location.hash = '#' + path;
+	    };
+	    /**
+	     * 刷新当前路由
+	     */
+	    Router.prototype.reflesh = function () {
+	        var hash = window.location.hash;
+	        window.location.hash = '#';
+	        window.location.hash = hash;
+	    };
+	    /**
+	     * 返回
+	     */
+	    Router.prototype.back = function () {
+	        window.history.back();
+	    };
+	    return Router;
+	}());
+	exports.default = Router;
+	// 更新路由配置
+	function updateRouterConfig(path, params) {
+	    store.get('routerConfig').forEach(function (v) {
+	        if (v.path == path) {
+	            v.params = params;
+	        }
+	    });
+	    store.data('routerConfig', store.get('routerConfig'));
+	}
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var loader_1 = __webpack_require__(27);
+	var injector_1 = __webpack_require__(28);
+	var loader = new loader_1.default();
+	var inject = new injector_1.default();
+	/**
+	 * 数据存储解析服务
+	 */
+	var Store = /** @class */ (function () {
+	    function Store(moduleName) {
+	        if (moduleName === void 0) { moduleName = 'Cpage'; }
+	        this.app = loader.module(moduleName, []);
+	        this.ins = function () {
+	            return inject.inject([moduleName]);
+	        };
+	    }
+	    /**
+	     * 存储数据
+	     * @param key
+	     * @param val
+	     */
+	    Store.prototype.data = function (key, val) {
+	        this.app.data(key, val);
+	    };
+	    /**
+	     * 是否有key这个变量
+	     * @param key
+	     */
+	    Store.prototype.has = function (key) {
+	        return this.ins().has(key);
+	    };
+	    /**
+	     * 获取数据
+	     * @param key
+	     */
+	    Store.prototype.get = function (key) {
+	        return this.ins().get(key);
+	    };
+	    /**
+	     * provider函数
+	     * @param key
+	     * @param obj { $get: function(){} }
+	     */
+	    Store.prototype.provider = function (key, obj) {
+	        this.app.provider(key, obj);
+	    };
+	    /**
+	     * factory函数
+	     * @param key
+	     * @param fn 需要返回值
+	     */
+	    Store.prototype.factory = function (key, fn) {
+	        this.app.factory(key, fn);
+	    };
+	    /**
+	     * service 函数
+	     * @param key
+	     * @param fn
+	     */
+	    Store.prototype.service = function (key, fn) {
+	        this.app.service(key, fn);
+	    };
+	    return Store;
+	}());
+	exports.default = Store;
+
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var $log = __webpack_require__(2);
+	var moduleNames = {};
+	var Loader = /** @class */ (function () {
+	    function Loader() {
+	        this.modules = {
+	            name: '',
+	            requires: []
+	        };
+	    }
+	    Loader.prototype.clear = function () {
+	        this.modules = {};
+	    };
+	    /**
+	     * 模块
+	     * @param name 模块名称
+	     * @param requires 模块的依赖项
+	     * @param configFn 配置函数
+	     */
+	    Loader.prototype.module = function (name, requires, configFn) {
+	        var modules = {};
+	        if (requires) {
+	            this.modules = this.$$set(name, requires, modules, configFn);
+	        }
+	        else {
+	            this.modules = this.$$get(name, modules);
+	        }
+	        return this.modules;
+	    };
+	    /**
+	     * 生成module
+	     * @param name
+	     * @param requires
+	     * @param configFn
+	     */
+	    Loader.prototype.$$set = function (name, requires, modules, configFn) {
+	        if (name == 'hasOwnProperty')
+	            $log.error('hasOwnProperty不能用于键名');
+	        var invokeQueue = [];
+	        var configQueue = [];
+	        /**
+	         * 引用函数
+	         * @param service 服务名称
+	         * @param prefix data,provider
+	         * @param arrProp 数组属性
+	         * @param queue 引用队列
+	         */
+	        var invokeFn = function (service, prefix, arrProp, queue) {
+	            if (arrProp === void 0) { arrProp = 'push'; }
+	            if (queue === void 0) { queue = invokeQueue; }
+	            return function () {
+	                queue[arrProp]([service, prefix, arguments]);
+	                return moduleObj;
+	            };
+	        };
+	        var moduleObj = {
+	            name: name,
+	            requires: requires,
+	            // data: (key, val)=>{
+	            //     invokeQueue.unshift(['data', [key, val]]);
+	            // },
+	            // provider: (key, val)=>{
+	            //     invokeQueue.push(['provider', [key, val]]);
+	            // },
+	            data: invokeFn('$provider', 'data', 'unshift'),
+	            provider: invokeFn('$provider', 'provider'),
+	            factory: invokeFn('$provider', 'factory'),
+	            value: invokeFn('$provider', 'value'),
+	            service: invokeFn('$provider', 'service'),
+	            config: invokeFn('$injector', 'invoke', 'push', configQueue),
+	            run: function (fn) {
+	                moduleObj._runQueue.push(fn);
+	                return moduleObj;
+	            },
+	            pipe: invokeFn('$pipeProvider', 'register'),
+	            // directive: invokeFn('$compileProvider', 'directive'),
+	            _invokeQueue: invokeQueue,
+	            _configQueue: configQueue,
+	            _runQueue: []
+	        };
+	        if (configFn) {
+	            moduleObj.config(configFn);
+	        }
+	        this.modules = moduleNames[name] = moduleObj;
+	        return moduleObj;
+	    };
+	    /**
+	     * 根据name获取module
+	     * @param name
+	     * @param modules
+	     */
+	    Loader.prototype.$$get = function (name, modules) {
+	        if (moduleNames.hasOwnProperty(name)) {
+	            return moduleNames[name];
+	        }
+	        $log.error('名称为' + name + '的module不存在！');
+	    };
+	    return Loader;
+	}());
+	exports.default = Loader;
+
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var $log = __webpack_require__(2);
+	var util_1 = __webpack_require__(3);
+	var loader_1 = __webpack_require__(27);
+	var loader = new loader_1.default();
+	// 处理函数
+	var FN_REG = /^function\s*[^\(]*\(\s*([^\)]*)\)/m;
+	// 处理空格
+	var SPACE_REG = /^\s*(\S+)\s*$/;
+	// 处理注释
+	var COMMENTS_REG = /(\/\*.*?\*\/)|(\/\/$)/mg;
+	var Injector = /** @class */ (function () {
+	    function Injector() {
+	    }
+	    /**
+	     * 模块注入函数
+	     * @param moduleNames 模块名称
+	     * @param strict 严格模式的判断，默认false
+	     */
+	    Injector.prototype.inject = function (moduleNames, strict) {
+	        if (util_1.default.type(moduleNames) != 'array')
+	            $log.error('模块的名称的参数为数组');
+	        // 缓存data数据
+	        var providerCache = { $injector: undefined, $provider: { data: undefined, provider: undefined } };
+	        var providerInjecter = providerCache.$injector = injectAgency(providerCache, function () {
+	            // $log.error('未知的provider'+JSON.stringify(depPath));
+	        });
+	        var dataCache = { $injector: undefined };
+	        var dataInjecter = dataCache.$injector = injectAgency(dataCache, function (name) {
+	            var provider = providerInjecter.get(name + 'Provider');
+	            return dataInjecter.invoke(provider.$get, provider);
+	        });
+	        // 已经加载的模块
+	        var loadedModules = new Map();
+	        var cricle = false;
+	        // provider依赖数组,[['数组名',['依赖项']]] [['a',['b']]]
+	        var depPath = [];
+	        // run 函数队列
+	        var runQueue = [];
+	        /**
+	         * 处理函数的返回值
+	         * @param fn
+	         */
+	        function handelReturn(fn) {
+	            return function () {
+	                var val = dataInjecter.invoke(fn);
+	                if (util_1.default.type(val) == 'undefined') {
+	                    $log.error('factory函数必须有返回值');
+	                }
+	                return val;
+	            };
+	        }
+	        providerCache.$provider = {
+	            data: function (key, val) {
+	                if (key == 'hasOwnProperty' || key == '$injector' || key == '$provider')
+	                    $log.error(key + '不能用于标识符');
+	                dataCache[key] = val;
+	                providerCache[key] = val;
+	            },
+	            provider: function (key, val) {
+	                if (key == 'hasOwnProperty' || key == '$injector' || key == '$provider')
+	                    $log.error(key + '不能用于标识符');
+	                if (util_1.default.type(val) == 'function') {
+	                    // val = instantiate(val);
+	                    val = providerInjecter.instantiate(val);
+	                }
+	                providerCache[key + 'Provider'] = val;
+	            },
+	            factory: function (key, fn) {
+	                this.provider(key, { $get: handelReturn(fn) });
+	            },
+	            value: function (key, val) {
+	                this.factory(key, function () { return val; });
+	            },
+	            service: function (key, fn) {
+	                this.factory(key, function () {
+	                    return dataInjecter.instantiate(fn);
+	                });
+	            }
+	        };
+	        var listQueue = function (queues) {
+	            queues.forEach(function (inq) {
+	                var service = providerInjecter.get(inq[0]);
+	                var method = inq[1];
+	                var args = inq[2];
+	                // const arr = [args[0], args[1]];
+	                // providerCache.$provider[method].apply(providerCache.$provider, args);
+	                service[method].apply(service, args);
+	            });
+	        };
+	        moduleNames.forEach(function loadMobule(val) {
+	            if (!loadedModules.get(val)) {
+	                loadedModules.set(val, true);
+	                if (util_1.default.type(val) == 'string') {
+	                    var module_1 = loader.module(val);
+	                    module_1.requires.forEach(loadMobule); // 递归其他的依赖模块
+	                    listQueue(module_1._invokeQueue);
+	                    listQueue(module_1._configQueue);
+	                    runQueue = runQueue.concat(module_1._runQueue);
+	                }
+	                if (util_1.default.type(val) == 'function' || util_1.default.type(val) == 'array') {
+	                    runQueue.push(providerInjecter.invoke(val));
+	                }
+	            }
+	        });
+	        //执行run函数队列
+	        util_1.default.arrayCompact(runQueue).forEach(function (run) {
+	            dataInjecter.invoke(run);
+	        });
+	        function injectAgency(cache, fn) {
+	            /**
+	             * 处理缓存
+	             * @param name data或者provideer名称
+	             */
+	            function handelCache(name) {
+	                handeldepPath(depPath);
+	                if (cache.hasOwnProperty(name)) {
+	                    return cache[name];
+	                }
+	                else {
+	                    try {
+	                        return (cache[name] = fn(name));
+	                    }
+	                    finally {
+	                        if (cricle)
+	                            delete cache[name];
+	                    }
+	                }
+	            }
+	            /**
+	             * $inject内部的调用函数
+	             * @param fn 注入的函数或数组
+	             * @param obj 对象，fn为其属性
+	             * @param local 用于覆盖$inject数组的item项
+	             * @param name data或provider名称
+	             */
+	            function invoke(fn, obj, local, name) {
+	                if (arguments.length == 1) {
+	                    obj = null;
+	                }
+	                var args = annotate(fn, name).map(function (v) {
+	                    if (util_1.default.type(v) == 'string')
+	                        return (local && local.hasOwnProperty(v)) ? local[v] : handelCache(v);
+	                    else
+	                        $log.error('无效的标识符' + v + '，标识符应为字符串');
+	                });
+	                if (util_1.default.type(fn) == 'array') {
+	                    fn = fn.slice(-1)[0];
+	                }
+	                return fn.apply(obj, args);
+	            }
+	            /**
+	             * 实例化
+	             * @param fn
+	             * @param local
+	             */
+	            function instantiate(fn, local) {
+	                var fn2 = util_1.default.type(fn) == 'array' ? fn.slice(-1)[0] : fn;
+	                var instance = Object.create(fn2.prototype);
+	                invoke(fn, instance, local);
+	                return instance;
+	            }
+	            function hasKey(key) {
+	                return dataCache.hasOwnProperty(key) || providerCache.hasOwnProperty(key + 'Provider');
+	            }
+	            return {
+	                has: hasKey,
+	                get: handelCache,
+	                invoke: invoke,
+	                annotate: annotate,
+	                instantiate: instantiate
+	            };
+	        }
+	        function handeldepPath(arr) {
+	            if (arr.length) {
+	                if (arr[arr.length - 1][1].includes(arr[0][0])) {
+	                    var path = arr.map(function (v) {
+	                        return v[0];
+	                    });
+	                    path.push(arr[0][0]);
+	                    cricle = true;
+	                    $log.error('发现循环依赖' + path.join('->'));
+	                }
+	            }
+	        }
+	        /**
+	         * 装饰器函数
+	         * @param fn 注入的函数
+	         */
+	        function annotate(fn, name) {
+	            var arr = [];
+	            if (util_1.default.type(fn) == 'array') {
+	                if (fn.length)
+	                    arr = fn.slice(0, fn.length - 1);
+	                else
+	                    arr = [];
+	            }
+	            if (util_1.default.type(fn) == 'function') {
+	                if (strict) {
+	                    $log.error('函数没有$inject属性，不能再严格模式下使用');
+	                }
+	                else if (fn.$inject) {
+	                    arr = fn.$inject;
+	                }
+	                else {
+	                    var fns = (fn.toString().replace(COMMENTS_REG, '')).match(FN_REG);
+	                    arr = util_1.default.arrayCompact(fns[1].split(',')).map(function (a) {
+	                        return a.match(SPACE_REG)[1];
+	                    });
+	                    if (name != null) {
+	                        depPath.push([name, arr]);
+	                    }
+	                }
+	            }
+	            // console.log(arr)
+	            return arr;
+	        }
+	        return dataInjecter;
+	    };
+	    return Injector;
+	}());
+	exports.default = Injector;
+
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var $log = __webpack_require__(2);
+	var util_1 = __webpack_require__(3);
+	/**
+	 * 验证组件的状态
+	 * @param component 组件
+	 */
+	function componentGuard(component) {
+	    // 验证组件名称
+	    if (!component.name) {
+	        return;
+	    }
+	    if (component.name) {
+	        if (util_1.default.type(component.name) != 'string')
+	            $log.error('组件' + component.name + '的名称必须为字符串');
+	    }
+	    // 验证组件components属性
+	    if (component.components) {
+	        if (util_1.default.type(component.components) != 'array') {
+	            $log.error('组件' + component.name + '的components属性应为数组！');
+	        }
+	    }
+	    // 验证组件style属性
+	    if (component.style) {
+	        if (util_1.default.type(component.style) != 'string') {
+	            $log.error('组件' + component.name + '的style属性应为字符！');
+	        }
+	    }
+	    // 验证组件styleeId属性
+	    if (component.styleId) {
+	        if (util_1.default.type(component.styleId) != 'string') {
+	            $log.error('组件' + component.name + '的styleId属性应为字符！');
+	        }
+	        if (document.querySelector(component.styleId) == undefined) {
+	            $log.error('节点' + component.styleId + '不存在');
+	        }
+	    }
+	    // 验证组件template属性
+	    if (component.template) {
+	        if (util_1.default.type(component.template) != 'string') {
+	            $log.error('组件' + component.name + '的template属性应为字符！');
+	        }
+	    }
+	    // 验证组件templateId属性
+	    if (component.templateId) {
+	        if (util_1.default.type(component.templateId) != 'string') {
+	            $log.error('组件' + component.name + '的templateId属性应为字符！');
+	        }
+	        if (document.querySelector(component.templateId) == undefined) {
+	            $log.error('节点' + component.templateId + '不存在');
+	        }
+	    }
+	    // 验证组件data属性
+	    if (component.data) {
+	        if (util_1.default.type(component.data) != 'object') {
+	            $log.error('组件' + component.name + '的data属性应为对象！');
+	        }
+	    }
+	    // 验证组件props属性
+	    if (component.props) {
+	        if (util_1.default.type(component.props) != 'object') {
+	            $log.error('组件' + component.name + '的props属性应为对象！');
+	        }
+	        // 验证type类型
+	        Object.entries(component.props).forEach(function (v) {
+	            if (util_1.default.type(v[1]['default']) != v[1]['type']) {
+	                $log.error('组件' + component.name + 'props属性中元素' + v[0] + '的default值非' + v[1]['type'] + '类型！');
+	            }
+	        });
+	    }
+	    // 验证组件props方法
+	    if (component.beforeRender) {
+	        if (util_1.default.type(component.beforeRender) != 'function') {
+	            $log.error('组件' + component.name + '的beforeRender属性应为函数！');
+	        }
+	    }
+	    // 验证组件render方法
+	    if (component.render) {
+	        if (util_1.default.type(component.render) != 'function') {
+	            $log.error('组件' + component.name + '的render属性应为函数！');
+	        }
+	    }
+	    else {
+	        return;
+	    }
+	}
+	exports.default = componentGuard;
+
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || (function () {
+	    var extendStatics = Object.setPrototypeOf ||
+	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+	    return function (d, b) {
+	        extendStatics(d, b);
+	        function __() { this.constructor = d; }
+	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	    };
+	})();
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var targetDom_1 = __webpack_require__(31);
+	var nodeModel_1 = __webpack_require__(32);
+	var eventModel_1 = __webpack_require__(33);
+	var moveModel_1 = __webpack_require__(34);
+	var statusModel_1 = __webpack_require__(35);
+	var mixins_1 = __webpack_require__(5);
+	// dom操作
+	var DomAction = /** @class */ (function (_super) {
+	    __extends(DomAction, _super);
+	    function DomAction(selector) {
+	        return _super.call(this, selector) || this;
+	    }
+	    return DomAction;
+	}(targetDom_1.default));
+	mixins_1.applyMixins(DomAction, [nodeModel_1.default, eventModel_1.default, moveModel_1.default, statusModel_1.default]);
+	var Dom = function (selector) {
+	    var dom = new DomAction(selector);
+	    return dom;
+	};
+	exports.default = Dom;
+
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	/**
+	 * 公共方法
+	 */
+	var targetDom = /** @class */ (function () {
+	    function targetDom(selector) {
+	        this.elements = document.querySelectorAll(selector);
+	        this.els = this._getEles(this.elements);
+	    }
+	    targetDom.prototype._getEles = function (nodes) {
+	        if (nodes && nodes.length) {
+	            return nodes;
+	        }
+	    };
+	    /**
+	     * 遍历dom节点
+	     * @param nodes 节点
+	     * @param fn 回调函数 val, index
+	     */
+	    targetDom.prototype.each = function (nodes, fn) {
+	        for (var i = 0; i < nodes.length; i++) {
+	            fn(nodes[i], i);
+	        }
+	    };
+	    return targetDom;
+	}());
+	exports.default = targetDom;
+
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || (function () {
+	    var extendStatics = Object.setPrototypeOf ||
+	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+	    return function (d, b) {
+	        extendStatics(d, b);
+	        function __() { this.constructor = d; }
+	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	    };
+	})();
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var targetDom_1 = __webpack_require__(31);
+	var util_1 = __webpack_require__(3);
+	// 操作dom节点
+	var nodeModel = /** @class */ (function (_super) {
+	    __extends(nodeModel, _super);
+	    function nodeModel(selector) {
+	        return _super.call(this, selector) || this;
+	    }
+	    /**
+	     * 设置，获取html
+	     * @param str html值
+	     */
+	    nodeModel.prototype.html = function (str) {
+	        if (str && util_1.default.type(str) != 'string') {
+	            return;
+	        }
+	        if (!str) {
+	            return this.els[0].innerHTML;
+	        }
+	        else {
+	            this.each(this.els, function (val, index) {
+	                val.innerHTML = str;
+	            });
+	            return this;
+	        }
+	    };
+	    /**
+	     * 设置，获取节点文本
+	     * @param str 文本值
+	     */
+	    nodeModel.prototype.text = function (str) {
+	        if (str && util_1.default.type(str) != 'string') {
+	            return;
+	        }
+	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
+	            var i = _a[_i];
+	            if (arguments.length == 0) {
+	                return i.innerText || i.textContent;
+	            }
+	            else if (arguments.length == 1) {
+	                if (i.innerText) {
+	                    i.innerText = str;
+	                }
+	                else {
+	                    i.textContent = str;
+	                }
+	            }
+	        }
+	        return this;
+	    };
+	    nodeModel.prototype.css = function (key, value) {
+	        if (key && util_1.default.type(key) != 'string') {
+	            return;
+	        }
+	        if (value && util_1.default.type(value) != 'string') {
+	            return;
+	        }
+	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
+	            var i = _a[_i];
+	            if (arguments.length == 1) {
+	                return window.getComputedStyle(i, null)[key];
+	            }
+	            else if (arguments.length == 2) {
+	                i.style[key] = value;
+	                return this;
+	            }
+	        }
+	    };
+	    /**
+	     * 获取，设置元素宽度
+	     * @param str
+	     */
+	    nodeModel.prototype.width = function (str) {
+	        if (str && util_1.default.type(str) != 'string') {
+	            return;
+	        }
+	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
+	            var i = _a[_i];
+	            if (str) {
+	                i.style.width = str;
+	            }
+	            else {
+	                return i.offsetWidth;
+	            }
+	        }
+	        return this;
+	    };
+	    /**
+	    * 获取，设置元素高度
+	    * @param str
+	    */
+	    nodeModel.prototype.height = function (str) {
+	        if (str && util_1.default.type(str) != 'string') {
+	            return;
+	        }
+	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
+	            var i = _a[_i];
+	            if (str) {
+	                i.style.height = str;
+	            }
+	            else {
+	                return i.offsetHeight;
+	            }
+	        }
+	        return this;
+	    };
+	    /**
+	     * 获取，设置节点的属性值
+	     * @param attr 属性名
+	     * @param value 属性值
+	     */
+	    nodeModel.prototype.attr = function (attr, value) {
+	        if (util_1.default.type(attr) != 'string') {
+	            return;
+	        }
+	        if (value && util_1.default.type(value) != 'string') {
+	            return;
+	        }
+	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
+	            var i = _a[_i];
+	            if (arguments.length == 1) {
+	                if (i.hasAttribute(attr)) {
+	                    return i.getAttribute(attr);
+	                }
+	            }
+	            else if (arguments.length == 2) {
+	                i.setAttribute(attr, value);
+	                return this;
+	            }
+	        }
+	    };
+	    /**
+	     * 获取，设置节点的value值
+	     * @param str value值
+	     */
+	    nodeModel.prototype.val = function (str) {
+	        if (str && util_1.default.type(str) != 'string') {
+	            return;
+	        }
+	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
+	            var i = _a[_i];
+	            if (arguments.length == 1) {
+	                var oldStr = i.getAttribute('value');
+	                i.setAttribute(oldStr, str);
+	            }
+	            else if (arguments.length == 0) {
+	                if (i.nodeName.match(/INPUT|TEXTAREA|SELECT|RADIO|CHECKBOX/)) {
+	                    return i.value;
+	                }
+	                return i.getAttribute('value');
+	            }
+	        }
+	        return this;
+	    };
+	    /**
+	     * 给节点添加class
+	     * @param name
+	     */
+	    nodeModel.prototype.addClass = function (name) {
+	        if (name && util_1.default.type(name) != 'string') {
+	            return;
+	        }
+	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
+	            var i = _a[_i];
+	            i.classList.add(name);
+	        }
+	        return this;
+	    };
+	    /**
+	     * 删除节点的class
+	     * @param name
+	     */
+	    nodeModel.prototype.removeClass = function (name) {
+	        if (name && util_1.default.type(name) != 'string') {
+	            return;
+	        }
+	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
+	            var i = _a[_i];
+	            i.classList.remove(name);
+	        }
+	        return this;
+	    };
+	    /**
+	     * 切换class
+	     */
+	    nodeModel.prototype.toggleClass = function (name) {
+	        if (name && util_1.default.type(name) != 'string') {
+	            return;
+	        }
+	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
+	            var i = _a[_i];
+	            if (i.classList.toggle(name)) {
+	                return true;
+	            }
+	            else {
+	                return false;
+	            }
+	        }
+	    };
+	    return nodeModel;
+	}(targetDom_1.default));
+	exports.default = nodeModel;
+
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || (function () {
+	    var extendStatics = Object.setPrototypeOf ||
+	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+	    return function (d, b) {
+	        extendStatics(d, b);
+	        function __() { this.constructor = d; }
+	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	    };
+	})();
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var targetDom_1 = __webpack_require__(31);
+	var util_1 = __webpack_require__(3);
+	// 事件的操作
+	var eventModel = /** @class */ (function (_super) {
+	    __extends(eventModel, _super);
+	    function eventModel(selector) {
+	        return _super.call(this, selector) || this;
+	    }
+	    // 事件绑定
+	    eventModel.prototype.on = function (eventType, fn) {
+	        this.each(this.els, function (val, index) {
+	            val.addEventListener(eventType, fn, false);
+	        });
+	    };
+	    // 解除事件绑定
+	    eventModel.prototype.off = function (eventType, fn) {
+	        this.each(this.els, function (val, index) {
+	            val.removeEventListener(eventType, fn, false);
+	        });
+	    };
+	    // 鼠标移入移除
+	    eventModel.prototype.hover = function (hover, out) {
+	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
+	            var i = _a[_i];
+	            if (util_1.default.type(hover) == 'function') {
+	                i.addEventListener('mouseover', hover, false);
+	            }
+	            else {
+	                throw new Error('hover方法：没有传递回调函数');
+	            }
+	            if (util_1.default.type(out) == 'function') {
+	                i.addEventListener('mouseout', hover, false);
+	            }
+	        }
+	        return this;
+	    };
+	    // 点击事件
+	    eventModel.prototype.click = function (fn) {
+	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
+	            var i = _a[_i];
+	            if (util_1.default.type(fn) == 'function') {
+	                i.addEventListener('click', fn, false);
+	            }
+	        }
+	        return this;
+	    };
+	    //设置点击切换方法
+	    eventModel.prototype.toggle = function () {
+	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
+	            var i = _a[_i];
+	            (function (element, args) {
+	                var count = 0;
+	                element.addEventListener('click', function () {
+	                    args[count++ % args.length].call(this);
+	                }, false);
+	            })(i, arguments);
+	        }
+	        return this;
+	    };
+	    //窗口滚动事件
+	    eventModel.prototype.scroll = function (fn) {
+	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
+	            var i = _a[_i];
+	            if (util_1.default.type(fn) == 'function') {
+	                i.addEventListener('scroll', fn, false);
+	            }
+	        }
+	        return this;
+	    };
+	    eventModel.prototype.resize = function (fn) {
+	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
+	            var i = _a[_i];
+	            var offsetLeft = i.offsetLeft;
+	            var offsetWidth = i.offsetWidth;
+	            var offsetTop = i.offsetTop;
+	            var offsetHeight = i.offsetHeight;
+	            window.onresize = function () {
+	                fn();
+	                if (offsetLeft >= util_1.default.page().width - offsetWidth) {
+	                    offsetLeft = util_1.default.page().width - offsetWidth;
+	                }
+	                if (offsetTop >= util_1.default.page().height - offsetHeight) {
+	                    offsetTop = util_1.default.page().height - offsetHeight;
+	                }
+	            };
+	        }
+	        return this;
+	    };
+	    return eventModel;
+	}(targetDom_1.default));
+	exports.default = eventModel;
+
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || (function () {
+	    var extendStatics = Object.setPrototypeOf ||
+	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+	    return function (d, b) {
+	        extendStatics(d, b);
+	        function __() { this.constructor = d; }
+	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	    };
+	})();
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var targetDom_1 = __webpack_require__(31);
+	var moveModel = /** @class */ (function (_super) {
+	    __extends(moveModel, _super);
+	    function moveModel(selector) {
+	        return _super.call(this, selector) || this;
+	    }
+	    moveModel.prototype.show = function (delay) {
+	        if (delay && typeof delay == 'number') {
+	            var _loop_1 = function (i) {
+	                setTimeout(function () {
+	                    i.style.display = 'none';
+	                }, delay || 500);
+	            };
+	            for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
+	                var i = _a[_i];
+	                _loop_1(i);
+	            }
+	        }
+	        else if (!delay) {
+	            for (var _b = 0, _c = this.els; _b < _c.length; _b++) {
+	                var i = _c[_b];
+	                i.style.display = 'block';
+	            }
+	        }
+	        return this;
+	    };
+	    moveModel.prototype.hide = function (delay) {
+	        if (delay && typeof delay == 'number') {
+	            var _loop_2 = function (i) {
+	                setTimeout(function () {
+	                    i.style.display = 'block';
+	                }, delay || 500);
+	            };
+	            for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
+	                var i = _a[_i];
+	                _loop_2(i);
+	            }
+	        }
+	        else if (!delay) {
+	            for (var _b = 0, _c = this.els; _b < _c.length; _b++) {
+	                var i = _c[_b];
+	                i.style.display = 'none';
+	            }
+	        }
+	        return this;
+	    };
+	    return moveModel;
+	}(targetDom_1.default));
+	exports.default = moveModel;
+
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || (function () {
+	    var extendStatics = Object.setPrototypeOf ||
+	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+	    return function (d, b) {
+	        extendStatics(d, b);
+	        function __() { this.constructor = d; }
+	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	    };
+	})();
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var targetDom_1 = __webpack_require__(31);
+	var util_1 = __webpack_require__(3);
+	// 操作dom节点
+	var statusModel = /** @class */ (function (_super) {
+	    __extends(statusModel, _super);
+	    function statusModel(selector) {
+	        return _super.call(this, selector) || this;
+	    }
+	    // 判断节点是否拥有属性
+	    statusModel.prototype.hasAttrs = function () {
+	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
+	            var i = _a[_i];
+	            if (i.hasAttributes()) {
+	                return true;
+	            }
+	            else {
+	                return false;
+	            }
+	        }
+	    };
+	    /**
+	     * 判断节点是否有某个属性
+	     * @param attr 属性名
+	     */
+	    statusModel.prototype.hasAttr = function (attr) {
+	        if (attr && util_1.default.type(attr) != 'string') {
+	            return;
+	        }
+	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
+	            var i = _a[_i];
+	            if (i.hasAttribute(attr)) {
+	                return true;
+	            }
+	            else {
+	                return false;
+	            }
+	        }
+	    };
+	    /**
+	     * 判断节点是否有某个class
+	     * @param name class名称
+	     */
+	    statusModel.prototype.hasClass = function (name) {
+	        if (name && util_1.default.type(name) != 'string') {
+	            return;
+	        }
+	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
+	            var i = _a[_i];
+	            if (i.classList.contains(name)) {
+	                return true;
+	            }
+	            else {
+	                return false;
+	            }
+	        }
+	    };
+	    return statusModel;
+	}(targetDom_1.default));
+	exports.default = statusModel;
+
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var Cookie = {
+	    // 判断cookie是否可用
+	    support: function () {
+	        if (!(document.cookie || navigator.cookieEnabled))
+	            return false;
+	        return true;
+	    },
+	    // 添加cookie
+	    set: function (name, value, config) {
+	        // config = {hours, path, domain, secure}
+	        var data = name + "=" + encodeURIComponent(value);
+	        console.log(123);
+	        if (config && config.hours != undefined) {
+	            var d = new Date();
+	            d.setHours(d.getHours() + config.hours);
+	            data += "; expires=" + d.toUTCString();
+	        }
+	        data += (config && config.path) ? ("; path=" + config.path) : "";
+	        data += (config && config.domain) ? ("; domain=" + config.domain) : "";
+	        data += (config && config.secure) ? ("; secure=" + config.secure) : "";
+	        document.cookie = data;
+	    },
+	    // 查询 cookie
+	    get: function (name) {
+	        var len = arguments.length;
+	        if (len == 0) {
+	            var cs = document.cookie, arr = [], arr2 = [], obj = {};
+	            arr = cs.split(';');
+	            // console.log(arr);
+	            for (var i = 0; i < arr.length; i++) {
+	                var a = arr[i].split('=');
+	                var a1 = [a[0].trim(), decodeURIComponent(a[1])];
+	                arr2.push(a1);
+	            }
+	            return JSON.stringify(arr2);
+	        }
+	        else if (len == 1) {
+	            var reg = eval("/(?:^|;\\s*)" + name + "=([^=]+)(?:;|$)/");
+	            return reg.test(document.cookie) ? decodeURIComponent(RegExp.$1) : "";
+	        }
+	    },
+	    // 删除 cookie
+	    remove: function (name, path) {
+	        if (arguments.length == 0) {
+	            var all = this.get();
+	            for (var i = 0; i < all.length; i++) {
+	                this.set(all[i][0], "", -1);
+	            }
+	        }
+	        this.set(name, path || '', { "hours": -1 });
+	    }
+	};
+	exports.default = Cookie;
+
+
+/***/ })
+/******/ ])
+});
+;
 //# sourceMappingURL=bundle.js.map
