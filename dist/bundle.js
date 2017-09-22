@@ -586,7 +586,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return newArr;
 	    };
 	    /**
-	     * 获取数组中某个元素的下标
+	     * 获取数组中某个元素的下标，返回结果维数组
 	     * @param data
 	     * @param array
 	     * @returns {any}

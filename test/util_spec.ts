@@ -96,4 +96,10 @@ describe('Util工具函数测试',function(){
 		var res = u.exitFirst(a, b);
 		expect(res).to.deep.eq({text:'['});
 	});
+
+	it('13, uArray数组去重',function(){
+		var a = [1,1,2,];
+		var b = u.uArray(a);
+		expect(b).to.deep.eq([1,2]);
+	});
 });
