@@ -26,7 +26,7 @@ class HandelEventer {
      * @param name 
      * @param fn 
      */
-    public listen(name, fn){
+    public listen(name, fn):void{
         if( !this.eventList[ name ] ){  
             this.eventList[ name ] = [];   
         };  

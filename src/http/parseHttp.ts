@@ -1,6 +1,7 @@
 import Util from '../util';
 import * as $log from '../log';
 
+// 支持的类型
 const httpType = ['get', 'post', 'put', 'delete', 'head', 'options'];
 
 /**

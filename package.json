@@ -1,6 +1,6 @@
 {
   "name": "cpage",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Cpage.js是一款轻量级的Mvvm框架，使用TypeScript开发，可以方便地进行组件化开发，语法统一、简介明了，不依赖于第三方框架，适合中小项目开发。框架同时支持es5与es6语法，可参考example中示例。",
   "main": "dist/bundle.js",
   "scripts": {
@@ -45,7 +45,7 @@
     "ts-loader": "^2.2.1",
     "ts-node": "^3.1.0",
     "tslint": "^5.4.3",
-    "typescript": "^2.2.1",
+    "typescript": "^2.6.2",
     "webpack": "^1.14.0",
     "webpack-dev-server": "^1.16.2"
   },

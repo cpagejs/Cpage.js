@@ -586,7 +586,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return newArr;
 	    };
 	    /**
-	     * 获取数组中某个元素的下标
+	     * 获取数组中某个元素的下标，返回结果维数组
 	     * @param data
 	     * @param array
 	     * @returns {any}
@@ -4117,6 +4117,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var HandelEventer_1 = __webpack_require__(21);
 	var util_1 = __webpack_require__(3);
+	/**
+	 * 监听组件的data数据变化
+	 */
 	var HandelData = /** @class */ (function () {
 	    function HandelData() {
 	        this.data = {};
@@ -4317,6 +4320,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var util_1 = __webpack_require__(3);
 	var $log = __webpack_require__(2);
+	// 支持的类型
 	var httpType = ['get', 'post', 'put', 'delete', 'head', 'options'];
 	/**
 	 * 解析http请求
@@ -4950,7 +4954,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            $log.error('组件' + component.name + '的props属性应为对象！');
 	        }
 	        // 验证type类型
-	        console.log(Object.entries(component.props));
 	        Object.entries(component.props).forEach(function (v) {
 	            if (util_1.default.type(v[1]['default']) != v[1]['type']) {
 	                $log.error('组件' + component.name + 'props属性中元素' + v[0] + '的default值非' + v[1]['type'] + '类型！');

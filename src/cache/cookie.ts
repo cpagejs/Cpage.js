@@ -1,12 +1,12 @@
 const Cookie = {
 	// 判断cookie是否可用
-	support(){
+	support():boolean{
 		if(!(document.cookie || navigator.cookieEnabled)) return false;
 		return true;
 	},
 
 	// 添加cookie
-	set(name:string, value:string, config?){
+	set(name:string, value:string, config?):void{
 		// config = {hours, path, domain, secure}
 		var data = name + "=" + encodeURIComponent(value);console.log(123)
 	  	if(config && config.hours != undefined){
@@ -22,7 +22,7 @@ const Cookie = {
 	},
 
 	// 查询 cookie
-	get(name?:string){
+	get(name?:string):string{
 		let len = arguments.length;
 		if(len == 0){
 			var cs = document.cookie,
@@ -44,7 +44,7 @@ const Cookie = {
 	},
 
 	// 删除 cookie
-	remove(name:string, path?:string){
+	remove(name:string, path?:string):void{
 		if(arguments.length == 0){
 			var all = this.get();
 			for(var i=0; i<all.length; i++){
