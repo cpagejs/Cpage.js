@@ -5,7 +5,7 @@ Cpage.js是一款轻量级的Mvvm框架，使用TypeScript开发，可以方便�
 ## 安装
     es6  npm install cpage
          import Cpage,  { Component } from 'cpage'; 
-    es5  <script src="https://chenhaozhi.github.io/cpage/1.0.3/Cpage-1.0.3.min.js"></script>
+    es5  <script src="https://chenhaozhi.github.io/cpage/1.0.7/Cpage-1.0.7.min.js"></script>
 
 ## 组件（es5）
 ```
