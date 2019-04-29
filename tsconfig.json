@@ -9,7 +9,8 @@
         "removeComments": false,
         "experimentalDecorators": true,
         "emitBOM": true,
-        "alwaysStrict": true
+        "alwaysStrict": true,
+		"downlevelIteration": true
     },
     "include": [
         "./src/**/*"

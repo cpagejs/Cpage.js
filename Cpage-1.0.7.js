@@ -834,6 +834,26 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, exports) {
 
 	"use strict";
+	var __read = (this && this.__read) || function (o, n) {
+	    var m = typeof Symbol === "function" && o[Symbol.iterator];
+	    if (!m) return o;
+	    var i = m.call(o), r, ar = [], e;
+	    try {
+	        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+	    }
+	    catch (error) { e = { error: error }; }
+	    finally {
+	        try {
+	            if (r && !r.done && (m = i["return"])) m.call(i);
+	        }
+	        finally { if (e) throw e.error; }
+	    }
+	    return ar;
+	};
+	var __spread = (this && this.__spread) || function () {
+	    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+	    return ar;
+	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	function mixins() {
 	    var otherClass = [];
@@ -841,7 +861,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        otherClass[_i] = arguments[_i];
 	    }
 	    return function (targetClass) {
-	        Object.assign.apply(Object, [targetClass.prototype].concat(otherClass));
+	        Object.assign.apply(Object, __spread([targetClass.prototype], otherClass));
 	    };
 	}
 	exports.mixins = mixins;
@@ -944,14 +964,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // '12', '12.12', '0.12e2'
 	        if (this.isNumber(str) || str === '.')
 	            return 'number';
+	        // '"abc"'  "'abc'"
 	        else if (str.charAt(0) === "'" || str.charAt(0) === '"')
 	            return 'string';
+	        //字母，_, $
 	        else if (this.isLetter(str))
 	            return 'letter';
+	        // '["a","b"]'
 	        else if ((str === '[' || str === ']' || str === ','))
 	            return 'array';
+	        // '{}'
 	        else if ((str === '{' || str === '}' || str === ':'))
 	            return 'object';
+	        // 'function'
 	        else if (str === '(' || str === ')')
 	            return 'function';
 	        else
@@ -1051,8 +1076,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function step(op) {
 	        if (f) throw new TypeError("Generator is already executing.");
 	        while (_) try {
-	            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
-	            if (y = 0, t) op = [0, t.value];
+	            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+	            if (y = 0, t) op = [op[0] & 2, t.value];
 	            switch (op[0]) {
 	                case 0: case 1: t = op; break;
 	                case 4: _.label++; return { value: op[1], done: false };
@@ -1070,6 +1095,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
 	        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
 	    }
+	};
+	var __values = (this && this.__values) || function (o) {
+	    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+	    if (m) return m.call(o);
+	    return {
+	        next: function () {
+	            if (o && i >= o.length) o = void 0;
+	            return { value: o && o[i++], done: !o };
+	        }
+	    };
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var $log = __webpack_require__(2);
@@ -1156,7 +1191,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                setTimeout(function () {
 	                    if (window.document.readyState == "complete") {
 	                        var hash = window.location.hash;
-	                        if (hash == '') {
+	                        if (hash == '') { // 处理默认首页， path="/"
 	                            var index = pathIndex();
 	                            if (util_1.default.type(index) == 'object') {
 	                                handelView(index);
@@ -1587,13 +1622,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    renderComponents.prototype.compareChildComponentAndInjectComponents = function (child, arr) {
 	        var self = this, flag = false;
-	        if (child = this.root.name) {
+	        if (child = this.root.name) { //判断是否为根组件
 	            flag = true;
 	        }
-	        else if (!arr.length && child != this.root.name) {
+	        else if (!arr.length && child != this.root.name) { //普通组件，有组件标识但components为空
 	            flag = false;
 	        }
-	        else {
+	        else { //普通组件，有组件标识但components不为空
 	            flag = arr.some(function (v) {
 	                if (v.name) {
 	                    return child != self.root.name && child == v.name;
@@ -1618,28 +1653,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return ev.which == v.name;
 	            });
 	            arr.forEach(function (val) {
+	                var e_1, _a;
 	                if (document.querySelectorAll(val.ele)) {
 	                    try {
-	                        for (var _i = 0, _a = document.querySelectorAll(val.ele); _i < _a.length; _i++) {
-	                            var dq = _a[_i];
-	                            dq.addEventListener(val.type, function (event) {
-	                                try {
-	                                    if (val.fn.toString().match(/\(\)$/)) {
-	                                        if (v.hasOwnProperty(val.fn.toString().split('()')[0])) {
-	                                            index_1.default.parse(val.fn)(v, { $event: event });
+	                        try {
+	                            for (var _b = __values(document.querySelectorAll(val.ele)), _c = _b.next(); !_c.done; _c = _b.next()) {
+	                                var dq = _c.value;
+	                                dq.addEventListener(val.type, function (event) {
+	                                    try {
+	                                        if (val.fn.toString().match(/\(\)$/)) {
+	                                            if (v.hasOwnProperty(val.fn.toString().split('()')[0])) {
+	                                                index_1.default.parse(val.fn)(v, { $event: event });
+	                                            }
+	                                            else {
+	                                                $log.error('组件' + v.name + '中不存在方法' + val.fn);
+	                                            }
 	                                        }
 	                                        else {
-	                                            $log.error('组件' + v.name + '中不存在方法' + val.fn);
+	                                            $log.error('组件' + v.name + '中方法' + val.fn + '语法错误');
 	                                        }
 	                                    }
-	                                    else {
-	                                        $log.error('组件' + v.name + '中方法' + val.fn + '语法错误');
+	                                    catch (e) {
+	                                        console.log(e);
 	                                    }
-	                                }
-	                                catch (e) {
-	                                    console.log(e);
-	                                }
-	                            }, false);
+	                                }, false);
+	                            }
+	                        }
+	                        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+	                        finally {
+	                            try {
+	                                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+	                            }
+	                            finally { if (e_1) throw e_1.error; }
 	                        }
 	                    }
 	                    catch (e) {
@@ -1660,7 +1705,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var _this = this;
 	        var _loop_1 = function (i) {
 	            HandelEventer_1.default.listen(i, function (info) {
-	                if (info.target == v.token && JSON.stringify(info.oldVal) != JSON.stringify(info.newVal)) {
+	                if (info.target == v.token && JSON.stringify(info.oldVal) != JSON.stringify(info.newVal)) { //只处理当前组件的属性改变
 	                    // 获取组件原始的tpl，将其转为dom
 	                    var parseNode = dom_1.default.create(_this.templateId[v.token]);
 	                    var dataPos = _this.dataPosition(i, parseNode, v.name);
@@ -2663,10 +2708,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        expression = expression.substring(2);
 	                    }
 	                    var parseFn = parser.parse(expression);
-	                    if (parseFn.constant) {
+	                    if (parseFn.constant) { //常量
 	                        parseFn.$$handelWatch = that.constantHandelWatch;
 	                    }
-	                    if (oneTime) {
+	                    if (oneTime) { //单次检测
 	                        parseFn.$$handelWatch = parseFn.literal ? that.oneTimeLiteralHandelWatch : that.oneTimeHandelWatch;
 	                    }
 	                    if (parseFn.inputs) {
@@ -2936,7 +2981,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        while (this.index < this.text.length) {
 	            var now = this.text.charAt(this.index);
 	            raw += now;
-	            if (now == quote) {
+	            if (now == quote) { //保证首位字符相同
 	                this.index++;
 	                this.tokens.push({
 	                    text: raw,
@@ -2944,7 +2989,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                });
 	                return;
 	            }
-	            else if (now == lexer_config_1.SPECIALS[now]) {
+	            else if (now == lexer_config_1.SPECIALS[now]) { //匹配特殊字符
 	                string += lexer_config_1.SPECIALS[now];
 	            }
 	            else {
@@ -3142,6 +3187,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        else if (util_1.default.expect(this.tokens, '{')) {
 	            agency = this.objectBuilder();
 	        }
+	        //处理boolean,null,this
 	        else if (LEXER.LETTER.hasOwnProperty(this.tokens[0]['text'])) {
 	            if (this.tokens[0]['text'] == "this") {
 	                agency = util_1.default.clone(AST.ast_this);
@@ -3151,9 +3197,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                agency = util_1.default.clone(AST.ast_constant);
 	            }
 	        }
+	        //处理标识符
 	        else if (util_1.default.exitFirst(this.tokens).identifier) {
 	            agency = this.identifierBuilder();
 	        }
+	        //处理常量
 	        else {
 	            agency = this.constantBuilder();
 	        }
@@ -3584,32 +3632,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	    ASTCompile.prototype.handelTree = function (ast, context, createNewElement) {
 	        if (context === void 0) { context = { context: undefined, name: undefined, computed: undefined }; }
 	        switch (ast.type) {
-	            case ast_config_1.dataType['1']://'ASTBuilder.Init'
+	            case ast_config_1.dataType['1']: //'ASTBuilder.Init'
 	                this.initCompile(ast);
 	                break;
-	            case ast_config_1.dataType['2']://'ASTBuilder.MetaData'
+	            case ast_config_1.dataType['2']: //'ASTBuilder.MetaData'
 	                return this.metaCompile(ast);
-	            case ast_config_1.dataType['3']://'ASTBuilder.Array'
+	            case ast_config_1.dataType['3']: //'ASTBuilder.Array'
 	                return this.arrayCompile(ast);
-	            case ast_config_1.dataType['4']://'ASTBuilder.Object'
+	            case ast_config_1.dataType['4']: //'ASTBuilder.Object'
 	                return this.objectCompile(ast);
-	            case ast_config_1.dataType['5']://'ASTBuilder.Identifier'
+	            case ast_config_1.dataType['5']: //'ASTBuilder.Identifier'
 	                return this.identifierCompile(ast, context, createNewElement);
-	            case ast_config_1.dataType['6']://'ASTBuilder.This'
+	            case ast_config_1.dataType['6']: //'ASTBuilder.This'
 	                return this.thisCompile();
-	            case ast_config_1.dataType['7']://'ASTBuilder.Member'
+	            case ast_config_1.dataType['7']: //'ASTBuilder.Member'
 	                return this.memberCompile(ast, context, createNewElement);
-	            case ast_config_1.dataType['8']://'ASTBuilder.Function'
+	            case ast_config_1.dataType['8']: //'ASTBuilder.Function'
 	                return this.functionCompile(ast);
-	            case ast_config_1.dataType['9']://'ASTBuilder.Assignment'
+	            case ast_config_1.dataType['9']: //'ASTBuilder.Assignment'
 	                return this.assigmentCompile(ast);
-	            case ast_config_1.dataType['10']://'ASTBuilder.Unary'
+	            case ast_config_1.dataType['10']: //'ASTBuilder.Unary'
 	                return this.unaryCompile(ast);
-	            case ast_config_1.dataType['11']://'ASTBuilder.Binary'
+	            case ast_config_1.dataType['11']: //'ASTBuilder.Binary'
 	                return this.binaryCompile(ast);
-	            case ast_config_1.dataType['12']://'ASTBuilder.Logical'
+	            case ast_config_1.dataType['12']: //'ASTBuilder.Logical'
 	                return this.logicalCompile(ast);
-	            case ast_config_1.dataType['13']://'ASTBuilder.Ternary'
+	            case ast_config_1.dataType['13']: //'ASTBuilder.Ternary'
 	                return this.ternaryCompile(ast);
 	        }
 	    };
@@ -3708,7 +3756,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (context) {
 	            context.context = noComp;
 	        }
-	        if (ast.computed) {
+	        if (ast.computed) { //a["b"]
 	            var comp = this.handelTree(ast.property);
 	            this.state.body.push('safeProperty(' + comp + ');');
 	            //处理空对象
@@ -3721,7 +3769,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                context.computed = true;
 	            }
 	        }
-	        if (!ast.computed) {
+	        if (!ast.computed) { //a.b
 	            safeProperty(ast.property.value);
 	            if (createNewElement) {
 	                util_1.default.conditionIsRight(this.state.body, util_1.default.notExist(util_1.default.nonComputedMember(noComp, ast.property.value)), util_1.default.concatCode(util_1.default.nonComputedMember(noComp, ast.property.value), '{}'));
@@ -3803,7 +3851,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @returns {string}
 	     */
 	    ASTCompile.prototype.binaryCompile = function (ast) {
-	        if (util_1.default.inStr(ast.operator, '+-')) {
+	        if (util_1.default.inStr(ast.operator, '+-')) { //加减运算
 	            return '(isUndefined(' + this.handelTree(ast.left) + ')' + ast.operator + 'isUndefined(' + this.handelTree(ast.right) + '))';
 	        }
 	        return '(' + this.handelTree(ast.left) + ast.operator + this.handelTree(ast.right) + ')';
@@ -3885,19 +3933,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var _this = this;
 	        var cons, that = this;
 	        switch (ast.type) {
-	            case ast_config_1.dataType['1']://ASTBuilder.Init
+	            case ast_config_1.dataType['1']: //ASTBuilder.Init
 	                cons = true;
 	                arrayLike(ast.body);
 	                break;
-	            case ast_config_1.dataType['2']://ASTBuilder.MetaData
+	            case ast_config_1.dataType['2']: //ASTBuilder.MetaData
 	                ast.constant = true;
 	                break;
-	            case ast_config_1.dataType['3']://ASTBuilder.Array
+	            case ast_config_1.dataType['3']: //ASTBuilder.Array
 	                cons = true;
 	                arrayLike(ast.value);
 	                ast.constant = cons;
 	                break;
-	            case ast_config_1.dataType['4']://ASTBuilder.Object
+	            case ast_config_1.dataType['4']: //ASTBuilder.Object
 	                cons = true;
 	                ast.value.forEach(function (val) {
 	                    _this.constantExpr(val.value);
@@ -3906,33 +3954,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	                ast.constant = cons;
 	                break;
 	            case ast_config_1.dataType['5']: //ASTBuilder.Identifier
-	            case ast_config_1.dataType['6']://ASTBuilder.This
+	            case ast_config_1.dataType['6']: //ASTBuilder.This
 	                ast.constant = false;
 	                break;
-	            case ast_config_1.dataType['7']://ASTBuilder.Member
+	            case ast_config_1.dataType['7']: //ASTBuilder.Member
 	                this.constantExpr(ast.object);
 	                if (ast.computed) {
 	                    this.constantExpr(ast.property);
 	                }
 	                ast.constant = ast.object.constant && (!ast.computed || ast.property.constant);
 	                break;
-	            case ast_config_1.dataType['8']://ASTBuilder.Function
+	            case ast_config_1.dataType['8']: //ASTBuilder.Function
 	                cons = ast.pipe;
 	                arrayLike(ast.arguments);
 	                ast.constant = cons;
 	                break;
-	            case ast_config_1.dataType['9']://ASTBuilder.Assignment
+	            case ast_config_1.dataType['9']: //ASTBuilder.Assignment
 	                leftRight();
 	                break;
-	            case ast_config_1.dataType['10']://ASTBuilder.Unary
+	            case ast_config_1.dataType['10']: //ASTBuilder.Unary
 	                this.constantExpr(ast.value);
 	                ast.constant = ast.value.constant;
 	                break;
 	            case ast_config_1.dataType['11']: //ASTBuilder.Binary
-	            case ast_config_1.dataType['12']://ASTBuilder.Logical
+	            case ast_config_1.dataType['12']: //ASTBuilder.Logical
 	                leftRight();
 	                break;
-	            case ast_config_1.dataType['13']://ASTBuilder.Teranry
+	            case ast_config_1.dataType['13']: //ASTBuilder.Teranry
 	                this.constantExpr(ast.boolean_expression);
 	                this.constantExpr(ast.true_value);
 	                this.constantExpr(ast.error_value);
@@ -4024,7 +4072,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var PROPERTY = ['constructor', '__proto__', '__defineGetter__', '__defineSetter__', '__lookupGetter__', '__loopupSetter__'];
 	exports.PROPERTY = PROPERTY;
 	//window对象
-	var WINDOW = ['document', 'alert', 'location', 'setInterval'];
+	var WINDOW = ['document', 'alert', 'location', 'setInterval', 'setTimeout'];
 	exports.WINDOW = WINDOW;
 	//dom节点
 	var NODE = ['nodeName', 'children'];
@@ -4862,7 +4910,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                if (strict) {
 	                    $log.error('函数没有$inject属性，不能再严格模式下使用');
 	                }
-	                else if (fn.$inject) {
+	                else if (fn.$inject) { //普通函数，有$inject属性
 	                    arr = fn.$inject;
 	                }
 	                else {
@@ -5066,6 +5114,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	    };
 	})();
+	var __values = (this && this.__values) || function (o) {
+	    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+	    if (m) return m.call(o);
+	    return {
+	        next: function () {
+	            if (o && i >= o.length) o = void 0;
+	            return { value: o && o[i++], done: !o };
+	        }
+	    };
+	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var targetDom_1 = __webpack_require__(31);
 	var util_1 = __webpack_require__(3);
@@ -5098,41 +5156,61 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param str 文本值
 	     */
 	    nodeModel.prototype.text = function (str) {
+	        var e_1, _a;
 	        if (str && util_1.default.type(str) != 'string') {
 	            return;
 	        }
-	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
-	            var i = _a[_i];
-	            if (arguments.length == 0) {
-	                return i.innerText || i.textContent;
-	            }
-	            else if (arguments.length == 1) {
-	                if (i.innerText) {
-	                    i.innerText = str;
+	        try {
+	            for (var _b = __values(this.els), _c = _b.next(); !_c.done; _c = _b.next()) {
+	                var i = _c.value;
+	                if (arguments.length == 0) {
+	                    return i.innerText || i.textContent;
 	                }
-	                else {
-	                    i.textContent = str;
+	                else if (arguments.length == 1) {
+	                    if (i.innerText) {
+	                        i.innerText = str;
+	                    }
+	                    else {
+	                        i.textContent = str;
+	                    }
 	                }
 	            }
+	        }
+	        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+	        finally {
+	            try {
+	                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+	            }
+	            finally { if (e_1) throw e_1.error; }
 	        }
 	        return this;
 	    };
 	    nodeModel.prototype.css = function (key, value) {
+	        var e_2, _a;
 	        if (key && util_1.default.type(key) != 'string') {
 	            return;
 	        }
 	        if (value && util_1.default.type(value) != 'string') {
 	            return;
 	        }
-	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
-	            var i = _a[_i];
-	            if (arguments.length == 1) {
-	                return window.getComputedStyle(i, null)[key];
+	        try {
+	            for (var _b = __values(this.els), _c = _b.next(); !_c.done; _c = _b.next()) {
+	                var i = _c.value;
+	                if (arguments.length == 1) {
+	                    return window.getComputedStyle(i, null)[key];
+	                }
+	                else if (arguments.length == 2) {
+	                    i.style[key] = value;
+	                    return this;
+	                }
 	            }
-	            else if (arguments.length == 2) {
-	                i.style[key] = value;
-	                return this;
+	        }
+	        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+	        finally {
+	            try {
+	                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
 	            }
+	            finally { if (e_2) throw e_2.error; }
 	        }
 	    };
 	    /**
@@ -5140,17 +5218,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param str
 	     */
 	    nodeModel.prototype.width = function (str) {
+	        var e_3, _a;
 	        if (str && util_1.default.type(str) != 'string') {
 	            return;
 	        }
-	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
-	            var i = _a[_i];
-	            if (str) {
-	                i.style.width = str;
+	        try {
+	            for (var _b = __values(this.els), _c = _b.next(); !_c.done; _c = _b.next()) {
+	                var i = _c.value;
+	                if (str) {
+	                    i.style.width = str;
+	                }
+	                else {
+	                    return i.offsetWidth;
+	                }
 	            }
-	            else {
-	                return i.offsetWidth;
+	        }
+	        catch (e_3_1) { e_3 = { error: e_3_1 }; }
+	        finally {
+	            try {
+	                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
 	            }
+	            finally { if (e_3) throw e_3.error; }
 	        }
 	        return this;
 	    };
@@ -5159,17 +5247,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	    * @param str
 	    */
 	    nodeModel.prototype.height = function (str) {
+	        var e_4, _a;
 	        if (str && util_1.default.type(str) != 'string') {
 	            return;
 	        }
-	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
-	            var i = _a[_i];
-	            if (str) {
-	                i.style.height = str;
+	        try {
+	            for (var _b = __values(this.els), _c = _b.next(); !_c.done; _c = _b.next()) {
+	                var i = _c.value;
+	                if (str) {
+	                    i.style.height = str;
+	                }
+	                else {
+	                    return i.offsetHeight;
+	                }
 	            }
-	            else {
-	                return i.offsetHeight;
+	        }
+	        catch (e_4_1) { e_4 = { error: e_4_1 }; }
+	        finally {
+	            try {
+	                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
 	            }
+	            finally { if (e_4) throw e_4.error; }
 	        }
 	        return this;
 	    };
@@ -5179,23 +5277,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param value 属性值
 	     */
 	    nodeModel.prototype.attr = function (attr, value) {
+	        var e_5, _a;
 	        if (util_1.default.type(attr) != 'string') {
 	            return;
 	        }
 	        if (value && util_1.default.type(value) != 'string') {
 	            return;
 	        }
-	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
-	            var i = _a[_i];
-	            if (arguments.length == 1) {
-	                if (i.hasAttribute(attr)) {
-	                    return i.getAttribute(attr);
+	        try {
+	            for (var _b = __values(this.els), _c = _b.next(); !_c.done; _c = _b.next()) {
+	                var i = _c.value;
+	                if (arguments.length == 1) {
+	                    if (i.hasAttribute(attr)) {
+	                        return i.getAttribute(attr);
+	                    }
+	                }
+	                else if (arguments.length == 2) {
+	                    i.setAttribute(attr, value);
+	                    return this;
 	                }
 	            }
-	            else if (arguments.length == 2) {
-	                i.setAttribute(attr, value);
-	                return this;
+	        }
+	        catch (e_5_1) { e_5 = { error: e_5_1 }; }
+	        finally {
+	            try {
+	                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
 	            }
+	            finally { if (e_5) throw e_5.error; }
 	        }
 	    };
 	    /**
@@ -5203,21 +5311,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param str value值
 	     */
 	    nodeModel.prototype.val = function (str) {
+	        var e_6, _a;
 	        if (str && util_1.default.type(str) != 'string') {
 	            return;
 	        }
-	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
-	            var i = _a[_i];
-	            if (arguments.length == 1) {
-	                var oldStr = i.getAttribute('value');
-	                i.setAttribute(oldStr, str);
-	            }
-	            else if (arguments.length == 0) {
-	                if (i.nodeName.match(/INPUT|TEXTAREA|SELECT|RADIO|CHECKBOX/)) {
-	                    return i.value;
+	        try {
+	            for (var _b = __values(this.els), _c = _b.next(); !_c.done; _c = _b.next()) {
+	                var i = _c.value;
+	                if (arguments.length == 1) {
+	                    var oldStr = i.getAttribute('value');
+	                    i.setAttribute(oldStr, str);
 	                }
-	                return i.getAttribute('value');
+	                else if (arguments.length == 0) {
+	                    if (i.nodeName.match(/INPUT|TEXTAREA|SELECT|RADIO|CHECKBOX/)) {
+	                        return i.value;
+	                    }
+	                    return i.getAttribute('value');
+	                }
 	            }
+	        }
+	        catch (e_6_1) { e_6 = { error: e_6_1 }; }
+	        finally {
+	            try {
+	                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+	            }
+	            finally { if (e_6) throw e_6.error; }
 	        }
 	        return this;
 	    };
@@ -5226,12 +5344,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param name
 	     */
 	    nodeModel.prototype.addClass = function (name) {
+	        var e_7, _a;
 	        if (name && util_1.default.type(name) != 'string') {
 	            return;
 	        }
-	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
-	            var i = _a[_i];
-	            i.classList.add(name);
+	        try {
+	            for (var _b = __values(this.els), _c = _b.next(); !_c.done; _c = _b.next()) {
+	                var i = _c.value;
+	                i.classList.add(name);
+	            }
+	        }
+	        catch (e_7_1) { e_7 = { error: e_7_1 }; }
+	        finally {
+	            try {
+	                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+	            }
+	            finally { if (e_7) throw e_7.error; }
 	        }
 	        return this;
 	    };
@@ -5240,12 +5368,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param name
 	     */
 	    nodeModel.prototype.removeClass = function (name) {
+	        var e_8, _a;
 	        if (name && util_1.default.type(name) != 'string') {
 	            return;
 	        }
-	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
-	            var i = _a[_i];
-	            i.classList.remove(name);
+	        try {
+	            for (var _b = __values(this.els), _c = _b.next(); !_c.done; _c = _b.next()) {
+	                var i = _c.value;
+	                i.classList.remove(name);
+	            }
+	        }
+	        catch (e_8_1) { e_8 = { error: e_8_1 }; }
+	        finally {
+	            try {
+	                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+	            }
+	            finally { if (e_8) throw e_8.error; }
 	        }
 	        return this;
 	    };
@@ -5253,17 +5391,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * 切换class
 	     */
 	    nodeModel.prototype.toggleClass = function (name) {
+	        var e_9, _a;
 	        if (name && util_1.default.type(name) != 'string') {
 	            return;
 	        }
-	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
-	            var i = _a[_i];
-	            if (i.classList.toggle(name)) {
-	                return true;
+	        try {
+	            for (var _b = __values(this.els), _c = _b.next(); !_c.done; _c = _b.next()) {
+	                var i = _c.value;
+	                if (i.classList.toggle(name)) {
+	                    return true;
+	                }
+	                else {
+	                    return false;
+	                }
 	            }
-	            else {
-	                return false;
+	        }
+	        catch (e_9_1) { e_9 = { error: e_9_1 }; }
+	        finally {
+	            try {
+	                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
 	            }
+	            finally { if (e_9) throw e_9.error; }
 	        }
 	    };
 	    return nodeModel;
@@ -5286,6 +5434,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	    };
 	})();
+	var __values = (this && this.__values) || function (o) {
+	    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+	    if (m) return m.call(o);
+	    return {
+	        next: function () {
+	            if (o && i >= o.length) o = void 0;
+	            return { value: o && o[i++], done: !o };
+	        }
+	    };
+	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var targetDom_1 = __webpack_require__(31);
 	var util_1 = __webpack_require__(3);
@@ -5309,69 +5467,119 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    // 鼠标移入移除
 	    eventModel.prototype.hover = function (hover, out) {
-	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
-	            var i = _a[_i];
-	            if (util_1.default.type(hover) == 'function') {
-	                i.addEventListener('mouseover', hover, false);
+	        var e_1, _a;
+	        try {
+	            for (var _b = __values(this.els), _c = _b.next(); !_c.done; _c = _b.next()) {
+	                var i = _c.value;
+	                if (util_1.default.type(hover) == 'function') {
+	                    i.addEventListener('mouseover', hover, false);
+	                }
+	                else {
+	                    throw new Error('hover方法：没有传递回调函数');
+	                }
+	                if (util_1.default.type(out) == 'function') {
+	                    i.addEventListener('mouseout', hover, false);
+	                }
 	            }
-	            else {
-	                throw new Error('hover方法：没有传递回调函数');
+	        }
+	        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+	        finally {
+	            try {
+	                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
 	            }
-	            if (util_1.default.type(out) == 'function') {
-	                i.addEventListener('mouseout', hover, false);
-	            }
+	            finally { if (e_1) throw e_1.error; }
 	        }
 	        return this;
 	    };
 	    // 点击事件
 	    eventModel.prototype.click = function (fn) {
-	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
-	            var i = _a[_i];
-	            if (util_1.default.type(fn) == 'function') {
-	                i.addEventListener('click', fn, false);
+	        var e_2, _a;
+	        try {
+	            for (var _b = __values(this.els), _c = _b.next(); !_c.done; _c = _b.next()) {
+	                var i = _c.value;
+	                if (util_1.default.type(fn) == 'function') {
+	                    i.addEventListener('click', fn, false);
+	                }
 	            }
+	        }
+	        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+	        finally {
+	            try {
+	                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+	            }
+	            finally { if (e_2) throw e_2.error; }
 	        }
 	        return this;
 	    };
 	    //设置点击切换方法
 	    eventModel.prototype.toggle = function () {
-	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
-	            var i = _a[_i];
-	            (function (element, args) {
-	                var count = 0;
-	                element.addEventListener('click', function () {
-	                    args[count++ % args.length].call(this);
-	                }, false);
-	            })(i, arguments);
+	        var e_3, _a;
+	        try {
+	            for (var _b = __values(this.els), _c = _b.next(); !_c.done; _c = _b.next()) {
+	                var i = _c.value;
+	                (function (element, args) {
+	                    var count = 0;
+	                    element.addEventListener('click', function () {
+	                        args[count++ % args.length].call(this);
+	                    }, false);
+	                })(i, arguments);
+	            }
+	        }
+	        catch (e_3_1) { e_3 = { error: e_3_1 }; }
+	        finally {
+	            try {
+	                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+	            }
+	            finally { if (e_3) throw e_3.error; }
 	        }
 	        return this;
 	    };
 	    //窗口滚动事件
 	    eventModel.prototype.scroll = function (fn) {
-	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
-	            var i = _a[_i];
-	            if (util_1.default.type(fn) == 'function') {
-	                i.addEventListener('scroll', fn, false);
+	        var e_4, _a;
+	        try {
+	            for (var _b = __values(this.els), _c = _b.next(); !_c.done; _c = _b.next()) {
+	                var i = _c.value;
+	                if (util_1.default.type(fn) == 'function') {
+	                    i.addEventListener('scroll', fn, false);
+	                }
 	            }
+	        }
+	        catch (e_4_1) { e_4 = { error: e_4_1 }; }
+	        finally {
+	            try {
+	                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+	            }
+	            finally { if (e_4) throw e_4.error; }
 	        }
 	        return this;
 	    };
 	    eventModel.prototype.resize = function (fn) {
-	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
-	            var i = _a[_i];
-	            var offsetLeft = i.offsetLeft;
-	            var offsetWidth = i.offsetWidth;
-	            var offsetTop = i.offsetTop;
-	            var offsetHeight = i.offsetHeight;
-	            window.onresize = function () {
-	                fn();
-	                if (offsetLeft >= util_1.default.page().width - offsetWidth) {
-	                    offsetLeft = util_1.default.page().width - offsetWidth;
-	                }
-	                if (offsetTop >= util_1.default.page().height - offsetHeight) {
-	                    offsetTop = util_1.default.page().height - offsetHeight;
-	                }
-	            };
+	        var e_5, _a;
+	        try {
+	            for (var _b = __values(this.els), _c = _b.next(); !_c.done; _c = _b.next()) {
+	                var i = _c.value;
+	                var offsetLeft = i.offsetLeft;
+	                var offsetWidth = i.offsetWidth;
+	                var offsetTop = i.offsetTop;
+	                var offsetHeight = i.offsetHeight;
+	                window.onresize = function () {
+	                    fn();
+	                    if (offsetLeft >= util_1.default.page().width - offsetWidth) {
+	                        offsetLeft = util_1.default.page().width - offsetWidth;
+	                    }
+	                    if (offsetTop >= util_1.default.page().height - offsetHeight) {
+	                        offsetTop = util_1.default.page().height - offsetHeight;
+	                    }
+	                };
+	            }
+	        }
+	        catch (e_5_1) { e_5 = { error: e_5_1 }; }
+	        finally {
+	            try {
+	                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+	            }
+	            finally { if (e_5) throw e_5.error; }
 	        }
 	        return this;
 	    };
@@ -5395,6 +5603,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	    };
 	})();
+	var __values = (this && this.__values) || function (o) {
+	    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+	    if (m) return m.call(o);
+	    return {
+	        next: function () {
+	            if (o && i >= o.length) o = void 0;
+	            return { value: o && o[i++], done: !o };
+	        }
+	    };
+	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var targetDom_1 = __webpack_require__(31);
 	var moveModel = /** @class */ (function (_super) {
@@ -5403,41 +5621,79 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return _super.call(this, selector) || this;
 	    }
 	    moveModel.prototype.show = function (delay) {
+	        var e_1, _a, e_2, _b;
 	        if (delay && typeof delay == 'number') {
 	            var _loop_1 = function (i) {
 	                setTimeout(function () {
 	                    i.style.display = 'none';
 	                }, delay || 500);
 	            };
-	            for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
-	                var i = _a[_i];
-	                _loop_1(i);
+	            try {
+	                for (var _c = __values(this.els), _d = _c.next(); !_d.done; _d = _c.next()) {
+	                    var i = _d.value;
+	                    _loop_1(i);
+	                }
+	            }
+	            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+	            finally {
+	                try {
+	                    if (_d && !_d.done && (_a = _c.return)) _a.call(_c);
+	                }
+	                finally { if (e_1) throw e_1.error; }
 	            }
 	        }
 	        else if (!delay) {
-	            for (var _b = 0, _c = this.els; _b < _c.length; _b++) {
-	                var i = _c[_b];
-	                i.style.display = 'block';
+	            try {
+	                for (var _e = __values(this.els), _f = _e.next(); !_f.done; _f = _e.next()) {
+	                    var i = _f.value;
+	                    i.style.display = 'block';
+	                }
+	            }
+	            catch (e_2_1) { e_2 = { error: e_2_1 }; }
+	            finally {
+	                try {
+	                    if (_f && !_f.done && (_b = _e.return)) _b.call(_e);
+	                }
+	                finally { if (e_2) throw e_2.error; }
 	            }
 	        }
 	        return this;
 	    };
 	    moveModel.prototype.hide = function (delay) {
+	        var e_3, _a, e_4, _b;
 	        if (delay && typeof delay == 'number') {
 	            var _loop_2 = function (i) {
 	                setTimeout(function () {
 	                    i.style.display = 'block';
 	                }, delay || 500);
 	            };
-	            for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
-	                var i = _a[_i];
-	                _loop_2(i);
+	            try {
+	                for (var _c = __values(this.els), _d = _c.next(); !_d.done; _d = _c.next()) {
+	                    var i = _d.value;
+	                    _loop_2(i);
+	                }
+	            }
+	            catch (e_3_1) { e_3 = { error: e_3_1 }; }
+	            finally {
+	                try {
+	                    if (_d && !_d.done && (_a = _c.return)) _a.call(_c);
+	                }
+	                finally { if (e_3) throw e_3.error; }
 	            }
 	        }
 	        else if (!delay) {
-	            for (var _b = 0, _c = this.els; _b < _c.length; _b++) {
-	                var i = _c[_b];
-	                i.style.display = 'none';
+	            try {
+	                for (var _e = __values(this.els), _f = _e.next(); !_f.done; _f = _e.next()) {
+	                    var i = _f.value;
+	                    i.style.display = 'none';
+	                }
+	            }
+	            catch (e_4_1) { e_4 = { error: e_4_1 }; }
+	            finally {
+	                try {
+	                    if (_f && !_f.done && (_b = _e.return)) _b.call(_e);
+	                }
+	                finally { if (e_4) throw e_4.error; }
 	            }
 	        }
 	        return this;
@@ -5462,6 +5718,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	    };
 	})();
+	var __values = (this && this.__values) || function (o) {
+	    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+	    if (m) return m.call(o);
+	    return {
+	        next: function () {
+	            if (o && i >= o.length) o = void 0;
+	            return { value: o && o[i++], done: !o };
+	        }
+	    };
+	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var targetDom_1 = __webpack_require__(31);
 	var util_1 = __webpack_require__(3);
@@ -5473,14 +5739,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    // 判断节点是否拥有属性
 	    statusModel.prototype.hasAttrs = function () {
-	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
-	            var i = _a[_i];
-	            if (i.hasAttributes()) {
-	                return true;
+	        var e_1, _a;
+	        try {
+	            for (var _b = __values(this.els), _c = _b.next(); !_c.done; _c = _b.next()) {
+	                var i = _c.value;
+	                if (i.hasAttributes()) {
+	                    return true;
+	                }
+	                else {
+	                    return false;
+	                }
 	            }
-	            else {
-	                return false;
+	        }
+	        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+	        finally {
+	            try {
+	                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
 	            }
+	            finally { if (e_1) throw e_1.error; }
 	        }
 	    };
 	    /**
@@ -5488,17 +5764,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param attr 属性名
 	     */
 	    statusModel.prototype.hasAttr = function (attr) {
+	        var e_2, _a;
 	        if (attr && util_1.default.type(attr) != 'string') {
 	            return;
 	        }
-	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
-	            var i = _a[_i];
-	            if (i.hasAttribute(attr)) {
-	                return true;
+	        try {
+	            for (var _b = __values(this.els), _c = _b.next(); !_c.done; _c = _b.next()) {
+	                var i = _c.value;
+	                if (i.hasAttribute(attr)) {
+	                    return true;
+	                }
+	                else {
+	                    return false;
+	                }
 	            }
-	            else {
-	                return false;
+	        }
+	        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+	        finally {
+	            try {
+	                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
 	            }
+	            finally { if (e_2) throw e_2.error; }
 	        }
 	    };
 	    /**
@@ -5506,17 +5792,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param name class名称
 	     */
 	    statusModel.prototype.hasClass = function (name) {
+	        var e_3, _a;
 	        if (name && util_1.default.type(name) != 'string') {
 	            return;
 	        }
-	        for (var _i = 0, _a = this.els; _i < _a.length; _i++) {
-	            var i = _a[_i];
-	            if (i.classList.contains(name)) {
-	                return true;
+	        try {
+	            for (var _b = __values(this.els), _c = _b.next(); !_c.done; _c = _b.next()) {
+	                var i = _c.value;
+	                if (i.classList.contains(name)) {
+	                    return true;
+	                }
+	                else {
+	                    return false;
+	                }
 	            }
-	            else {
-	                return false;
+	        }
+	        catch (e_3_1) { e_3 = { error: e_3_1 }; }
+	        finally {
+	            try {
+	                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
 	            }
+	            finally { if (e_3) throw e_3.error; }
 	        }
 	    };
 	    return statusModel;

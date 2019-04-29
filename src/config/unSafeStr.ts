@@ -2,7 +2,7 @@
 const PROPERTY = ['constructor', '__proto__', '__defineGetter__', '__defineSetter__','__lookupGetter__','__loopupSetter__'];
 
 //window对象
-const WINDOW = ['document', 'alert', 'location', 'setInterval'];
+const WINDOW = ['document', 'alert', 'location', 'setInterval', 'setTimeout'];
 
 //dom节点
 const NODE =['nodeName', 'children'];

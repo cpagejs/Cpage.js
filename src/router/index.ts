@@ -3,14 +3,9 @@ import Util from '../util';
 import Store from '../store';
 const store:any = new Store();
 
-interface indexAction {
-    go({}):void;
-    hash(path?:string):any;
-    reflesh():void;
-    back():void;
-}
+import { routerAction } from './router_action';
 
-export default class Router implements indexAction {
+export default class Router implements routerAction {
     private url:string;  //浏览器pathname
     public routers:Array<object>; //路由集合
     public nowRouter;  //当前路由
