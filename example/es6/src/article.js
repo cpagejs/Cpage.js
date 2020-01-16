@@ -16,17 +16,17 @@ export default class Article extends Component {
         this.data = {};
     }
 
-    goAbout(){alert()
+    goDeatil(){
         this.$router.go({
-            path: '/about',
-            params: {
-                id: 123,
-                key: 'af'
-            },
-            query: {
-                id: 123,
-                key: 'af'
-            }
+            path: '/article/100',
+            // params: {
+            //     id: 123,
+            //     key: 'af'
+            // },
+            // query: {
+            //     id: 123,
+            //     key: 'af'
+            // }
         });
     }
 

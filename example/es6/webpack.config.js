@@ -3,13 +3,13 @@ var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {  
-    entry: './src/main.js',  
+    entry: './src/index.js',  
     output: {  
         path:path.join(__dirname,'dist'),  
         filename: 'bundle.js',  
     },  
     module: {  
-        loaders: [
+        rules: [
             {  
                 test: /\.js$/,  
                 exclude: /node_modules/,  
@@ -18,7 +18,7 @@ module.exports = {
             {  
                 test: /\.css$/,  
                 exclude: /node_modules/,  
-                loader: [ 'css-loader' ]
+                loader: 'css-loader'
             },
             {  
                 test: /\.html$/,  
@@ -32,5 +32,9 @@ module.exports = {
             title: 'My App',
             template: './src/index.html'
         })
-    ]
+    ],
+    devServer: {
+        port: 8080,
+        open: true
+    },
 }  

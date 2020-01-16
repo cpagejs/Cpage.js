@@ -3,11 +3,11 @@ function log(str:any){
 }
 
 function info(str:any){
-	console.log(str);
+	console.info(str);
 }
 
 function warn(str:any){
-	console.log(str);
+	console.warn(str);
 }
 
 function error(str:any){

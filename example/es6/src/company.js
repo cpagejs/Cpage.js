@@ -13,6 +13,6 @@ export default class Company extends Component {
     }
 
     render(){
-
+        console.log('Company component render')
     }
 }

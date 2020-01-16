@@ -1,9 +1,12 @@
-var webpack = require('webpack');
+const path = require('path');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
+    mode: "production",
     entry: "./src/index.ts",
     output: {
-        filename: "./dist/bundle.js",
+        path: path.resolve(__dirname, 'dist'),
+        filename: "bundle.js",
         libraryTarget: 'umd'
     },
 
@@ -12,20 +15,17 @@ module.exports = {
 
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.
-        extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
+        extensions: ["*", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
     },
 
     module: {
-        loaders: [
+        rules: [
             // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
-            { test: /\.tsx?$/, loader: "ts-loader", exclude: /node_modules/ }
-        ],
-
-        preLoaders: [
-            // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-            { test: /\.js$/, loader: "source-map-loader" }
+            { test: /\.(tsx|ts)?$/, loader: "ts-loader", exclude: /node_modules/ }
         ]
     },
-
+    plugins: [
+        new CleanWebpackPlugin(),
+    ]
     // Other options...
 };

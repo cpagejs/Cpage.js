@@ -7,8 +7,13 @@ export default class Header extends Component {
         this.name = 'header';
         this.templateUrl = html;
     }
+
     handelC(event){
         this.$event.trigger('header-event', 'header');
+    }
+
+    beforeRender(){
+        console.log('Header beforeRender')
     }
 
     render(){

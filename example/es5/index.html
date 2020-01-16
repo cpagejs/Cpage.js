@@ -17,14 +17,15 @@
 
     <script type="text/Cpage" id="testId">
         <div>
-             <div class="main" c-click="handelIf()">my app--templateId</div>
+             <div class="main" c-click="handelIf()">点击-显示隐藏文章</div>
             <div c-if="{{ifTest}}">
                 <my-article></my-article>
             </div>
-             <header 
+            <header 
                 height="{{headerHeight}}"
                 c-click="headerClick()"
-                ></header>
+                >
+            </header>
             <!-- 列表  -->
             <div c-for="item in items">
                 <h1>id: {{item.id}}</h1>
@@ -60,9 +61,10 @@
                 console.log('headerClick')
             },
             handelIf(){
-                this.$data('ifTest', true);
+                this.$data('ifTest', !this.data.ifTest);
             },
             render(){
+                console.log(this.data)
             }
         });
 

@@ -1,5 +1,3 @@
-import Util from '../util';
-import * as $log from '../log';
 import Eventer from '../util/HandelEventer';
 
 /**

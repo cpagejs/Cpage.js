@@ -55,6 +55,7 @@ Cpage.bootstrap('#app', App);
 ```
 
 ## 路由
+路由需要使用`<div c-view></div>`
 | 方法名 | 用法 |
 | :------ | :------ |
 | go() | this.$router.go({path='', params={}})，跳转到已存在的路由页面 |

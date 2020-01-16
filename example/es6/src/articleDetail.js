@@ -1,12 +1,13 @@
 import Cpage,  { Component } from '../../../dist/bundle';
 
-export default class ArticleList extends Component {
+export default class ArticleDetail extends Component {
     constructor(){
         super();
-        this.name = 'articleList';
+        this.name = 'article-detail';
         this.template = `
         <div>
-            article-list-list
+            ArticleDetail
+            <br/>
             <button c-click="reload()">reload</button>
             <button c-click="back()">back</button>
         </div>
@@ -23,7 +24,7 @@ export default class ArticleList extends Component {
     }
 
     beforeRender(){
-        console.log('ArticleList')
+        console.log('ArticleDetail beforeRender')
     }
 
     render(){

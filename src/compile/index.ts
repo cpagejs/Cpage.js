@@ -33,7 +33,7 @@ export  default class CPage {
     CList = [];
     id = 0;
 
-    static version = '1.0.5';
+    static version = require('../../package.json').version;
 
     constructor(){
         this.id = 0;

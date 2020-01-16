@@ -1,6 +1,5 @@
 import Util from '../util';
 import * as $log from '../log';
-import http from '../http';
 
 class HandelDom {
     private BOOLEAN_ATTRS;
@@ -99,7 +98,10 @@ class HandelDom {
      */
     public getAttr(attr, node):Array<any>{
         let arr = [];
-        if(node.nodeType == 1 && node.getAttribute(attr)){
+        if(!node)
+            return arr;
+
+        if(node.nodeType === 1 && node.getAttribute(attr)){
             arr.push(node.getAttribute(attr));
         }
         if(node.childNodes && node.childNodes.length){
@@ -107,7 +109,7 @@ class HandelDom {
         }
         function getA(node){
             for(let i=0; i<node.length; i++){
-                if(node[i].nodeType == 1 && node[i].getAttribute(attr)){
+                if(node[i].nodeType === 1 && node[i].getAttribute(attr)){
                     arr.push(node[i].getAttribute(attr));
                 }
                 if(node[i].childNodes && node[i].childNodes.length){
@@ -144,7 +146,7 @@ class HandelDom {
      * @param node 节点
      */
     public noOtherAttr(attr, node):boolean{
-        if(node.nodeType == 1){
+        if(node.nodeType === 1){
             if(node.attributes){
                 if(node.attributes.length >= 2)
                     return false;
@@ -161,9 +163,9 @@ class HandelDom {
      * @param bool true, false
      */
     public boolToDisplay(bool):string{
-        if(bool == 'true' || bool == true)
+        if(bool === 'true' || bool === true)
             return 'block';
-        if(bool == 'false' || bool == false)
+        if(bool === 'false' || bool === false)
             return 'none';
     }
 
@@ -176,7 +178,7 @@ class HandelDom {
         let obj = {};
         if(node.attributes && node.attributes.length){
             for(let i=0,len=node.attributes; i<len.length; i++){
-                if(len[i].name != attr){
+                if(len[i].name !== attr){
                     obj[len[i].name] = len[i].value;
                 }
             }
@@ -200,10 +202,10 @@ class HandelDom {
      * @param newNode 新的节点
      */
     public replaceComment(node, text, newNode){
-        const iterator = document.createNodeIterator(node, NodeFilter.SHOW_COMMENT, null, false);
+        const iterator = document.createNodeIterator(node, NodeFilter.SHOW_COMMENT, null);
         let n = iterator.nextNode();
         while(n){   
-            if(n.nodeValue == text){
+            if(n.nodeValue === text){
                 n.parentNode.replaceChild(newNode, n);
             }
             n = iterator.nextNode();
@@ -218,11 +220,11 @@ class HandelDom {
      */
     public attr(str, key, val?){
         const dom = this.q(str);
-        if(dom != undefined){
-            if(arguments.length == 3){
+        if(!Util.isNil(dom)){
+            if(arguments.length === 3){
                 dom.setAttribute(key, val);
             }
-            if(arguments.length == 2){
+            if(arguments.length === 2){
                 return dom.getAttribute(key);
             }
         }
@@ -254,10 +256,10 @@ class HandelDom {
      * @param component style所属组件
      */
     public addStyle(res, component){
-        if(component.name == undefined){
+        if(component.name === undefined){
             $log.error('找不到组件的name属性，无法添加style样式');
         }
-        if(res == undefined){
+        if(res === undefined){
             return;
         }
         // 组件的标签名称
@@ -268,7 +270,7 @@ class HandelDom {
                 this.appendStyle(res.result, tag);
                 break;
             case 'id':
-                if(this.q(res.result) == undefined){
+                if(this.q(res.result) === undefined){
                     $log.error('名称为'+component.name+'组件中，节点'+res.result+'不存在');
                 }
                 let inner = this.q(res.result).innerHTML;
@@ -306,7 +308,7 @@ class HandelDom {
     public addSelectorPrefix(title):void{
         let stylesheet = document.styleSheets;
         for(var i=0; i<stylesheet.length; i++){
-            if(stylesheet[i].title == title){
+            if(stylesheet[i].title === title){
                 for(let j=0,cr=(<any>stylesheet[i]).cssRules; j<cr.length; j++){
                     cr[j].selectorText = title + ' ' + cr[j].selectorText;
                 }
@@ -322,7 +324,7 @@ class HandelDom {
     public removeDomExpectWhich(item, selector){
         const nodes = document.querySelectorAll(selector);
         for(let i=0; i<nodes.length; i++){
-            if(i != item){
+            if(i !== item){
                 nodes[i].parentNode.removeChild(nodes[i]);
             }
         }

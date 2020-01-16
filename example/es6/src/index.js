@@ -2,7 +2,7 @@ import Cpage,  { Component, Dom, Cookie } from '../../../dist/bundle';
 
 import Header from './header';
 import Article from './article';
-import ArticleList from './articleList';
+import ArticleDetail from './articleDetail';
 import About from './about';
 import Company from './company';
 import Footer from './footer';
@@ -12,7 +12,7 @@ import * as css from './style.css';
 export default class Main extends Component {
     constructor(){
         super();
-        this.components = [Header,Article,ArticleList,Footer, About, Company];
+        this.components = [Header, Article, ArticleDetail, Footer, About, Company];
         this.name = 'myApp';
         // this.styleUrl = require('./style.css');
         this.styleUrl = css;
@@ -23,16 +23,18 @@ export default class Main extends Component {
         // `;
         this.template = `
             <div>
-                <div id="main-app" c-ref="add-ref">{{json.title}}--{{json.title}}--{{text}}</div>
-                <div id="repeat" c-for="item in items">c-for</div>
-                <span c-click="handelClick()">点击</span>
+                <div id="main-app" c-ref="add-ref">{{json.title}}--{{text}}</div>
+                <div class="repeat" c-for="item in items"><p c-click="handleItem({{item.id}})">{{item.name}}</p></div>
+                <button c-click="handelClick()">点击</button>
                 <div c-if="{{isShow}}"><header></header></div>
-                <div c-show="{{a>10}}">show2</div>
                 <header></header>
-                <a href="#/article?id=1&addr=aa">article</a>
-                <a href="#/article/123">article-list</a>
-                <a href="#/footer/oo">footer</a>
+                <div c-show="{{a>10}}">show2</div>
+                <br/>
+                <a href="#/article">article</a>
+                <a href="#/company">company</a>
+                <a href="#/about">about</a>
                 <div c-view></div>
+                <footer></footer>
             </div>
         `;
         this.data = {
@@ -40,7 +42,7 @@ export default class Main extends Component {
             isShow: false,
             a: 5,
             items: [
-                'a', 'b', 'c'
+                {id:1,name:'橘子'}, {id:2,name:'苹果'}, {id:3,name:'香蕉'}
             ],
             json: {
                 title: '123'
@@ -48,9 +50,13 @@ export default class Main extends Component {
         };
     }
 
+    handleItem(msg){
+        console.log(msg)
+    }
+
     handelClick(){
         this.$data('json', {'title':'aaaa'});
-        this.$data('isShow', true);
+        this.$data('isShow', !this.data.isShow);
         this.$data('a', 20);
     }
 
@@ -80,10 +86,10 @@ export default class Main extends Component {
 }
 
 Cpage.router([
-    {
-        path: '/',
-        component: Header
-    },
+    // {
+    //     path: '/',
+    //     component: Home
+    // },
     {
         path: '/article',
         component: Article,
@@ -91,21 +97,21 @@ Cpage.router([
             id: 123
         },
         cache: true,
-        delay: 2000
+        delay: 200
     },
     {
         path: '/article/:id',
-        component: ArticleList
+        component: ArticleDetail
+    },
+    {
+        path: '/company',
+        component: Company
     },
     {
         path: '/about',
         component: About,
         cache: true,
     },
-    {
-        path: '/footer/oo',
-        component: Footer
-    }
 ]);
 
 Cpage.bootstrap('#app', Main);

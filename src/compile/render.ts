@@ -7,10 +7,11 @@ import Eventer from '../util/HandelEventer';
 import handelEvent from './HandelEvent';
 import parse from '../parse/index';
 import http from '../http';
-import componentGuard from './componentGuard';
 import Router from '../router';
 import Store from '../store';
 const store:any = new Store();
+
+const isNil = Util.isNil;
 
 const PREFIX_DIRECTIVE = /(x[\:\-_]|data[\:\-_])/i;
 const ID = 'c-data-id';
@@ -24,8 +25,8 @@ export default class renderComponents {
     private CObj:object;  //组件键值对
     private eventList:Array<any>;  //事件集合
     private cRefList:Array<any>;  //c-ref集合
-    private showList:Array<any>;  //c-show结合
-    private ifList:Array<any>;  //c-if结合
+    private cShowList:Array<any>;  //c-show集合
+    private cIfList:Array<any>;  //c-if集合
     private ifTpl:object;  //c-if 模板集合
     private cHtmlList:Array<any>;  //c-html集合
     private cForList:Array<any>;  //c-for集合
@@ -47,8 +48,8 @@ export default class renderComponents {
         this.CObj = this.listToObj(CList);
         this.eventList = [];
         this.cRefList = [];
-        this.showList = [];
-        this.ifList = [];
+        this.cShowList = [];
+        this.cIfList = [];
         this.ifTpl = {};
         this.cHtmlList = [];
         this.cForList = [];
@@ -67,7 +68,7 @@ export default class renderComponents {
     /**
      * 组件渲染到dom节点
      */
-    public componentToDom():void{
+    public async componentToDom(){
         let self = this, node,
             components = [],
             rootTpl = DOM.wrapDom(this.theTpl(this.root), Util._cameCase(this.root.name).toLowerCase());
@@ -77,7 +78,7 @@ export default class renderComponents {
             await invokeLoopComponents();
             await invokeRouter();
         }
-        handelComponent();
+        await handelComponent();
 
         // 遍历节点
         function invokeLooopNodes(){
@@ -126,7 +127,7 @@ export default class renderComponents {
                         }
                         
                         const r = getNowRouter(nowPath);
-                        if(r != undefined){
+                        if(!isNil(r)){
                             handelView((<any>r))
                         }
                         
@@ -135,7 +136,6 @@ export default class renderComponents {
                     function handelView(obj){
                         const name = obj.component.name;
                         const delay = obj.delay || 0;
-    
                         setTimeout(()=>{
                             self.cViewList.forEach(v => {
                                 if(!DOM.q(v.ele)) return;
@@ -146,8 +146,10 @@ export default class renderComponents {
                                 else{
                                     DOM.q(v.ele).innerHTML = '';
                                     DOM.q(v.ele).insertAdjacentHTML('afterbegin', '<' + Util._cameCase(name) + '></' + Util._cameCase(name) + '>');
+  
                                     self.loopNodes(name, DOM.q(v.ele).childNodes, []);
                                     self.loopComponents([self.CObj[name]], self.CObj[v.which].data || {}, [], v.which);
+
                                     setTimeout(()=>{
                                         self.$routerCache[name] = DOM.q(Util._cameCase(name)).outerHTML;
                                     },0);
@@ -207,7 +209,7 @@ export default class renderComponents {
 
         // component.styleId
         function handelId(id:string){
-            if(DOM.q(id) != undefined){
+            if(!isNil(DOM.q(id))){
                 return {
                     type: 'id',
                     result: id
@@ -220,11 +222,11 @@ export default class renderComponents {
         function handelUrl(url){
             if(url != undefined){
                 // 针对import * as css from '';
-                if(Util.type(url) == 'object'){
+                if(Util.type(url) === 'object'){
                     url = url[0][1];
                 }
                 // 针对require('../xx.css')
-                if(Util.type(url) == 'array'){
+                if(Util.type(url) === 'array'){
                     url = url[1];
                 }
 
@@ -246,7 +248,7 @@ export default class renderComponents {
      */
     private loopNodes(name:string, node, components?:Array<any>){
         for (let i = 0; i < node.length; i++) {
-            if (node[i].nodeType == 1) {
+            if (node[i] && node[i].nodeType === 1) {
                 node[i].setAttribute("c-data-id", this.dataId);
 
                 const cs = this.getComponent(node[i], name);
@@ -259,7 +261,7 @@ export default class renderComponents {
                 
                 this.dataId++;
 
-                // 添加eventList, showList...等集合
+                // 添加eventList, cShowList...等集合
                 this.addDirectiveList(name, node[i]);
 
                 if (node[i].childNodes && node[i].childNodes.length) {
@@ -272,7 +274,7 @@ export default class renderComponents {
     }
 
     /**
-     * 添加eventList, showList...等集合
+     * 添加eventList, cShowList...等集合
      * @param name 组件名称
      * @param node 节点
      */
@@ -291,7 +293,7 @@ export default class renderComponents {
                         });
                         break;
                     case 'cShow':
-                        this.showList.push({
+                        this.cShowList.push({
                             which: name,
                             type: len[j].name.split('-')[1],
                             fn: len[j].value,
@@ -305,7 +307,7 @@ export default class renderComponents {
                         node.style.display = displayStatus;
                         break;
                     case 'cIf':
-                        this.ifList.push({
+                        this.cIfList.push({
                             which: name,
                             type: len[j].name.split('-')[1],
                             fn: len[j].value,
@@ -380,29 +382,29 @@ export default class renderComponents {
      * @param componentName 父组件名称
      */
     private loopComponents(components:Array<any>, fatherData:object, componentArr:Array<any>, componentName:string){
-        if(components.length && componentArr == undefined){
+        if(components.length && componentArr === undefined){
             $log.error('找不到组件为'+componentName+'的components属性');
         }
-
+        
         let self = this;
-        components.forEach(v => {
-            if(v == undefined) return;
+        components.forEach(async (v) => {
+            if(v === undefined) return;
             // “模板中的组件” 与 “注入的组件” 对比
-            self.compareChildComponentAndInjectComponents(v.name, componentArr);
+            this.compareChildComponentAndInjectComponents(v.name, componentArr);
 
             // 给组件赋能
             v.$data = Data.$data;
             v.$http = http;
             v.$event = handelEvent;
             v.$router = self.$router;
-
+            
             async function handelCC(){
                 await self.handelDataChange(v);  // 监听data数据改变
                 const before = await self.handelBeforeRender(v);  //在组建渲染之前执行
                 await self.handelAfterRender(before, v);  //在组件渲染之后执行
             }
 
-            handelCC();
+            await handelCC();
 
         });
     }
@@ -427,9 +429,9 @@ export default class renderComponents {
      * @param status handelBeforeRender()的返回值
      * @param v 组件
      */
-    private handelAfterRender(status, v){
+    private async handelAfterRender(status, v){
         if(status != 'beforeRenderIsDone'){
-            return;
+            // return;
         }
 
         let self = this;
@@ -441,11 +443,11 @@ export default class renderComponents {
             const step4 = await handelOtherDirective(step3);
             const step5 = await handelRenderFn(step4);
             const step6 = await loopChildComponent(step5);
-            const step7 = await handelClickDirective(step6);
+            await handelClickDirective(step6);
         }
         
         if(v.render){
-            invokeAfterRender();
+            await invokeAfterRender();
         }
 
         function addStyle(){
@@ -454,20 +456,19 @@ export default class renderComponents {
             return 'done';
         }
 
-        function renderOnce(status){
-            if(status != 'done'){
+        async function renderOnce(status){
+            if(status !== 'done'){
                 return;
             }
 
             let node;
-
             // 根组件单独渲染
-            if(v.name == self.root.name){
-                if(self.oneRootComponent == 2){
+            if(v.name === self.root.name){
+                if(self.oneRootComponent === 2){
                     $log.error('根组件'+self.root.name+'只能有一个');
                 }
                 const dom = DOM.q(self.selector);
-                if(dom == undefined){
+                if(dom === undefined){
                     $log.error('节点'+self.selector+'不存在');
                 }
                 dom.innerHTML = tpl(self.theTpl(self.root), self.root.data, {});
@@ -476,13 +477,28 @@ export default class renderComponents {
             }
             else {
                 const newNode = self.loopNodes(v.name, DOM.create(self.theTpl(self.CObj[v.name])));
-                node = DOM.q('['+ ID +'="'+ v.token +'"]');
-                self.templateId[v.token] = newNode[0].outerHTML;
+                // TODO 避免某些组件没有设置token
+                const dataId = DOM.q(v.name) && parseInt(DOM.q(v.name).getAttribute(ID));
+                if(!v.token){
+                    v.token = dataId
+                }
 
-                // 编译组件属性，父组件的data值覆盖子组件的props值（组件的attr值与props对比，有则覆盖）
-                const newProps = DOM.combineAttrAndProps(self.componentAttrs[v.token], self.CObj[v.name].props);
-                node.innerHTML = self.getChangedData(newNode[0].outerHTML, self.CObj[v.name].data, newProps);
+                node = DOM.q('['+ ID +'="'+ v.token +'"]');
+                if(v.token && !node){
+                    node = DOM.q('['+ ID +'="'+ dataId +'"]');
+                }
+
+                if(node){
+                    self.templateId[v.token] = newNode[0].outerHTML;
+
+                    // 编译组件属性，父组件的data值覆盖子组件的props值（组件的attr值与props对比，有则覆盖）
+                    const newProps = DOM.combineAttrAndProps(self.componentAttrs[v.token], self.CObj[v.name].props);
+                    node.innerHTML = self.getChangedData(newNode[0].outerHTML, self.CObj[v.name].data, newProps);
+                }else{
+                    console.log(v.name+'组件中token不存在', v);
+                }
             }
+
             return node;
         }
 
@@ -494,7 +510,7 @@ export default class renderComponents {
 
         function handelOtherDirective(node){
             // 处理c-if
-            self.loopIfToDom(self.ifList, v);
+            self.loopIfToDom(self.cIfList, v);
 
             // 处理c-html
             self.loopHtmlToDom(self.cHtmlList, v);
@@ -522,7 +538,7 @@ export default class renderComponents {
 
         function loopChildComponent(node){
             // 遍历组件子节点
-            if(v.name != self.root.name){
+            if(v.name !== self.root.name && node){
                 const arr = self.findComponent(node.firstChild);
                 if(arr.length){
                     if(v.name){
@@ -547,18 +563,18 @@ export default class renderComponents {
      * @param arr 注入的组件集合
      */
     private compareChildComponentAndInjectComponents(child, arr){
-        let self = this, flag=false;
+        let self = this, flag = false;
 
         if(child = this.root.name){  //判断是否为根组件
             flag = true;
         }
-        else if(!arr.length && child != this.root.name){  //普通组件，有组件标识但components为空
+        else if(!arr.length && child !== this.root.name){  //普通组件，有组件标识但components为空
             flag = false;
         }
         else {  //普通组件，有组件标识但components不为空
             flag = arr.some(v => {
                 if(v.name){
-                    return child != self.root.name && child == v.name
+                    return child !== self.root.name && child === v.name
                 }
             });
         }
@@ -580,7 +596,7 @@ export default class renderComponents {
         // 事件绑定处理
         if (newAttrArr.length) {
             const arr = newAttrArr.filter((ev) => {
-                return ev.which == v.name
+                return ev.which === v.name
             });
             arr.forEach(val => {
                 if (document.querySelectorAll(val.ele)) {
@@ -588,17 +604,21 @@ export default class renderComponents {
                         for(let dq of document.querySelectorAll(val.ele)){
                             dq.addEventListener(val.type, function(event){
                                 try {
-                                    if(val.fn.toString().match(/\(\)$/)){
-                                        if(v.hasOwnProperty(val.fn.toString().split('()')[0])){
-                                            parse.parse(val.fn)(v, { $event: event });
-                                        }else{
-                                            $log.error('组件' + v.name + '中不存在方法'+val.fn);
-                                        }
-                                    }else{
-                                        $log.error('组件' + v.name + '中方法'+val.fn+'语法错误');
-                                    }
+                                    // console.log(val.fn.toString().match(/\(\)$/))
+                                    // if(val.fn.toString().match(/\(\)$/)){
+                                    //     if(v.hasOwnProperty(val.fn.toString().split('()')[0])){
+                                    //         parse.parse(val.fn)(v, { $event: event });
+                                    //     }else{
+                                    //         $log.error('组件' + v.name + '中不存在方法'+val.fn);
+                                    //     }
+                                    // }else{
+                                    //     $log.error('组件' + v.name + '中方法'+val.fn+'语法错误');
+                                    // }
+                                    // console.log(val.fn, v);
+                                    
+                                    parse.parse(val.fn)(v, { $event: event });
                                 }catch(e){
-                                    console.log(e)
+                                    console.log('ee---',e)
                                 }
                             }, false);
                         }
@@ -676,7 +696,10 @@ export default class renderComponents {
         if(textData.length){
             textData.forEach(dp=>{
                 const originNode = parseNode[0].parentNode.querySelector(dp.position).childNodes[dp.item].textContent;
-                document.querySelector(dp.position).childNodes[dp.item].textContent = tpl(originNode, info.new, info.props);
+                if(document.querySelector(dp.position)){
+                    document.querySelector(dp.position).childNodes[dp.item].textContent = tpl(originNode, info.new, info.props);
+                }
+                
             });
         }
     }
@@ -690,7 +713,7 @@ export default class renderComponents {
     private loopAttrToDom(dataPos, info, component):void{
         let self = this;
         const attrData = dataPos.filter(df=>{
-            return df.type == 'attr';
+            return df.type === 'attr';
         });
         if(attrData.length){
             attrData.forEach(dp=>{
@@ -702,10 +725,10 @@ export default class renderComponents {
                         break;
                     case 'c-if':
                         const dom = DOM.q(dp.position);
-                        if(dom != undefined){
+                        if(!isNil(dom)){
                             DOM.q(dp.position).setAttribute(dp.attr, info.newVal);
                         }
-                        this.handelIf(dp, component);
+                        this.handelIf(dp, this.CObj[component]);
                         break;
                     case 'c-for':
                         this.loopCforToDom(dataPos, this.CObj[component], 'dataChange');
@@ -734,7 +757,7 @@ export default class renderComponents {
                             changedComponentData = changedComponent.data,
                             changedPropKey = dp.attr,
                             changedPropVal = self.componentAttrs[dp.componentToken][dp.attr],
-                            changedComponentProps = self.combineChangedProps(changedPropKey, changedPropVal, changedOriginComponentProps);
+                            changedComponentProps = self.combineChangedProps(changedPropKey, changedPropVal,changedOriginComponentProps);
 
                         const changedOrginNode = DOM.create(self.templateId[dp.componentToken]);
                         const changedOrginText = changedOrginNode[0].parentNode.querySelector(chItem.position).childNodes[chItem.item].textContent;
@@ -747,7 +770,7 @@ export default class renderComponents {
                     });
                     childChangePosAttr.forEach(chItem=>{
                         // 父组件的attr值与子组件的props值进行联动
-                        if(dp.attr == chItem.value){
+                        if(dp.attr === chItem.value){
                             chItem.value = dp.value;
                         }
                         DOM.q(chItem.position).setAttribute(chItem.attr, chItem.value);
@@ -789,9 +812,9 @@ export default class renderComponents {
             const itemExp = match2[1];
             const itemsExp = match2[2];
             const items = this.inComponent(itemsExp, component);
-            if(items && Util.type(items) == 'array' && items.length){
+            if(items && Util.type(items) === 'array' && items.length){
 
-                if(reRender == 'dataChange'){
+                if(reRender === 'dataChange'){
                     DOM.removeDomExpectWhich(0, '[c-for-id="'+ DOM.q(re.ele).getAttribute('c-for-id') +'"]');
                 }
 
@@ -807,7 +830,7 @@ export default class renderComponents {
                     newNode[0].setAttribute('c-for-id', re.id);
 
                     // 重新编译节点
-                    if(i == 0){
+                    if(i === 0){
                         DOM.q(re.ele).innerHTML = newNode[0].innerHTML;
                         DOM.q(re.ele).setAttribute('c-for-id', re.id);
                     }
@@ -835,7 +858,7 @@ export default class renderComponents {
             return ifVal.which == component.name;
         });
         currentIf.forEach(cIf=>{
-            this.handelIf(cIf, component.name);
+            this.handelIf(cIf, component);
         });
     }
 
@@ -843,20 +866,18 @@ export default class renderComponents {
      * 移除c-if指令所在的节点
      * @param cIf c-if指令所绑定的节点信息
      */
-    private handelIf(cIf, componentName):void{
+    private handelIf(cIf, component):void{
         const ifDom = DOM.q(cIf.ele || cIf.position);
         // 节点存在，移除节点
-        if(ifDom != undefined){
+        if(!isNil(ifDom)){
             const ifInfo = ifDom.getAttribute('c-if');
-            if(ifInfo == 'true'){
+            if(ifInfo === 'true'){
                 ifDom.parentNode.replaceChild(DOM.addComment('c-if:'+ cIf.id +''), ifDom);
                 this.ifTpl[cIf.id] = ifDom.outerHTML;
             }
-        }
-        // 已经被移除，还原节点
-        if(ifDom == undefined){
+        }else{ // 已经被移除，还原节点
             DOM.replaceComment(
-                DOM.q(Util._cameCase(componentName)),
+                DOM.q(Util._cameCase(component.name)),
                 cIf.attr+':'+cIf.id,
                 DOM.create(this.ifTpl[cIf.id])[0]
             );
@@ -873,7 +894,7 @@ export default class renderComponents {
      */
     private loopHtmlToDom(arr, component){
         const currentHtml = arr.filter(h=>{
-            return h.which == component.name;
+            return h.which === component.name;
         });
         currentHtml.forEach(h => {
             DOM.q(h.ele).innerHTML = DOM.attr(h.ele, 'c-html');
@@ -931,7 +952,7 @@ export default class renderComponents {
         const regExp = new RegExp("{{\\s*([\\s\\S]*" + name + "[\\s\\S]*)\\s*}}", "gm");
         const res = regExp.exec(expression);
 
-        if(res == null){
+        if(res === null){
             return null;
         }
 
@@ -984,16 +1005,16 @@ export default class renderComponents {
 
         // 属性
         function loopAttr(node){
-            if(typeof node == 'object' && node.length){
+            if(typeof node === 'object' && node.length){
                 for(let i=0; i<node.length; i++){
-                    if(node[i].nodeType == 1 && node[i].hasAttributes()){
+                    if(node[i].nodeType === 1 && node[i].hasAttributes()){
                         for(let j=0,len=node[i].attributes; j<len.length; j++){
-                            if(len[j].name == 'c-for'){
+                            if(len[j].name === 'c-for'){
                                 const match2 = len[j].value.match(/^\s*([\s\S]+?)\s+in\s+([\s\S]+?)\s*$/);
                                 if(!match2){
                                     $log.error('组件'+component+'内的c-for指令表达式'+ len[j] +'有误');
                                 }
-                                if(match2[2] == name && !self.isComponent(node[i])){
+                                if(match2[2] === name && !self.isComponent(node[i])){
                                     res = res.concat({
                                         attr: len[j].name,
                                         fn: len[j].value,
@@ -1051,9 +1072,9 @@ export default class renderComponents {
 
         // textContent
         function loopText(node){
-            if(typeof node == 'object' && node.length){
+            if(typeof node === 'object' && node.length){
                 for(let i=0; i<node.length; i++){
-                    if(node[i].nodeType == 3){
+                    if(node[i].nodeType === 3){
                         const text = node[i].textContent;
                         if(self.isComponentData(name, text)){
                             res = res.concat({
@@ -1105,22 +1126,22 @@ export default class renderComponents {
      * @param node dom节点
      */
     private findComponent(node){
-        if(node.nodeType == 3){
+        if(node.nodeType === 3){
             return;
         }
         let arr = [];
         let self = this;
-
+        
         // tag标签
         function loopTagNode(node){
             let normalizedNodeName = self.normalizeDirective(DOM.getNodeName(node).toLowerCase());
             if(self.componentNames.includes(normalizedNodeName)){
-                // arr.push(Util.deepClone(Util.extend(self.CObj[normalizedNodeName], {token: node.getAttribute(ID)})));
-                arr.push(Util.extend(self.CObj[normalizedNodeName], {token: node.getAttribute(ID)}));
+                arr.push(Util.deepClone(Util.extend(self.CObj[normalizedNodeName], {token: node.getAttribute(ID)})));
+                // arr.push(Util.extend(self.CObj[normalizedNodeName], {token: node.getAttribute(ID)}));
             }
             if(node.childNodes && node.childNodes.length){
                 node.childNodes.forEach(v=>{
-                    if(v.nodeType != 3){
+                    if(v.nodeType !== 3){
                         loopTagNode(v);
                     }
                     
@@ -1149,7 +1170,7 @@ export default class renderComponents {
                 arr.push(normalizedNodeName);
                 let obj = {};
                 for(let i=0,len=node.attributes; i<len.length; i++){
-                    if(len[i].name != ID){
+                    if(len[i].name !== ID){
                         obj[len[i].name] = tpl(len[i].value, self.CObj[name].data, self.CObj[name].props);
                     }
                 }

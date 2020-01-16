@@ -585,6 +585,22 @@ export class util implements utilAction, HandelType, HandelCoding {
 			componentJson, rootComponent
 		}
 	}
+
+	/**
+	 * 延迟加载
+	 * @param delay 延迟时间
+	 */
+	public async sleep(delay=0){
+		await new Promise(resolve=>setTimeout(resolve, delay))
+	}
+
+	/**
+	 * 判断元素是否为null或者undefined
+	 * @param ele 
+	 */
+	public isNil(ele){
+		return ele === undefined || ele === null;
+	}
 }
 
 applyMixins(util, [HandelType, HandelCoding]);
