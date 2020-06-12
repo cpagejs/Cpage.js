@@ -5,7 +5,7 @@ class HandelDom {
     private BOOLEAN_ATTRS;
     private BOOLEAN_ELEMENT;
 
-    constructor(){
+    constructor() {
         this.BOOLEAN_ATTRS = {
             selected: true
         };
@@ -18,7 +18,7 @@ class HandelDom {
      * 获取dom节点
      * @param str 节点标识,class,id...
      */
-    public q(str){
+    public q(str) {
         return document.querySelector(str);
     }
 
@@ -26,15 +26,15 @@ class HandelDom {
      * 根据字符串创建dom节点，返回dom节点
      * @param str 
      */
-    public createDom(str){
-        if(Util.type(str) != 'string'){
-            $log.error('组件模板'+str+'必须为字符串，请检查组件的template,templateId,templateUrl属性');
+    public createDom(str) {
+        if (Util.type(str) != 'string') {
+            $log.error('组件模板' + str + '必须为字符串，请检查组件的template,templateId,templateUrl属性');
         }
-    
+
         var html = `${str}`;
-            html = html.trim();
-            html = html.replace(/<!--[\s\S]*?-->/gm, '');  //去除html注释
-            html = html.replace(/>\s+([^\s<]*)\s+</gm, '>$1<').trim();  //去除html标签间的多余空白
+        html = html.trim();
+        html = html.replace(/<!--[\s\S]*?-->/gm, '');  //去除html注释
+        html = html.replace(/>\s+([^\s<]*)\s+</gm, '>$1<').trim();  //去除html标签间的多余空白
 
         var pattern = /([^>]*)(<([a-z/][-a-z0-9_:.]*)[^>/]*(\/*)>)([^<]*)/gm,
             matchArr,
@@ -51,7 +51,7 @@ class HandelDom {
 
             arr.push(elemName);
         }
-        
+
         let dom = document.createElement(arr[0]);
         dom.innerHTML = str;
         return dom;
@@ -61,16 +61,16 @@ class HandelDom {
      * 根据字符串创建dom节点，返回dom的子节点
      * @param str 
      */
-    public create(str):Array<any>{
+    public create(str): Array<any> {
         const div = this.createDom(str);
         return div.childNodes;
     }
 
-     /**
-     * 获取节点名称
-     * @param node 
-     */
-    public getNodeName(node):string{
+    /**
+    * 获取节点名称
+    * @param node 
+    */
+    public getNodeName(node): string {
         return node.nodeName ? node.nodeName : node[0].nodeName;
     }
 
@@ -78,7 +78,7 @@ class HandelDom {
      * 获取节点的驼峰名称
      * @param node 
      */
-    public parseName(node):string{
+    public parseName(node): string {
         return Util.cameCase(node.tagName.toLowerCase());
     }
 
@@ -87,8 +87,8 @@ class HandelDom {
      * @param str 节点字符串
      * @param wrap 包括的tag标签
      */
-    public wrapDom(str:string, wrap:string):string{
-        return "<"+ wrap +">" + str + "</"+ wrap +">";
+    public wrapDom(str: string, wrap: string): string {
+        return "<" + wrap + ">" + str + "</" + wrap + ">";
     }
 
     /**
@@ -96,23 +96,23 @@ class HandelDom {
      * @param attr 属性名
      * @param node 节点
      */
-    public getAttr(attr, node):Array<any>{
+    public getAttr(attr, node): Array<any> {
         let arr = [];
-        if(!node)
+        if (!node)
             return arr;
 
-        if(node.nodeType === 1 && node.getAttribute(attr)){
+        if (node.nodeType === 1 && node.getAttribute(attr)) {
             arr.push(node.getAttribute(attr));
         }
-        if(node.childNodes && node.childNodes.length){
+        if (node.childNodes && node.childNodes.length) {
             getA(node.childNodes);
         }
-        function getA(node){
-            for(let i=0; i<node.length; i++){
-                if(node[i].nodeType === 1 && node[i].getAttribute(attr)){
+        function getA(node) {
+            for (let i = 0; i < node.length; i++) {
+                if (node[i].nodeType === 1 && node[i].getAttribute(attr)) {
                     arr.push(node[i].getAttribute(attr));
                 }
-                if(node[i].childNodes && node[i].childNodes.length){
+                if (node[i].childNodes && node[i].childNodes.length) {
                     getA(node[i].childNodes);
                 }
             }
@@ -126,13 +126,13 @@ class HandelDom {
      * @param attr {component:'hello', 'width': 100}
      * @param props { 'width': { default:50, type:Number } }
      */
-    public combineAttrAndProps(attr, props):object{
-        if(Util.isEmpty(attr))
+    public combineAttrAndProps(attr, props): object {
+        if (Util.isEmpty(attr))
             return props;
-        if(attr){
+        if (attr) {
             const newAttr = Util.expectSome(attr, 'component');
-            for(let i in newAttr){
-                if(props && props[i]){
+            for (let i in newAttr) {
+                if (props && props[i]) {
                     props[i].default = newAttr[i];
                 }
             }
@@ -145,13 +145,13 @@ class HandelDom {
      * @param attr 属性
      * @param node 节点
      */
-    public noOtherAttr(attr, node):boolean{
-        if(node.nodeType === 1){
-            if(node.attributes){
-                if(node.attributes.length >= 2)
+    public noOtherAttr(attr, node): boolean {
+        if (node.nodeType === 1) {
+            if (node.attributes) {
+                if (node.attributes.length >= 2)
                     return false;
-                if(node.attributes.length == 1){
-                    if(node.attributes[0].name == attr) return true;
+                if (node.attributes.length == 1) {
+                    if (node.attributes[0].name == attr) return true;
                     else return false;
                 }
             }
@@ -162,10 +162,10 @@ class HandelDom {
      * 根据bool值转化成display
      * @param bool true, false
      */
-    public boolToDisplay(bool):string{
-        if(bool === 'true' || bool === true)
+    public boolToDisplay(bool): string {
+        if (bool === 'true' || bool === true)
             return 'block';
-        if(bool === 'false' || bool === false)
+        if (bool === 'false' || bool === false)
             return 'none';
     }
 
@@ -174,11 +174,11 @@ class HandelDom {
      * @param node 节点
      * @param attr 属性
      */
-    public expectSomeAttr(node, attr){
+    public expectSomeAttr(node, attr) {
         let obj = {};
-        if(node.attributes && node.attributes.length){
-            for(let i=0,len=node.attributes; i<len.length; i++){
-                if(len[i].name !== attr){
+        if (node.attributes && node.attributes.length) {
+            for (let i = 0, len = node.attributes; i < len.length; i++) {
+                if (len[i].name !== attr) {
                     obj[len[i].name] = len[i].value;
                 }
             }
@@ -190,7 +190,7 @@ class HandelDom {
      * 添加注释节点
      * @param str 注释内容 
      */
-    public addComment(str){
+    public addComment(str) {
         let dom = document.createComment(str);
         return dom;
     }
@@ -201,11 +201,11 @@ class HandelDom {
      * @param text 注释内容
      * @param newNode 新的节点
      */
-    public replaceComment(node, text, newNode){
+    public replaceComment(node, text, newNode) {
         const iterator = document.createNodeIterator(node, NodeFilter.SHOW_COMMENT, null);
         let n = iterator.nextNode();
-        while(n){   
-            if(n.nodeValue === text){
+        while (n) {
+            if (n.nodeValue === text) {
                 n.parentNode.replaceChild(newNode, n);
             }
             n = iterator.nextNode();
@@ -218,13 +218,13 @@ class HandelDom {
      * @param key 属性名
      * @param val 属性值
      */
-    public attr(str, key, val?){
+    public attr(str, key, val?) {
         const dom = this.q(str);
-        if(!Util.isNil(dom)){
-            if(arguments.length === 3){
+        if (!Util.isNil(dom)) {
+            if (arguments.length === 3) {
                 dom.setAttribute(key, val);
             }
-            if(arguments.length === 2){
+            if (arguments.length === 2) {
                 return dom.getAttribute(key);
             }
         }
@@ -234,8 +234,8 @@ class HandelDom {
      * 返回节点的html
      * @param str 节点标识
      */
-    public hasHtml(str){
-        if(DOM.q(str)){
+    public hasHtml(str) {
+        if (DOM.q(str)) {
             return DOM.q(str).innerHTML;
         }
         return undefined;
@@ -245,7 +245,7 @@ class HandelDom {
      * 返回require,import 的html
      * @param str 节点标识
      */
-    public hasHtmlUrl(str){
+    public hasHtmlUrl(str) {
         return str;
     }
 
@@ -255,23 +255,23 @@ class HandelDom {
      * @param res style所属类型
      * @param component style所属组件
      */
-    public addStyle(res, component){
-        if(component.name === undefined){
+    public addStyle(res, component) {
+        if (component.name === undefined) {
             $log.error('找不到组件的name属性，无法添加style样式');
         }
-        if(res === undefined){
+        if (res === undefined) {
             return;
         }
         // 组件的标签名称
         const tag = Util._cameCase(component.name);
 
-        switch(res.type){
+        switch (res.type) {
             case 'string':
                 this.appendStyle(res.result, tag);
                 break;
             case 'id':
-                if(this.q(res.result) === undefined){
-                    $log.error('名称为'+component.name+'组件中，节点'+res.result+'不存在');
+                if (this.q(res.result) === undefined) {
+                    $log.error('名称为' + component.name + '组件中，节点' + res.result + '不存在');
                 }
                 let inner = this.q(res.result).innerHTML;
                 this.appendStyle(inner, tag);
@@ -287,7 +287,7 @@ class HandelDom {
      * @param inner 样式表内容
      * @param title style的title属性，也是组件tag标签
      */
-    public appendStyle(inner, title){
+    public appendStyle(inner, title) {
         let style = `${inner}`;
         style = Util.trimStr(style);
 
@@ -305,11 +305,11 @@ class HandelDom {
      * 给选择符设置前缀
      * @param title style的title属性
      */
-    public addSelectorPrefix(title):void{
+    public addSelectorPrefix(title): void {
         let stylesheet = document.styleSheets;
-        for(var i=0; i<stylesheet.length; i++){
-            if(stylesheet[i].title === title){
-                for(let j=0,cr=(<any>stylesheet[i]).cssRules; j<cr.length; j++){
+        for (var i = 0; i < stylesheet.length; i++) {
+            if (stylesheet[i].title === title) {
+                for (let j = 0, cr = (<any>stylesheet[i]).cssRules; j < cr.length; j++) {
                     cr[j].selectorText = title + ' ' + cr[j].selectorText;
                 }
             }
@@ -321,28 +321,28 @@ class HandelDom {
      * @param item 索引
      * @param selector 节点选择器 
      */
-    public removeDomExpectWhich(item, selector){
+    public removeDomExpectWhich(item, selector) {
         const nodes = document.querySelectorAll(selector);
-        for(let i=0; i<nodes.length; i++){
-            if(i !== item){
+        for (let i = 0; i < nodes.length; i++) {
+            if (i !== item) {
                 nodes[i].parentNode.removeChild(nodes[i]);
             }
         }
     }
 
-    public watch(node){
+    public watch(node) {
         // 观察dom数据变化
         const MutationObserver = (<any>window).MutationObserver || (<any>window).WebKitMutationObserver || (<any>window).MozMutationObserver;
         const target = document.querySelector(node);
-        const observer = new MutationObserver(mu=>{
+        const observer = new MutationObserver(mu => {
             // console.log(mu)
         });
-        const config = { childList: true, attributes: true, characterData: true, subtree:true, attributeOldValue:true, characterDataOldValue:true };
+        const config = { childList: true, attributes: true, characterData: true, subtree: true, attributeOldValue: true, characterDataOldValue: true };
         observer.observe(target, config);
     }
 
-    public booleanAttr(node, nodeName){
-        
+    public booleanAttr(node, nodeName) {
+
     }
 
 }

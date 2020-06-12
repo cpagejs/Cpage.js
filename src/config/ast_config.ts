@@ -18,7 +18,7 @@ export const dataType = {
 // astBuilder的词法解析匹配模式
 export const ast_init = {
     type: dataType['1'],
-    body: {} 
+    body: {}
 };
 
 //常量

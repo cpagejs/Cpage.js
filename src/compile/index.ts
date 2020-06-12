@@ -3,39 +3,39 @@ import Util from '../util';
 import renderComponents from './render';
 import componentGuard from './componentGuard';
 import Store from '../store';
-const store:any = new Store();
+const store: any = new Store();
 
 store.data('componentList', []);
-store.service('component', function(){
-    this.ensureOneInvokeComponent = (name,arr)=>{
+store.service('component', function () {
+    this.ensureOneInvokeComponent = (name, arr) => {
         let res = {
-                type: 'yes'
-            },
+            type: 'yes'
+        },
             rootName = [],
             names = [];
 
-        for(let i=0; i<arr.length; i++){
-            if(arr[i].name == name)
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i].name == name)
                 rootName.push(name);
 
             names.push(arr[i].name);
         }
-        if(rootName.length >= 2)
+        if (rootName.length >= 2)
             res = {
                 type: 'no',
-                info: '只能有一个根组件，却发现'+rootName.length+'个'+name+'根组件'
-            }   
+                info: '只能有一个根组件，却发现' + rootName.length + '个' + name + '根组件'
+            }
         return res;
     }
 });
 
-export  default class CPage {
+export default class CPage {
     CList = [];
     id = 0;
 
-    static version = require('../../package.json').version;
+    static version = '1.1.2';
 
-    constructor(){
+    constructor() {
         this.id = 0;
     }
 
@@ -44,12 +44,12 @@ export  default class CPage {
      * @param selector id选择符，如果是class，则取第一个节点
      * @param fn 根组件函数
      */
-    static bootstrap(selector, fn){
-        let rootComponent:any = {};
-        function componetList(fn, isRoot=false){
+    static bootstrap(selector, fn) {
+        let rootComponent: any = {};
+        function componetList(fn, isRoot = false) {
             const classToJson = Util.classToJson(fn, isRoot);
             const componentJson = classToJson.componentJson;
-            if(isRoot){
+            if (isRoot) {
                 rootComponent = classToJson.rootComponent;
             }
 
@@ -57,14 +57,14 @@ export  default class CPage {
 
             store.data('componentList', store.get('componentList').push(componentJson));
 
-            if(componentJson.components && Util.type(componentJson.components)=='array' && componentJson.components.length){
+            if (componentJson.components && Util.type(componentJson.components) == 'array' && componentJson.components.length) {
                 componentJson.components.forEach(v => {
                     componetList(v);
                 });
             }
         }
         componetList(fn, true);
-        
+
         const r = new renderComponents(selector, rootComponent, store.get('componentList'));
         r.componentToDom();
     }
@@ -73,30 +73,30 @@ export  default class CPage {
      * 路由
      * @param config 路由配置
      */
-    static router(config:Array<object>){
-        function check(str){
-            if(Util.type(str) != 'array'){
+    static router(config: Array<object>) {
+        function check(str) {
+            if (Util.type(str) != 'array') {
                 $log.error('路由配置项需为数组形式');
             }
         }
         check(config);
 
-        config.forEach(v=>{
+        config.forEach(v => {
             const classToJson = Util.classToJson((<any>v).component, false);
             (<any>v).component = classToJson.componentJson;
         });
-        
+
         store.data('routerConfig', config);
     }
 
-    public directive(name, fn){
+    public directive(name, fn) {
         let conf = fn();
         conf.id = this.id;
         this.CList.push(conf);
         this.id++;
 
         const guard = store.get('component').ensureOneInvokeComponent(name, this.CList);
-        if(guard.type == 'no') {
+        if (guard.type == 'no') {
             $log.error(guard.info);
         }
         return conf;
@@ -106,7 +106,7 @@ export  default class CPage {
      * es5模式获取组建信息
      * @param obj 
      */
-    public component(obj):object{
+    public component(obj): object {
         componentGuard(obj);
 
         let componentInfo = Util.deepClone(obj);
@@ -124,8 +124,8 @@ export  default class CPage {
                 writable: true
             }
         });
-        
-        return this.directive(obj.name, function(){
+
+        return this.directive(obj.name, function () {
             return componentInfo;
         });
     }
@@ -135,20 +135,20 @@ export  default class CPage {
      * @param selector id选择符，如果是class，则取第一个节点
      * @param root 根组件信息
      */
-    public bootstrap(selector:string, root):void{
-        if(Util.type(selector) != 'string'){
-            $log.error(selector+'应为字符串');
+    public bootstrap(selector: string, root): void {
+        if (Util.type(selector) != 'string') {
+            $log.error(selector + '应为字符串');
         }
-        if(!document.querySelector(selector)){
-            $log.error('节点“'+selector+'”不存在');
+        if (!document.querySelector(selector)) {
+            $log.error('节点“' + selector + '”不存在');
         }
-        if(Util.type(root) != 'object'){
-            $log.error(root+'应为json对象');
+        if (Util.type(root) != 'object') {
+            $log.error(root + '应为json对象');
         }
 
-        if(arguments.length == 2){
+        if (arguments.length == 2) {
             componentGuard(root);
-            if(!root.name){
+            if (!root.name) {
                 $log.error('找不到根组件的name属性');
             }
             store.data('rootComponent', root.name);
@@ -162,13 +162,13 @@ export  default class CPage {
  * es6模式构建组件
  */
 export class Component {
-    public components:Array<any>;
-    public name:string;
-    public template:string;
-    public data:object;
-    public props:object;
+    public components: Array<any>;
+    public name: string;
+    public template: string;
+    public data: object;
+    public props: object;
 
-    constructor(){
+    constructor() {
         this.components = [];
         this.name = '';
         this.template = '';
@@ -176,7 +176,7 @@ export class Component {
         this.props = {};
     }
 
-    render(){
+    render() {
         $log.error('render方法必须被继承');
     }
 }

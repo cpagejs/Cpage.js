@@ -1,7 +1,7 @@
 {
-  "name": "cpage.js",
-  "version": "1.1.1",
-  "description": "Cpage.js是一款轻量级的Mvvm框架，使用TypeScript开发，可以方便地进行组件化开发，语法统一、简介明了，不依赖于第三方框架，适合中小项目开发。框架同时支持es5与es6语法，可参考example中示例。",
+  "name": "cpage",
+  "version": "1.1.2",
+  "description": "Cpage.js是一款轻量级的前端框架，使用TypeScript开发，可以方便地进行组件化开发，语法统一、简介明了，不依赖于第三方框架，适合中小项目开发。框架同时支持es5与es6语法，可参考example中示例。",
   "main": "dist/bundle.js",
   "scripts": {
     "tsc": "tsc",
@@ -14,19 +14,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chenhaozhi/Cpage.js.git"
+    "url": "git+https://github.com/cpagejs/Cpage.js.git"
   },
   "keywords": [
     "cpage",
     "Cpage.js",
-    "js mvvm",
+    "js",
+    "javascript",
     "chen.js",
     "TypeScript",
     "mocha",
     "chai",
     "test"
   ],
-  "author": "cpage.js",
+  "author": "夏小宅",
   "license": "MIT",
   "devDependencies": {
     "@types/chai": "^4.2.7",
@@ -53,9 +54,9 @@
     "webpack-dev-server": "^3.10.1"
   },
   "bugs": {
-    "url": "https://github.com/chenhaozhi/Cpage.js/issues"
+    "url": "https://github.com/cpagejs/Cpage.js/issues"
   },
-  "homepage": "https://github.com/chenhaozhi/Cpage.js#readme",
+  "homepage": "https://github.com/cpagejs/Cpage.js#readme",
   "directories": {
     "example": "example",
     "test": "test"

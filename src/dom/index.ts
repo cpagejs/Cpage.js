@@ -8,14 +8,14 @@ import { applyMixins } from '../mixins';
 // dom操作
 class DomAction extends targetDom {
 
-    constructor(selector){
+    constructor(selector) {
         super(selector);
     }
 }
 
 applyMixins(DomAction, [nodeModel, eventModel, moveModel, statusModel]);
 
-const Dom = function(selector){
+const Dom = function (selector) {
     const dom = new DomAction(selector);
     return dom;
 }

@@ -94,7 +94,7 @@ export default class renderComponents {
             self.root.isRoot = true;
             self.templateId[node[0].getAttribute(ID)] = node[0].outerHTML;
 
-            self.loopComponents(components, self.root.data, self.root.components, self.root.name);
+            self.loopComponents(components, self.root.components, self.root.name, self.root.data);
         }
 
         // 处理路由
@@ -148,7 +148,7 @@ export default class renderComponents {
                                     DOM.q(v.ele).insertAdjacentHTML('afterbegin', '<' + Util._cameCase(name) + '></' + Util._cameCase(name) + '>');
   
                                     self.loopNodes(name, DOM.q(v.ele).childNodes, []);
-                                    self.loopComponents([self.CObj[name]], self.CObj[v.which].data || {}, [], v.which);
+                                    self.loopComponents([self.CObj[name]], [], v.which, self.CObj[v.which].data || {});
 
                                     setTimeout(()=>{
                                         self.$routerCache[name] = DOM.q(Util._cameCase(name)).outerHTML;
@@ -377,11 +377,11 @@ export default class renderComponents {
     /**
      * 遍历组件
      * @param components 模板中的组件集合 
-     * @param fatherData 父组件data数据
      * @param componentArr 注入的组件集合
      * @param componentName 父组件名称
+     * @param fatherData 父组件data数据
      */
-    private loopComponents(components:Array<any>, fatherData:object, componentArr:Array<any>, componentName:string){
+    private loopComponents(components:Array<any>, componentArr:Array<any>, componentName:string, fatherData?:object, ){
         if(components.length && componentArr === undefined){
             $log.error('找不到组件为'+componentName+'的components属性');
         }
@@ -467,15 +467,17 @@ export default class renderComponents {
                 if(self.oneRootComponent === 2){
                     $log.error('根组件'+self.root.name+'只能有一个');
                 }
+
                 const dom = DOM.q(self.selector);
                 if(dom === undefined){
                     $log.error('节点'+self.selector+'不存在');
                 }
+
                 dom.innerHTML = tpl(self.theTpl(self.root), self.root.data, {});
                 node = DOM.q('['+ ID +'="'+ v.token +'"]');
                 self.oneRootComponent++;
             }
-            else {
+            else { // 其他组件
                 const newNode = self.loopNodes(v.name, DOM.create(self.theTpl(self.CObj[v.name])));
                 // TODO 避免某些组件没有设置token
                 const dataId = DOM.q(v.name) && parseInt(DOM.q(v.name).getAttribute(ID));
@@ -543,7 +545,7 @@ export default class renderComponents {
                 if(arr.length){
                     if(v.name){
                         // self.loopComponents(arr, v.data, Util.deepClone(v.components), v.name)
-                        self.loopComponents(arr, v.data, v.components, v.name);
+                        self.loopComponents(arr, v.components, v.name, v.data);
                     }
                 }
             }
@@ -839,7 +841,7 @@ export default class renderComponents {
                         (<any>el[el.length-1]).insertAdjacentElement('afterEnd', newNode[0]);
                     }
                     if(innerComponents.length){
-                        self.loopComponents(Util.deepClone(innerComponents), data, [], component.name);
+                        self.loopComponents(Util.deepClone(innerComponents), [], component.name, data);
                     }
                 });
             }else {

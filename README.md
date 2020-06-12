@@ -1,11 +1,11 @@
-## 文档地址：[https://chenhaozhi.github.io/](https://chenhaozhi.github.io/)
+## 文档地址：[https://cpagejs.github.io/](https://cpagejs.github.io/)
 ## Cpage.js
-Cpage.js是一款轻量级的Mvvm框架，使用TypeScript开发，可以方便地进行组件化开发，语法统一、简介明了，不依赖于第三方框架，适合中小项目开发。框架同时支持es5与es6语法，可参考example中示例。
+Cpage.js是一款轻量级的前端框架，使用TypeScript开发，可以方便地进行组件化开发，语法统一、简介明了，不依赖于第三方框架，适合中小项目开发。框架同时支持es5与es6语法，可参考example中示例。
 
 ## 安装
     es6  npm install cpage
          import Cpage,  { Component } from 'cpage'; 
-    es5  <script src="https://chenhaozhi.github.io/cpage/Cpage-1.1.1.js"></script>
+    es5  <script src="https://cpagejs.github.io/cpage/Cpage-1.1.1.js"></script>
 
 ## 组件（es5）
 ```
@@ -151,19 +151,3 @@ Dom('body').css('width')
 Dom('body').width('100px')
 Dom('body').hasClass('dom')
 ```
-
-## cookie操作
-Cpage.js提供建议的dom操作方式
-es6语法
-```
-import { Cookie } from 'cpage';
-```
-es5 可以直接使用Cookie对象
-#### 是否支持cookie
-    Cookie.support()
-#### 添加cookie
-    Cookie.set(name,value,{hours,path,domain,secure})
-#### 获取cookie
-    Cookie.get(name:string)
-#### 移除cookie
-    Cookie.remove(name:string, path?:string)
