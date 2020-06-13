@@ -5,3 +5,4 @@ dist/
 .idea
 example/es6/node_modules/
 .DS_Store
+docs
