@@ -1,0 +1,11 @@
+﻿"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var compile_1 = require("./compile");
+exports.Component = compile_1.Component;
+var Dom_1 = require("./Dom");
+exports.Dom = Dom_1.default;
+var store_1 = require("./store");
+var Store = new store_1.default('user');
+exports.Store = Store;
+exports.default = compile_1.default;
+window.Cpage = new compile_1.default();
