@@ -1,4 +1,4 @@
-import Cpage,  { Component, Dom, Cookie } from '../../../dist/bundle';
+import Cpage,  { Component, Dom } from '../../../dist/bundle';
 
 import Header from './header';
 import Article from './article';
@@ -26,8 +26,9 @@ export default class Main extends Component {
                 <div id="main-app" c-ref="add-ref">{{json.title}}--{{text}}</div>
                 <div class="repeat" c-for="item in items"><p c-click="handleItem({{item.id}})">{{item.name}}</p></div>
                 <button c-click="handelClick()">点击</button>
-                <div c-if="{{isShow}}"><header></header></div>
-                <header></header>
+                <div c-if="{{isShow}}">
+                    <header></header>
+                </div>
                 <div c-show="{{a>10}}">show2</div>
                 <br/>
                 <a href="#/article">article</a>
@@ -80,8 +81,6 @@ export default class Main extends Component {
         });
         this.$data('text', 'after render');
         Dom('body').attr('data-aa', '456');
-        console.log(Cookie.support())
-        Cookie.set('mainjs', 'main-render');
     }
 }
 

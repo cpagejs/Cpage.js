@@ -18,7 +18,7 @@
     <script type="text/Cpage" id="testId">
         <div>
              <div class="main" c-click="handelIf()">点击-显示隐藏文章</div>
-            <div c-if="{{ifTest}}">
+            <div c-show="{{ifTest}}">
                 <my-article></my-article>
             </div>
             <header 
@@ -27,6 +27,7 @@
                 >
             </header>
             <!-- 列表  -->
+            <p>----列表----</p>
             <div c-for="item in items">
                 <h1>id: {{item.id}}</h1>
                 <h2>text：{{item.text}}</h2>
@@ -34,6 +35,7 @@
             <div c-for="item in items">
                 <my-article></my-article>
             </div>
+            <p>----列表----</p>
             <footer></footer> 
         </div>
     </script>

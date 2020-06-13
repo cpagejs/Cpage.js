@@ -724,11 +724,12 @@ export default class renderComponents {
                     case 'c-show':
                         const newAttr = DOM.boolToDisplay(parse.parse(dp.value)(info.new));
                         DOM.q(dp.position).style.display = newAttr;
+                        DOM.attr(dp.position, 'c-show', newAttr === 'none' ? false : true);
                         break;
                     case 'c-if':
                         const dom = DOM.q(dp.position);
-                        if(!isNil(dom)){
-                            DOM.q(dp.position).setAttribute(dp.attr, info.newVal);
+                        if(dom){
+                            dom.setAttribute(dp.attr, info.newVal);
                         }
                         this.handelIf(dp, this.CObj[component]);
                         break;
@@ -871,9 +872,9 @@ export default class renderComponents {
     private handelIf(cIf, component):void{
         const ifDom = DOM.q(cIf.ele || cIf.position);
         // 节点存在，移除节点
-        if(!isNil(ifDom)){
+        if(ifDom){
             const ifInfo = ifDom.getAttribute('c-if');
-            if(ifInfo === 'true'){
+            if(ifInfo === 'false'){
                 ifDom.parentNode.replaceChild(DOM.addComment('c-if:'+ cIf.id +''), ifDom);
                 this.ifTpl[cIf.id] = ifDom.outerHTML;
             }
@@ -884,7 +885,7 @@ export default class renderComponents {
                 DOM.create(this.ifTpl[cIf.id])[0]
             );
             // 更改属性
-            DOM.attr((cIf.ele || cIf.position), 'c-if', false);
+            DOM.attr((cIf.ele || cIf.position), 'c-if', true);
             DOM.q(cIf.ele || cIf.position).style.display = 'block';
         }
     }
