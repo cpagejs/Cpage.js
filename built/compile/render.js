@@ -62,8 +62,6 @@ var store = new store_1.default();
 var isNil = util_1.default.isNil;
 var PREFIX_DIRECTIVE = /(x[\:\-_]|data[\:\-_])/i;
 var ID = 'c-data-id';
-var ID_FOR = 'c-for-id';
-var ID_REPEAT = 'c-repeat-id';
 var renderComponents = /** @class */ (function () {
     function renderComponents(selector, root, CList) {
         this.selector = selector;
@@ -298,7 +296,7 @@ var renderComponents = /** @class */ (function () {
     renderComponents.prototype.addDirectiveList = function (name, node) {
         for (var j = 0, len = node.attributes; j < len.length; j++) {
             var attrName = this.normalizeDirective(len[j].name);
-            if (attrName.match(/^cClick|cDbclick|cMouseover|cMousedown|cMouseup|cMousemove|cMouseout|cMouseleave|cBlur|cFocus|cChange|cInput|cDrag|cDragend|cDragenter|cDragleave|cDragover|cDragstart|cDrop|cFocus|cKeydown|cKeypress|cKeyup|cScroll|cSelect|cSubmit|cTtoggle|cResize|cWaiting|cProgress|cLoadstart|cDurationchange|cLoadedmetadata|cLoadeddata|cCanplay|cCanplaythrough|cPlay|cPause|cRef|cShow|cIf|cHtml|cFor|cRepeat|cView$/g)) {
+            if (attrName.match(/^cClick|cDbclick|cMouseover|cMousedown|cMouseup|cMousemove|cMouseout|cMouseleave|cBlur|cFocus|cChange|cInput|cDrag|cDragend|cDragenter|cDragleave|cDragover|cDragstart|cDrop|cFocus|cKeydown|cKeypress|cKeyup|cScroll|cSelect|cSubmit|cToggle|cResize|cWaiting|cProgress|cLoadstart|cDurationchange|cLoadedmetadata|cLoadeddata|cCanplay|cCanplaythrough|cPlay|cPause|cRef|cShow|cIf|cHtml|cFor|cRepeat|cView$/g)) {
                 switch (attrName) {
                     case 'cRef':
                         this.cRefList.push({
@@ -405,18 +403,17 @@ var renderComponents = /** @class */ (function () {
         components.forEach(function (v) { return __awaiter(_this, void 0, void 0, function () {
             function handelCC() {
                 return __awaiter(this, void 0, void 0, function () {
-                    var before;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
-                            case 0: return [4 /*yield*/, self.handelDataChange(v)];
+                            case 0: return [4 /*yield*/, self.handelBeforeRender(v)];
                             case 1:
-                                _a.sent(); // 监听data数据改变
-                                return [4 /*yield*/, self.handelBeforeRender(v)];
+                                _a.sent(); //在组建渲染之前执行
+                                return [4 /*yield*/, self.handelAfterRender(v)];
                             case 2:
-                                before = _a.sent();
-                                return [4 /*yield*/, self.handelAfterRender(before, v)];
-                            case 3:
                                 _a.sent(); //在组件渲染之后执行
+                                return [4 /*yield*/, self.handelDataChange(v)];
+                            case 3:
+                                _a.sent(); // 监听data数据改变
                                 return [2 /*return*/];
                         }
                     });
@@ -428,7 +425,7 @@ var renderComponents = /** @class */ (function () {
                         if (v === undefined)
                             return [2 /*return*/];
                         // “模板中的组件” 与 “注入的组件” 对比
-                        this.compareChildComponentAndInjectComponents(v.name, componentArr);
+                        // this.compareChildComponentAndInjectComponents(v.name, componentArr);
                         // 给组件赋能
                         v.$data = HandelData_1.default.$data;
                         v.$http = http_1.default;
@@ -453,14 +450,13 @@ var renderComponents = /** @class */ (function () {
             v.componentStatus = 'beforeRender';
             v.beforeRender();
         }
-        return 'beforeRenderIsDone';
     };
     /**
      * 在组件渲染之后执行
      * @param status handelBeforeRender()的返回值
      * @param v 组件
      */
-    renderComponents.prototype.handelAfterRender = function (status, v) {
+    renderComponents.prototype.handelAfterRender = function (v) {
         return __awaiter(this, void 0, void 0, function () {
             function invokeAfterRender() {
                 return __awaiter(this, void 0, void 0, function () {
@@ -588,9 +584,6 @@ var renderComponents = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (status != 'beforeRenderIsDone') {
-                            // return;
-                        }
                         self = this;
                         if (!v.render) return [3 /*break*/, 2];
                         return [4 /*yield*/, invokeAfterRender()];
@@ -609,7 +602,7 @@ var renderComponents = /** @class */ (function () {
      */
     renderComponents.prototype.compareChildComponentAndInjectComponents = function (child, arr) {
         var self = this, flag = false;
-        if (child = this.root.name) { //判断是否为根组件
+        if (child === this.root.name) { //判断是否为根组件
             flag = true;
         }
         else if (!arr.length && child !== this.root.name) { //普通组件，有组件标识但components为空
@@ -662,7 +655,7 @@ var renderComponents = /** @class */ (function () {
                                         index_1.default.parse(val.fn)(v, { $event: event });
                                     }
                                     catch (e) {
-                                        console.log('ee---', e);
+                                        console.log(e);
                                     }
                                 }, false);
                             }
@@ -693,7 +686,10 @@ var renderComponents = /** @class */ (function () {
         var _this = this;
         var _loop_1 = function (i) {
             HandelEventer_1.default.listen(i, function (info) {
-                if (info.target == v.token && JSON.stringify(info.oldVal) != JSON.stringify(info.newVal)) { //只处理当前组件的属性改变
+                //只处理当前组件的属性改变
+                if (info.target === v.token && JSON.stringify(info.oldVal) !== JSON.stringify(info.newVal)) {
+                    // 执行组件更新前函数
+                    v.beforeUpdate && v.beforeUpdate(info.oldVal, info.newVal, i);
                     // 获取组件原始的tpl，将其转为dom
                     var parseNode = dom_1.default.create(_this.templateId[v.token]);
                     var dataPos = _this.dataPosition(i, parseNode, v.name);
@@ -702,6 +698,8 @@ var renderComponents = /** @class */ (function () {
                     if (dom_1.default.q(util_1.default._cameCase(v.name))) {
                         // data数据改变重新渲染对象的节点
                         _this.dataChangeToDom(parseNode, dataPos, info, v.name);
+                        // 执行组件更新后函数
+                        v.afterUpdate && v.afterUpdate(info.oldVal, info.newVal, i);
                     }
                 }
             });
@@ -772,11 +770,12 @@ var renderComponents = /** @class */ (function () {
                     case 'c-show':
                         var newAttr = dom_1.default.boolToDisplay(index_1.default.parse(dp.value)(info.new));
                         dom_1.default.q(dp.position).style.display = newAttr;
+                        dom_1.default.attr(dp.position, 'c-show', newAttr === 'none' ? false : true);
                         break;
                     case 'c-if':
                         var dom = dom_1.default.q(dp.position);
-                        if (!isNil(dom)) {
-                            dom_1.default.q(dp.position).setAttribute(dp.attr, info.newVal);
+                        if (dom) {
+                            dom.setAttribute(dp.attr, info.newVal);
                         }
                         _this.handelIf(dp, _this.CObj[component]);
                         break;
@@ -832,12 +831,14 @@ var renderComponents = /** @class */ (function () {
      * 处理c-for指令
      * @param arr c-for 集合
      * @param component 指令所在组件
+     * @param reRender 再次渲染
      */
     renderComponents.prototype.loopCforToDom = function (arr, component, reRender) {
         var _this = this;
         var currentRepeat = arr.filter(function (rVal) {
             return rVal.which == component.name;
         });
+        // console.log('loopCforToDom', arr, component);
         var self = this;
         currentRepeat.forEach(function (re) {
             // 解析指令，获取重复次数
@@ -845,7 +846,6 @@ var renderComponents = /** @class */ (function () {
             if (!match2) {
                 $log.error('c-for格式有误');
             }
-            var itemExp = match2[1];
             var itemsExp = match2[2];
             var items = _this.inComponent(itemsExp, component);
             if (items && util_1.default.type(items) === 'array' && items.length) {
@@ -902,9 +902,9 @@ var renderComponents = /** @class */ (function () {
     renderComponents.prototype.handelIf = function (cIf, component) {
         var ifDom = dom_1.default.q(cIf.ele || cIf.position);
         // 节点存在，移除节点
-        if (!isNil(ifDom)) {
+        if (ifDom) {
             var ifInfo = ifDom.getAttribute('c-if');
-            if (ifInfo === 'true') {
+            if (ifInfo === 'false') {
                 ifDom.parentNode.replaceChild(dom_1.default.addComment('c-if:' + cIf.id + ''), ifDom);
                 this.ifTpl[cIf.id] = ifDom.outerHTML;
             }
@@ -912,7 +912,7 @@ var renderComponents = /** @class */ (function () {
         else { // 已经被移除，还原节点
             dom_1.default.replaceComment(dom_1.default.q(util_1.default._cameCase(component.name)), cIf.attr + ':' + cIf.id, dom_1.default.create(this.ifTpl[cIf.id])[0]);
             // 更改属性
-            dom_1.default.attr((cIf.ele || cIf.position), 'c-if', false);
+            dom_1.default.attr((cIf.ele || cIf.position), 'c-if', true);
             dom_1.default.q(cIf.ele || cIf.position).style.display = 'block';
         }
     };

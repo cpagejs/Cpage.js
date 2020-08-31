@@ -538,7 +538,7 @@ var util = /** @class */ (function () {
         return res;
     };
     /**
-     * 获取当前时间 20170516
+     * 获取当前时间 20190516
      */
     util.prototype.now = function () {
         var date = new Date(), year = date.getFullYear().toString(), month = (date.getMonth() + 1).toString(), day = date.getDate().toString();
