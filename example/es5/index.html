@@ -20,7 +20,7 @@
   <script type="text/Cpage" id="testId">
         <div>
             <div class="main" c-click="handelIf()">点击-显示隐藏文章</div>
-            <div c-show="{{ifTest}}">
+            <div c-if="{{ifTest}}">
               <my-article></my-article>
             </div>
             <header 
@@ -72,6 +72,9 @@
       },
       afterUpdate() {
         console.log('after')
+      },
+      beforeDestory(){
+        console.log('beforeDestory')
       },
       render() {
         console.log(this.data)

@@ -137,6 +137,7 @@ export default class renderComponents {
             setTimeout(() => {
               self.cViewList.forEach(v => {
                 if (!DOM.q(v.ele)) return;
+                v.beforeDestory && v.beforeDestory();
                 if (obj.cache && self.$routerCache.hasOwnProperty(name)) {
                   DOM.q(v.ele).innerHTML = self.$routerCache[name];
                   self.handelEventListener(self.CObj[name], DOM.q(v.ele).firstChild);
@@ -865,6 +866,7 @@ export default class renderComponents {
   /**
    * 移除c-if指令所在的节点
    * @param cIf c-if指令所绑定的节点信息
+   * @param component 所属组件
    */
   private handelIf(cIf, component): void {
     const ifDom = DOM.q(cIf.ele || cIf.position);
@@ -872,6 +874,7 @@ export default class renderComponents {
     if (ifDom) {
       const ifInfo = ifDom.getAttribute('c-if');
       if (ifInfo === 'false') {
+        component.beforeDestory && component.beforeDestory();
         ifDom.parentNode.replaceChild(DOM.addComment('c-if:' + cIf.id + ''), ifDom);
         this.ifTpl[cIf.id] = ifDom.outerHTML;
       }
