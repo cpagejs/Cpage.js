@@ -12,7 +12,7 @@ import Store from '../../built/store/index';
 describe('index',function(){
     var so;
     before(function(){
-        so = new Store();
+        so = new Store("Cpage");
     });
 
     describe('1),data',function(){

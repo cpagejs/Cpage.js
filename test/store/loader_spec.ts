@@ -12,8 +12,8 @@ const loader = new Loader();
 describe('loader测试',function(){
 
     it('1,module',function(){
-        var m = loader.module('li', []);
+        // var m = loader.module('li', []);
 
-        expect(m.name).to.eq('li');
+        // expect(m.name).to.eq('li');
     });
 });

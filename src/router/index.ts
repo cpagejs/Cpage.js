@@ -3,6 +3,7 @@ const store: any = new Store();
 
 import { routerAction } from './router_action';
 
+// 后续支持history路由
 export default class Router implements routerAction {
   private url: string;  //浏览器pathname
   public routers: Array<object>; //路由集合

@@ -1,3 +1,5 @@
+// 简单的日志打印
+
 function log(str:any){
 	console.log(str);
 }
