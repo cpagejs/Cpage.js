@@ -1,7 +1,8 @@
 ﻿"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Store = exports.Dom = exports.Component = void 0;
 var compile_1 = require("./compile");
-exports.Component = compile_1.Component;
+Object.defineProperty(exports, "Component", { enumerable: true, get: function () { return compile_1.Component; } });
 var Dom_1 = require("./Dom");
 exports.Dom = Dom_1.default;
 var store_1 = require("./store");

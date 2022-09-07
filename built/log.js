@@ -1,5 +1,7 @@
 ﻿"use strict";
+// 简单的日志打印
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.error = exports.warn = exports.info = exports.log = void 0;
 function log(str) {
     console.log(str);
 }

@@ -20,6 +20,7 @@ var __spread = (this && this.__spread) || function () {
     return ar;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.applyMixins = exports.mixins = void 0;
 function mixins() {
     var otherClass = [];
     for (var _i = 0; _i < arguments.length; _i++) {

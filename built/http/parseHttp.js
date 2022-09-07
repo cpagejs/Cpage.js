@@ -1,5 +1,6 @@
 ﻿"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.parseHttp = void 0;
 var util_1 = require("../util");
 var $log = require("../log");
 // 支持的类型

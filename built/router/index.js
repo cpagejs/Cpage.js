@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var store_1 = require("../store");
 var store = new store_1.default();
+// 后续支持history路由
 var Router = /** @class */ (function () {
     function Router(url, routers) {
         this.url = url;

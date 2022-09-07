@@ -14,7 +14,7 @@ var Duff = /** @class */ (function () {
                 return;
             this._array = value;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(Duff.prototype, "fn", {
@@ -26,7 +26,7 @@ var Duff = /** @class */ (function () {
                 return;
             this._fn = value;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Duff.prototype.duff = function () {

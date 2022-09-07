@@ -1,5 +1,6 @@
 ﻿"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ast_teranry = exports.ast_logical = exports.ast_binary = exports.ast_unary = exports.ast_assignment = exports.ast_function = exports.ast_member = exports.ast_this = exports.ast_identifier = exports.ast_json = exports.ast_object = exports.ast_array = exports.ast_constant = exports.ast_init = exports.dataType = void 0;
 //数据类型
 exports.dataType = {
     '1': 'ASTBuilder.Init',

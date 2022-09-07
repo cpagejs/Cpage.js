@@ -1,5 +1,6 @@
 ﻿"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.OPERATORS = exports.LETTER = exports.SPECIALS = void 0;
 // js特殊字符
 var SPECIALS = {
     '\'': '\'',

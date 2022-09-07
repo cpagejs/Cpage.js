@@ -1,5 +1,6 @@
 ﻿"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Component = void 0;
 var $log = require("../log");
 var util_1 = require("../util");
 var render_1 = require("./render");

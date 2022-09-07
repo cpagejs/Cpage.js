@@ -159,6 +159,7 @@ var renderComponents = /** @class */ (function () {
                                 self.cViewList.forEach(function (v) {
                                     if (!dom_1.default.q(v.ele))
                                         return;
+                                    v.beforeDestory && v.beforeDestory();
                                     if (obj.cache && self.$routerCache.hasOwnProperty(name)) {
                                         dom_1.default.q(v.ele).innerHTML = self.$routerCache[name];
                                         self.handelEventListener(self.CObj[name], dom_1.default.q(v.ele).firstChild);
@@ -898,6 +899,7 @@ var renderComponents = /** @class */ (function () {
     /**
      * 移除c-if指令所在的节点
      * @param cIf c-if指令所绑定的节点信息
+     * @param component 所属组件
      */
     renderComponents.prototype.handelIf = function (cIf, component) {
         var ifDom = dom_1.default.q(cIf.ele || cIf.position);
@@ -905,6 +907,7 @@ var renderComponents = /** @class */ (function () {
         if (ifDom) {
             var ifInfo = ifDom.getAttribute('c-if');
             if (ifInfo === 'false') {
+                component.beforeDestory && component.beforeDestory();
                 ifDom.parentNode.replaceChild(dom_1.default.addComment('c-if:' + cIf.id + ''), ifDom);
                 this.ifTpl[cIf.id] = ifDom.outerHTML;
             }
