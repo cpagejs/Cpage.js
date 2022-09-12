@@ -10,7 +10,9 @@
     "build": "webpack -p",
     "watch": "webpack -p -w",
     "wh": "webpack-dev-server --hot",
-    "tslint": "tslint \"src/**/*.ts\" --force"
+    "tslint": "tslint \"src/**/*.ts\" --force",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
   },
   "repository": {
     "type": "git",
@@ -39,6 +41,7 @@
     "chai": "^4.2.0",
     "chai-dom": "^1.8.1",
     "clean-webpack-plugin": "^3.0.0",
+    "vuepress": "^1.9.7",
     "jsdom": "^16.0.0",
     "mocha": "^7.0.0",
     "mochawesome": "^4.1.0",

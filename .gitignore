@@ -8,7 +8,6 @@ yarn-error.log*
 package-lock.json
 yarn.lock
 node_modules/
-docs/
 
 # Editor directories and files
 .idea
