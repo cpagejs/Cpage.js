@@ -4,7 +4,7 @@ Cpage.js是一款轻量级的前端框架，使用TypeScript开发，可以方�
 
 ## 使用脚手架生成项目
 ```
-npx npx happy-web-cli init 项目名称
+npx happy-web-cli init 项目名称
 
 ? 请选择模板 (Use arrow keys)
 ❯ Cpage.Js项目js版本 
