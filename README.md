@@ -21,7 +21,7 @@ npx happy-web-cli init 项目名称
     es5  <script src="https://cpagejs.github.io/source/cpage/bundle.js"></script>
 
 ## 组件（es5）
-```
+```js
 var app = Cpage.component({
     name: 'app',
     components: [],
@@ -45,7 +45,7 @@ Cpage.bootstrap("#app", app);
 ```
 
 ## 组件（es6）
-```
+```js
 import Cpage,  { Component } from 'cpage';
 const html = require('./app.html');
 
@@ -76,7 +76,7 @@ Cpage.bootstrap('#app', App);
 | reflesh() | this.$router.reflesh()，刷新当前路由 |
 | back() | this.$router.back()，返回 |
 路由示例
-```
+```js
 Cpage.router([
     {
         path: '/',
@@ -157,7 +157,7 @@ Cpage.router([
 ## DOM操作
 Cpage.js提供建议的dom操作方式
 es6语法
-```
+```js
 import { Dom } from 'cpage';
 
 Dom('body').css('width')

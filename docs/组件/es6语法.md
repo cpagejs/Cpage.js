@@ -3,7 +3,7 @@ title: es6语法
 ---
 
 声明一个hello组件
-```
+```js
 import Cpage,  { Component } from 'cpage';
 
 export default class Hello extends Component {
@@ -19,8 +19,9 @@ export default class Hello extends Component {
     }
 }
 ```
+
 在根组件引用hello组件
-```
+```js
 import Cpage,  { Component } from 'cpage';
 import Hello from './hello';
 const html = require('./app.html');

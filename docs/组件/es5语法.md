@@ -4,7 +4,7 @@ title: es5语法
 基本示例，先上demo，一睹为快！
 
 声明一个hello组件
-```
+```js
 var Hello = Cpage.component({
     name: 'hello',
     components: [],
@@ -23,8 +23,9 @@ var Hello = Cpage.component({
     }
 });
 ```
+
 在根组件引用hello组件
-```
+```js
 var app = Cpage.component({
     name: 'app',
     components: [Hello],
