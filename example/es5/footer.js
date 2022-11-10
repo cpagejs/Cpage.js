@@ -1,5 +1,5 @@
 var footer = Cpage.component({
-    name: 'footer',
+    name: 'cFooter',
     mode: 'E',
     components: [],
     template: `<h1>{{footer}}</h1>`,

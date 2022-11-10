@@ -1,5 +1,5 @@
 var header = Cpage.component({
-    name: 'header',
+    name: 'cHeader',
     components: [],
     template: `<div style="color:{{color}}">{{header}}--{{height}}</div>`,
     data: {

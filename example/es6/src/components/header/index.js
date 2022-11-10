@@ -1,4 +1,4 @@
-import Cpage,  { Component } from 'capge';
+import { Component } from 'capge';
 const html = require('./index.html');
 import css from './index.css';
 

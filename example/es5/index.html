@@ -11,36 +11,35 @@
 <body>
   <div id="app"></div>
 
-  <style type="text/Cpage" id="main-style">
+  <style type="Cpage/css" id="main-style">
     .main {
-            color: blue
-        }
-    </style>
+      color: blue
+    }
+  </style>
 
-  <script type="text/Cpage" id="testId">
-        <div>
-            <div class="main" c-click="handelIf()">点击-显示隐藏文章</div>
-            <div c-if="{{ifTest}}">
-              <my-article></my-article>
-            </div>
-            <header 
-              height="{{headerHeight}}"
-              c-click="headerClick(100)"
-            >
-            </header>
-            <!-- 列表  -->
-            <p>----列表----</p>
-            <div c-for="item in items">
-                <h1>id: {{item.id}}</h1>
-                <h2>text：{{item.text}}</h2>
-            </div>
-            <div c-for="item in items">
-                <my-article></my-article>
-            </div>
-            <p>----列表----</p>
-            <footer></footer> 
-        </div>
-    </script>
+  <script type="Cpage/js" id="testId">
+    <div>
+      <div class="main" c-click="handelIf()">点击-显示隐藏文章</div>
+      <div c-if="{{ifTest}}">
+        <my-article />
+      </div>
+      <c-header 
+        height="{{headerHeight}}"
+        c-click="headerClick(100)"
+      ></c-header>
+      <!-- 列表  -->
+      <p>----列表----</p>
+      <div c-for="item in items">
+          <h1>id: {{item.id}}</h1>
+          <h2>text：{{item.text}}</h2>
+      </div>
+      <div c-for="item in items">
+          <my-article></my-article>
+      </div>
+      <p>----列表----</p>
+      <c-footer></c-footer> 
+    </div>
+  </script>
 
   <script src="../../dist/bundle.js"></script>
   <script src="./header.js"></script>
@@ -56,9 +55,9 @@
         ifTest: false,
         headerHeight: 20,
         items: [
-          // { id: 1, text: 'text1' },
-          // { id: 2, text: 'text2' },
-          // { id: 3, text: 'text3' }
+          { id: 1, text: 'text1' },
+          { id: 2, text: 'text2' },
+          { id: 3, text: 'text3' }
         ]
       },
       headerClick(id) {
@@ -74,7 +73,7 @@
       afterUpdate() {
         console.log('after')
       },
-      beforeDestory(){
+      beforeDestory() {
         console.log('beforeDestory')
       },
       render() {

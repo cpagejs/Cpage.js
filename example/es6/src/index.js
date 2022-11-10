@@ -22,27 +22,28 @@ export default class Main extends Component {
     //         color: #f90;
     //     }
     // `;
-    this.template = `
-      <div>
-        <c-header title="这是自定义的header组件"></c-header>
-        <a href="#/article">article</a>
-        <a href="#/company">company</a>
-        <a href="#/about">about</a>
-        <div id="main-app" c-ref="add-ref">{{json.title}}--{{text}}</div>
-        <div class="repeat" c-for="item in items">
-          <p c-click="handleItem({{item.id}})">{{item.id}}-{{item.name}}</p>
-        </div>
-        <button c-click="handelClick()">点击</button>
-        <div c-if="{{isShow}}">
-            show
-        </div>
-        <div c-show="{{a>10}}">show2</div>
-        <br/>
-        <c-menu></c-menu>
-        <div c-view></div>
-        <footer></footer>
-      </div>
-    `;
+    this.templateUrl = require('./index.html'),
+    // this.template = `
+    //   <div>
+    //     <c-header title="这是自定义的header组件"></c-header>
+    //     <a href="#/article">article</a>
+    //     <a href="#/company">company</a>
+    //     <a href="#/about">about</a>
+    //     <div id="main-app" c-ref="add-ref">{{json.title}}--{{text}}</div>
+    //     <div class="repeat" c-for="item in items">
+    //       <p c-click="handleItem({{item.id}})">{{item.id}}-{{item.name}}</p>
+    //     </div>
+    //     <button c-click="handelClick()">点击</button>
+    //     <div c-if="{{isShow}}">
+    //         show
+    //     </div>
+    //     <div c-show="{{a>10}}">show2</div>
+    //     <br/>
+    //     <c-menu></c-menu>
+    //     <div c-view></div>
+    //     <footer></footer>
+    //   </div>
+    // `;
     this.data = {
       text: 'text',
       isShow: false,

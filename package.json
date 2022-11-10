@@ -1,6 +1,6 @@
 {
   "name": "cpage",
-  "version": "1.2.3",
+  "version": "1.2.5",
   "description": "Cpage.js是一款轻量级的前端框架，使用TypeScript开发，可以方便地进行组件化开发，语法统一、简介明了，不依赖于第三方框架，适合中小项目开发。框架同时支持es5与es6语法，可参考example中示例。",
   "main": "dist/bundle.js",
   "scripts": {
@@ -8,6 +8,7 @@
     "tsc:w": "tsc -w",
     "test": "mocha -r ./node_modules/ts-node/register test/**/*_spec.ts --reporter mochawesome",
     "build": "webpack -p",
+    "build:types": "tsc --project packages/tsconfig.json",
     "watch": "webpack -p -w",
     "wh": "webpack-dev-server --hot",
     "tslint": "tslint \"src/**/*.ts\" --force",

@@ -7,7 +7,6 @@ import { applyMixins } from '../mixins';
 
 // dom操作
 class DomAction extends targetDom {
-
     constructor(selector) {
         super(selector);
     }

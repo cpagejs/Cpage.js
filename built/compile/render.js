@@ -254,7 +254,7 @@ var renderComponents = /** @class */ (function () {
                 // if (Util.type(url) === 'array') {
                 //   _url = url[1];
                 // }
-                // console.log(url, url[0], url[1]);
+                console.log(url, url[0][1].toString());
                 return {
                     type: 'url',
                     result: url[0][1]
@@ -848,7 +848,7 @@ var renderComponents = /** @class */ (function () {
             // 解析指令，获取重复次数
             var match2 = re.fn.match(/^\s*([\s\S]+?)\s+in\s+([\s\S]+?)\s*$/);
             if (!match2) {
-                $log.error('c-for格式有误');
+                $log.error('c-for指令格式有误，正确方式类似 item in items');
             }
             var itemsExp = match2[2];
             var items = _this.inComponent(itemsExp, component);

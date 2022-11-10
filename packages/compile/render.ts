@@ -233,7 +233,7 @@ export default class renderComponents {
         // if (Util.type(url) === 'array') {
         //   _url = url[1];
         // }
-        // console.log(url, url[0], url[1]);
+        // console.log(url, url[0][1].toString());
         return {
           type: 'url',
           result: url[0][1]
@@ -254,12 +254,11 @@ export default class renderComponents {
     for (let i = 0; i < node.length; i++) {
       if (node[i] && node[i].nodeType === 1) {
         node[i].setAttribute("c-data-id", this.dataId);
-
+        
         const cs = this.getComponent(node[i], name);
         cs.forEach(v => {
           if (components) {
             components.push(Util.deepClone(Util.extend(this.CObj[v], { token: this.dataId })));
-            // components.push(Util.extend(this.CObj[v], {token: this.dataId}));
           }
         });
 
@@ -487,7 +486,7 @@ export default class renderComponents {
         if (v.token && !node) {
           node = DOM.q('[' + ID + '="' + dataId + '"]');
         }
-
+        
         if (node) {
           self.templateId[v.token] = newNode[0].outerHTML;
 
@@ -812,7 +811,7 @@ export default class renderComponents {
       // 解析指令，获取重复次数
       const match2 = (<any>re.fn).match(/^\s*([\s\S]+?)\s+in\s+([\s\S]+?)\s*$/);
       if (!match2) {
-        $log.error('c-for格式有误');
+        $log.error('c-for指令格式有误，正确方式类似 item in items');
       }
 
       const itemsExp = match2[2];
@@ -839,7 +838,7 @@ export default class renderComponents {
           this.cForTpl[re.id] = cForDom.outerHTML;
           return;
         }
-        
+
         // 渲染单个有c-for指令的模板
         items.forEach((item, i) => {
           // 克隆节点，重复次数
@@ -1161,7 +1160,6 @@ export default class renderComponents {
       let normalizedNodeName = self.normalizeDirective(DOM.getNodeName(node).toLowerCase());
       if (self.componentNames.includes(normalizedNodeName)) {
         arr.push(Util.deepClone(Util.extend(self.CObj[normalizedNodeName], { token: node.getAttribute(ID) })));
-        // arr.push(Util.extend(self.CObj[normalizedNodeName], {token: node.getAttribute(ID)}));
       }
       if (node.childNodes && node.childNodes.length) {
         node.childNodes.forEach(v => {
@@ -1188,8 +1186,8 @@ export default class renderComponents {
 
     // tag标签
     function loopTagNode(node) {
+      // TODO <cHeader></cHeader>会无法识别
       let normalizedNodeName = Util.cameCase(DOM.getNodeName(node).toLowerCase());
-
       if (self.componentNames.includes(normalizedNodeName)) {
         arr.push(normalizedNodeName);
         let obj = {};

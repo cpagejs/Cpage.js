@@ -3,6 +3,6 @@
   line-height: 50px;
   padding-left: 10px;
   padding-right: 10px;
-  background: #cbcbcb;
+  background: linear-gradient(90deg,#f90,#eac10c);
   box-sizing: border-box;
 }
