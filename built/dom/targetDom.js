@@ -1,7 +1,7 @@
 ﻿"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
- * 公共方法
+ * 获取目标节点
  */
 var targetDom = /** @class */ (function () {
     function targetDom(selector) {

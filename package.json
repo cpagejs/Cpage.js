@@ -1,6 +1,6 @@
 {
   "name": "cpage",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Cpage.js是一款轻量级的前端框架，使用TypeScript开发，可以方便地进行组件化开发，语法统一、简介明了，不依赖于第三方框架，适合中小项目开发。框架同时支持es5与es6语法，可参考example中示例。",
   "main": "dist/bundle.js",
   "scripts": {
@@ -41,7 +41,7 @@
     "chai": "^4.2.0",
     "chai-dom": "^1.8.1",
     "clean-webpack-plugin": "^3.0.0",
-    "vuepress": "^1.9.7",
+    "vuepress": "1.9.7",
     "jsdom": "^16.0.0",
     "mocha": "^7.0.0",
     "mochawesome": "^4.1.0",

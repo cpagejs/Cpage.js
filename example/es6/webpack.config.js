@@ -1,6 +1,7 @@
 var webpack = require('webpack');
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+const resolve = dir => path.resolve(__dirname, dir);
 
 module.exports = {  
     entry: './src/index.js',  
@@ -33,6 +34,12 @@ module.exports = {
             template: './src/index.html'
         })
     ],
+    resolve: {
+        alias: {
+            '@': resolve('src'),
+            'capge': resolve('bundle/bundle.js')
+        }
+    },
     devServer: {
         port: 8080,
         open: true

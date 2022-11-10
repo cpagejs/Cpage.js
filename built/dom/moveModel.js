@@ -25,6 +25,9 @@ var __values = (this && this.__values) || function(o) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var targetDom_1 = require("./targetDom");
+/**
+ * 动画操作
+ */
 var moveModel = /** @class */ (function (_super) {
     __extends(moveModel, _super);
     function moveModel(selector) {

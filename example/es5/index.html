@@ -56,9 +56,9 @@
         ifTest: false,
         headerHeight: 20,
         items: [
-          { id: 1, text: 'text1' },
-          { id: 2, text: 'text2' },
-          { id: 3, text: 'text3' }
+          // { id: 1, text: 'text1' },
+          // { id: 2, text: 'text2' },
+          // { id: 3, text: 'text3' }
         ]
       },
       headerClick(id) {
@@ -66,6 +66,7 @@
       },
       handelIf() {
         this.$data('ifTest', !this.data.ifTest);
+        this.$data('items', [{ id: 1, text: 'text1' }]);
       },
       beforeUpdate(oldVal, newVal, state) {
         console.log('before', oldVal, newVal, state)

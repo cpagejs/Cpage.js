@@ -1,0 +1,8 @@
+.c-header {
+  height: 50px;
+  line-height: 50px;
+  padding-left: 10px;
+  padding-right: 10px;
+  background: #cbcbcb;
+  box-sizing: border-box;
+}

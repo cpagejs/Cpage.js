@@ -1,18 +1,19 @@
-import Cpage, { Component, Dom } from '../../../dist/bundle';
+import Cpage, { Component, Dom } from 'capge';
 
-import Header from './header';
-import Article from './article';
-import ArticleDetail from './articleDetail';
-import About from './about';
-import Company from './company';
-import Footer from './footer';
+import cHeader from './components/header';
+import Footer from './components/footer';
+import Article from './pages/article/article';
+import ArticleDetail from './pages/article/articleDetail';
+import About from './pages/about';
+import Company from './pages/company';
 
-import * as css from './style.css';
+import cMenu from './components/cMenu';
 
+import css from './style.css';
 export default class Main extends Component {
   constructor() {
     super();
-    this.components = [Header, Article, ArticleDetail, Footer, About, Company];
+    this.components = [cHeader, Article, ArticleDetail, Footer, About, Company, cMenu];
     this.name = 'myApp';
     // this.styleUrl = require('./style.css');
     this.styleUrl = css;
@@ -23,17 +24,21 @@ export default class Main extends Component {
     // `;
     this.template = `
       <div>
-        <div id="main-app" c-ref="add-ref">{{json.title}}--{{text}}</div>
-        <div class="repeat" c-for="item in items"><p c-click="handleItem({{item.id}})">{{item.name}}</p></div>
-        <button c-click="handelClick()">点击</button>
-        <div c-if="{{isShow}}">
-            <header></header>
-        </div>
-        <div c-show="{{a>10}}">show2</div>
-        <br/>
+        <c-header title="这是自定义的header组件"></c-header>
         <a href="#/article">article</a>
         <a href="#/company">company</a>
         <a href="#/about">about</a>
+        <div id="main-app" c-ref="add-ref">{{json.title}}--{{text}}</div>
+        <div class="repeat" c-for="item in items">
+          <p c-click="handleItem({{item.id}})">{{item.id}}-{{item.name}}</p>
+        </div>
+        <button c-click="handelClick()">点击</button>
+        <div c-if="{{isShow}}">
+            show
+        </div>
+        <div c-show="{{a>10}}">show2</div>
+        <br/>
+        <c-menu></c-menu>
         <div c-view></div>
         <footer></footer>
       </div>
@@ -59,6 +64,7 @@ export default class Main extends Component {
     this.$data('json', { 'title': 'aaaa' });
     this.$data('isShow', !this.data.isShow);
     this.$data('a', 20);
+    this.$data('items', [{ id: 10, name: '橘子10' }]);
   }
 
   beforeRender() {
@@ -77,7 +83,7 @@ export default class Main extends Component {
 
   render() {
     this.$event.listen('header-event', function (msg) {
-      console.log('子组件广播事件--' + msg)
+      console.log(msg + '--子组件广播事件')
     });
     this.$data('text', 'after render');
     Dom('body').attr('data-aa', '456');
@@ -85,10 +91,10 @@ export default class Main extends Component {
 }
 
 Cpage.router([
-  // {
-  //     path: '/',
-  //     component: Home
-  // },
+  {
+      path: '/',
+      component: Article
+  },
   {
     path: '/article',
     component: Article,

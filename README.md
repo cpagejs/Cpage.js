@@ -126,7 +126,9 @@ Cpage.router([
 ## 方法
 | 方法名 | 是否必须 | 用途 |
 | :------ | :------: | :------ |
-| beforeRender | 否 | 组件完成渲染之前执行 |
+| beforeRender | 否 | 组件完成渲染之前执行 | 
+| beforeUpdate | 否 | 组件更新之前执行 | 
+| afterUpdate | 否 | 组件更新之后执行 | 
 | render | 是 | 组件完成渲染之后执行 |
 | bootstrap | 是 | Cpage对象的静态方法，用于将组件渲染到dom中 |
 

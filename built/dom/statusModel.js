@@ -26,7 +26,9 @@ var __values = (this && this.__values) || function(o) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var targetDom_1 = require("./targetDom");
 var util_1 = require("../util");
-// 操作dom节点
+/**
+ * 节点是否包含某些属性
+ */
 var statusModel = /** @class */ (function (_super) {
     __extends(statusModel, _super);
     function statusModel(selector) {

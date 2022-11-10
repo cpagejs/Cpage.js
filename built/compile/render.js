@@ -73,6 +73,7 @@ var renderComponents = /** @class */ (function () {
         this.cShowList = [];
         this.cIfList = [];
         this.ifTpl = {};
+        this.cForTpl = {};
         this.cHtmlList = [];
         this.cForList = [];
         this.cRepeatList = [];
@@ -127,21 +128,21 @@ var renderComponents = /** @class */ (function () {
                 }
                 function handelRouter() {
                     setTimeout(function () {
-                        if (window.document.readyState == "complete") {
-                            var hash = window.location.hash;
-                            if (hash == '') { // 处理默认首页， path="/"
-                                var index = pathIndex();
-                                if (util_1.default.type(index) == 'object') {
-                                    handelView(index);
-                                }
-                            }
-                            else {
-                                var r = getNowRouter(hash.substr(1));
-                                if (r != undefined) {
-                                    handelView(r);
-                                }
+                        // if ((<any>window).document.readyState === "complete") {
+                        var hash = window.location.hash;
+                        if (hash === '' || hash === '#/') { // 处理默认首页， path="/"
+                            var index = pathIndex();
+                            if (util_1.default.type(index) == 'object') {
+                                handelView(index);
                             }
                         }
+                        else {
+                            var r = getNowRouter(hash.substr(1));
+                            if (r != undefined) {
+                                handelView(r);
+                            }
+                        }
+                        // }
                         window.addEventListener('hashchange', function (data) {
                             var nowPath = '';
                             if (data.newURL.includes('/#')) {
@@ -244,17 +245,19 @@ var renderComponents = /** @class */ (function () {
         // component.styleUrl, webpack打包需要引入css-loader
         function handelUrl(url) {
             if (url != undefined) {
-                // 针对import * as css from '';
-                if (util_1.default.type(url) === 'object') {
-                    url = url[0][1];
-                }
-                // 针对require('../xx.css')
-                if (util_1.default.type(url) === 'array') {
-                    url = url[1];
-                }
+                // let _url; css-loader版本升级后失效了
+                // // 针对import * as css from '';
+                // if (Util.type(url) === 'object') {
+                //   _url = url[0][1];
+                // }
+                // // 针对require('../xx.css')
+                // if (Util.type(url) === 'array') {
+                //   _url = url[1];
+                // }
+                // console.log(url, url[0], url[1]);
                 return {
                     type: 'url',
-                    result: url
+                    result: url[0][1]
                 };
             }
             return false;
@@ -849,9 +852,22 @@ var renderComponents = /** @class */ (function () {
             }
             var itemsExp = match2[2];
             var items = _this.inComponent(itemsExp, component);
-            if (items && util_1.default.type(items) === 'array' && items.length) {
+            if (items && util_1.default.type(items) === 'array') {
+                // 组件的属性更新了
                 if (reRender === 'dataChange') {
-                    dom_1.default.removeDomExpectWhich(0, '[c-for-id="' + dom_1.default.q(re.ele).getAttribute('c-for-id') + '"]');
+                    if (dom_1.default.q(re.ele)) {
+                        dom_1.default.delDomExpectWhich('[c-for-id="' + dom_1.default.q(re.ele).getAttribute('c-for-id') + '"]', 0);
+                    }
+                    else { // 已经被移除，还原节点
+                        dom_1.default.replaceComment(dom_1.default.q(util_1.default._cameCase(re.which)), 'c-for:' + re.id, dom_1.default.create(_this.cForTpl[re.id])[0]);
+                    }
+                }
+                // 数组为空，就删除c-for相关的节点,添加注释
+                if (!items.length) {
+                    var cForDom = dom_1.default.q(re.ele);
+                    cForDom.parentNode.replaceChild(dom_1.default.addComment('c-for:' + re.id + ''), cForDom);
+                    _this.cForTpl[re.id] = cForDom.outerHTML;
+                    return;
                 }
                 // 渲染单个有c-for指令的模板
                 items.forEach(function (item, i) {
@@ -1239,7 +1255,7 @@ var renderComponents = /** @class */ (function () {
      * @param component 组件
      */
     renderComponents.prototype.inComponent = function (exp, component) {
-        return component.data[exp] || component.props.default[exp];
+        return component.data[exp] || component.props[exp]['default'];
     };
     return renderComponents;
 }());
