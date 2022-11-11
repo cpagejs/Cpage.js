@@ -68,6 +68,10 @@ export default class Main extends Component {
     this.$data('items', [{ id: 10, name: '橘子10' }]);
   }
 
+  handleHeaderClick() {
+    alert("handleHeaderClick")
+  }
+
   beforeRender() {
     let self = this;
     this.$http.ajax({
@@ -83,7 +87,7 @@ export default class Main extends Component {
   }
 
   render() {
-    this.$event.listen('header-event', function (msg) {
+    this.$event.on('header-event', function (msg) {
       console.log(msg + '--子组件广播事件')
     });
     this.$data('text', 'after render');

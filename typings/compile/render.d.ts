@@ -14,7 +14,6 @@
     private cRepeatList;
     private cViewList;
     private dataId;
-    private componentToken;
     private componentNames;
     private componentAttrs;
     private templateId;

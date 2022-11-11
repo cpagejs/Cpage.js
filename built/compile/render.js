@@ -79,7 +79,6 @@ var renderComponents = /** @class */ (function () {
         this.cRepeatList = [];
         this.cViewList = [];
         this.dataId = parseInt(util_1.default.now());
-        this.componentToken = [];
         this.componentNames = this.getComponentNameList();
         this.componentAttrs = {};
         this.templateId = {};
@@ -254,7 +253,7 @@ var renderComponents = /** @class */ (function () {
                 // if (Util.type(url) === 'array') {
                 //   _url = url[1];
                 // }
-                console.log(url, url[0][1].toString());
+                // console.log(url, url[0][1].toString());
                 return {
                     type: 'url',
                     result: url[0][1]
@@ -270,27 +269,26 @@ var renderComponents = /** @class */ (function () {
      * @param node dom节点
      * @param components 组件列表
      */
-    renderComponents.prototype.loopNodes = function (name, node, components) {
+    renderComponents.prototype.loopNodes = function (name, nodes, components) {
         var _this = this;
-        for (var i = 0; i < node.length; i++) {
-            if (node[i] && node[i].nodeType === 1) {
-                node[i].setAttribute("c-data-id", this.dataId);
-                var cs = this.getComponent(node[i], name);
+        for (var i = 0; i < nodes.length; i++) {
+            if (nodes[i] && nodes[i].nodeType === 1) {
+                nodes[i].setAttribute("c-data-id", this.dataId);
+                var cs = this.getComponent(nodes[i], name);
                 cs.forEach(function (v) {
                     if (components) {
                         components.push(util_1.default.deepClone(util_1.default.extend(_this.CObj[v], { token: _this.dataId })));
-                        // components.push(Util.extend(this.CObj[v], {token: this.dataId}));
                     }
                 });
                 this.dataId++;
                 // 添加eventList, cShowList...等集合
-                this.addDirectiveList(name, node[i]);
-                if (node[i].childNodes && node[i].childNodes.length) {
-                    this.loopNodes(name, node[i].childNodes, components);
+                this.addDirectiveList(name, nodes[i]);
+                if (nodes[i].childNodes && nodes[i].childNodes.length) {
+                    this.loopNodes(name, nodes[i].childNodes, components);
                 }
             }
         }
-        return node;
+        return nodes;
     };
     /**
      * 添加eventList, cShowList...等集合
@@ -300,7 +298,7 @@ var renderComponents = /** @class */ (function () {
     renderComponents.prototype.addDirectiveList = function (name, node) {
         for (var j = 0, len = node.attributes; j < len.length; j++) {
             var attrName = this.normalizeDirective(len[j].name);
-            if (attrName.match(/^cClick|cDbclick|cMouseover|cMousedown|cMouseup|cMousemove|cMouseout|cMouseleave|cBlur|cFocus|cChange|cInput|cDrag|cDragend|cDragenter|cDragleave|cDragover|cDragstart|cDrop|cFocus|cKeydown|cKeypress|cKeyup|cScroll|cSelect|cSubmit|cToggle|cResize|cWaiting|cProgress|cLoadstart|cDurationchange|cLoadedmetadata|cLoadeddata|cCanplay|cCanplaythrough|cPlay|cPause|cRef|cShow|cIf|cHtml|cFor|cRepeat|cView$/g)) {
+            if (attrName.match(/^cClick|cDbclick|cMouseover|cMousedown|cMouseup|cMousemove|cMouseout|cMouseleave|cBlur|cFocus|cChange|cInput|cDrag|cDragend|cDragenter|cDragleave|cDragover|cDragstart|cDrop|cFocus|cKeydown|cKeypress|cKeyup|cScroll|cSelect|cSubmit|cToggle|cResize|cWaiting|cProgress|cLoadstart|cDurationchange|cLoadedmetadata|cLoadeddata|cCanplay|cCanplaythrough|cPlay|cPause|cRef|cShow|cIf|cHtml|cFor|cRepeat|cView|\@*$/g)) {
                 switch (attrName) {
                     case 'cRef':
                         this.cRefList.push({
@@ -452,7 +450,7 @@ var renderComponents = /** @class */ (function () {
             v.$el = undefined;
             v.$refs = undefined;
             v.componentStatus = 'beforeRender';
-            v.beforeRender();
+            v.beforeRender && v.beforeRender();
         }
     };
     /**
@@ -531,10 +529,12 @@ var renderComponents = /** @class */ (function () {
                             if (node) {
                                 self.templateId[v.token] = newNode[0].outerHTML;
                                 newProps = dom_1.default.combineAttrAndProps(self.componentAttrs[v.token], self.CObj[v.name].props);
+                                // TODO 设置props中的事件
+                                v.$props = newProps;
                                 node.innerHTML = self.getChangedData(newNode[0].outerHTML, self.CObj[v.name].data, newProps);
                             }
                             else {
-                                console.log(v.name + '组件中token不存在', v);
+                                console.log(v.name + '组件的token不存在', v);
                             }
                         }
                         return [2 /*return*/, node];
@@ -689,7 +689,7 @@ var renderComponents = /** @class */ (function () {
     renderComponents.prototype.handelDataChange = function (v, type) {
         var _this = this;
         var _loop_1 = function (i) {
-            HandelEventer_1.default.listen(i, function (info) {
+            HandelEventer_1.default.on(i, function (info) {
                 //只处理当前组件的属性改变
                 if (info.target === v.token && JSON.stringify(info.oldVal) !== JSON.stringify(info.newVal)) {
                     // 执行组件更新前函数
@@ -819,7 +819,7 @@ var renderComponents = /** @class */ (function () {
                         dom_1.default.q(chItem.position).setAttribute(chItem.attr, chItem.value);
                         // 更新componentAttrs
                         self.componentAttrs[chItem.componentToken][chItem.attr] = chItem.value;
-                        self.componentAttrs[chItem.componentToken][chItem.attr] = chItem.value;
+                        // self.componentAttrs[chItem.componentToken][chItem.attr] = chItem.value;
                         if (chItem.isComponent) {
                             handelComponent(chItem);
                         }
@@ -1162,7 +1162,6 @@ var renderComponents = /** @class */ (function () {
             var normalizedNodeName = self.normalizeDirective(dom_1.default.getNodeName(node).toLowerCase());
             if (self.componentNames.includes(normalizedNodeName)) {
                 arr.push(util_1.default.deepClone(util_1.default.extend(self.CObj[normalizedNodeName], { token: node.getAttribute(ID) })));
-                // arr.push(Util.extend(self.CObj[normalizedNodeName], {token: node.getAttribute(ID)}));
             }
             if (node.childNodes && node.childNodes.length) {
                 node.childNodes.forEach(function (v) {
@@ -1185,6 +1184,7 @@ var renderComponents = /** @class */ (function () {
         var self = this;
         // tag标签
         function loopTagNode(node) {
+            // TODO <cHeader></cHeader>会无法识别
             var normalizedNodeName = util_1.default.cameCase(dom_1.default.getNodeName(node).toLowerCase());
             if (self.componentNames.includes(normalizedNodeName)) {
                 arr.push(normalizedNodeName);

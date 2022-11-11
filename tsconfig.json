@@ -14,7 +14,7 @@
     },
     "include": [
         "packages/**/*"
-    ],
+, "tsconfig.types.json"    ],
     "exclude": [
         "node_modules",
         "docs"

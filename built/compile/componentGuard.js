@@ -64,7 +64,7 @@ function componentGuard(component) {
         }
         // 验证type类型
         Object.entries(component.props).forEach(function (v) {
-            if (util_1.default.type(v[1]['default']) != v[1]['type']) {
+            if (v[1]['default'] && (util_1.default.type(v[1]['default']) != v[1]['type'])) {
                 $log.error('组件' + component.name + '的props属性中元素' + v[0] + '的default值非' + v[1]['type'] + '类型！或者是没有定义属性的类型导致的！');
             }
         });

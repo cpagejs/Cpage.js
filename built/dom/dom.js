@@ -102,7 +102,7 @@ var HandelDom = /** @class */ (function () {
     /**
      * 父组件的data值覆盖子组件的props值（组件的attr值与props对比，有则覆盖）
      * @param attr {component:'hello', 'width': 100}
-     * @param props { 'width': { default:50, type:Number } }
+     * @param props { 'width': { default:50, type:'number' } }
      */
     HandelDom.prototype.combineAttrAndProps = function (attr, props) {
         if (util_1.default.isEmpty(attr))
@@ -257,7 +257,7 @@ var HandelDom = /** @class */ (function () {
      */
     HandelDom.prototype.appendStyle = function (inner, title) {
         var style = "" + inner;
-        style = util_1.default.trimStr(style);
+        // style = Util.trimStr(style);
         var newStyle = document.createElement('style');
         newStyle.type = 'text/css';
         // newStyle.title = title;

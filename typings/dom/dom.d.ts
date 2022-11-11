@@ -42,7 +42,7 @@
     /**
      * 父组件的data值覆盖子组件的props值（组件的attr值与props对比，有则覆盖）
      * @param attr {component:'hello', 'width': 100}
-     * @param props { 'width': { default:50, type:Number } }
+     * @param props { 'width': { default:50, type:'number' } }
      */
     combineAttrAndProps(attr: any, props: any): object;
     /**

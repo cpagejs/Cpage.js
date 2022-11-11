@@ -24,7 +24,7 @@ var HandelData = /** @class */ (function () {
                 var oldData = util_1.default.deepClone(this.data);
                 this.data[key] = val;
                 var newData = this.data;
-                HandelEventer_1.default.trigger(key, util_1.default.clone({
+                HandelEventer_1.default.emit(key, util_1.default.clone({
                     target: this.token,
                     which: this.name,
                     old: oldData,

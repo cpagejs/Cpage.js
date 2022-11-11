@@ -32,7 +32,6 @@ export default class renderComponents {
   private cRepeatList: Array<any>;  //c-repeat集合
   private cViewList: Array<any>;  //c-view集合
   private dataId: number;  //节点编号
-  private componentToken: Array<any>;  //组件token
   private componentNames: Array<any>;  //组件名称集合
   private componentAttrs: object;  //组件属性
   private templateId: object;  //模板id集合
@@ -56,7 +55,6 @@ export default class renderComponents {
     this.cRepeatList = [];
     this.cViewList = [];
     this.dataId = parseInt(Util.now());
-    this.componentToken = [];
     this.componentNames = this.getComponentNameList();
     this.componentAttrs = {};
     this.templateId = {};
@@ -250,12 +248,12 @@ export default class renderComponents {
    * @param node dom节点
    * @param components 组件列表
    */
-  private loopNodes(name: string, node, components?: Array<any>) {
-    for (let i = 0; i < node.length; i++) {
-      if (node[i] && node[i].nodeType === 1) {
-        node[i].setAttribute("c-data-id", this.dataId);
+  private loopNodes(name: string, nodes, components?: Array<any>) {
+    for (let i = 0; i < nodes.length; i++) {
+      if (nodes[i] && nodes[i].nodeType === 1) {
+        nodes[i].setAttribute("c-data-id", this.dataId);
         
-        const cs = this.getComponent(node[i], name);
+        const cs = this.getComponent(nodes[i], name);
         cs.forEach(v => {
           if (components) {
             components.push(Util.deepClone(Util.extend(this.CObj[v], { token: this.dataId })));
@@ -265,15 +263,15 @@ export default class renderComponents {
         this.dataId++;
 
         // 添加eventList, cShowList...等集合
-        this.addDirectiveList(name, node[i]);
+        this.addDirectiveList(name, nodes[i]);
 
-        if (node[i].childNodes && node[i].childNodes.length) {
-          this.loopNodes(name, node[i].childNodes, components);
+        if (nodes[i].childNodes && nodes[i].childNodes.length) {
+          this.loopNodes(name, nodes[i].childNodes, components);
         }
 
       }
     }
-    return node;
+    return nodes;
   }
 
   /**
@@ -284,7 +282,7 @@ export default class renderComponents {
   private addDirectiveList(name: string, node): void {
     for (let j = 0, len = node.attributes; j < len.length; j++) {
       const attrName = this.normalizeDirective(len[j].name);
-      if (attrName.match(/^cClick|cDbclick|cMouseover|cMousedown|cMouseup|cMousemove|cMouseout|cMouseleave|cBlur|cFocus|cChange|cInput|cDrag|cDragend|cDragenter|cDragleave|cDragover|cDragstart|cDrop|cFocus|cKeydown|cKeypress|cKeyup|cScroll|cSelect|cSubmit|cToggle|cResize|cWaiting|cProgress|cLoadstart|cDurationchange|cLoadedmetadata|cLoadeddata|cCanplay|cCanplaythrough|cPlay|cPause|cRef|cShow|cIf|cHtml|cFor|cRepeat|cView$/g)) {
+      if (attrName.match(/^cClick|cDbclick|cMouseover|cMousedown|cMouseup|cMousemove|cMouseout|cMouseleave|cBlur|cFocus|cChange|cInput|cDrag|cDragend|cDragenter|cDragleave|cDragover|cDragstart|cDrop|cFocus|cKeydown|cKeypress|cKeyup|cScroll|cSelect|cSubmit|cToggle|cResize|cWaiting|cProgress|cLoadstart|cDurationchange|cLoadedmetadata|cLoadeddata|cCanplay|cCanplaythrough|cPlay|cPause|cRef|cShow|cIf|cHtml|cFor|cRepeat|cView|\@*$/g)) {
         switch (attrName) {
           case 'cRef':
             this.cRefList.push({
@@ -421,7 +419,7 @@ export default class renderComponents {
       v.$refs = undefined;
       v.componentStatus = 'beforeRender';
 
-      v.beforeRender();
+      v.beforeRender && v.beforeRender();
     }
   }
 
@@ -492,9 +490,13 @@ export default class renderComponents {
 
           // 编译组件属性，父组件的data值覆盖子组件的props值（组件的attr值与props对比，有则覆盖）
           const newProps = DOM.combineAttrAndProps(self.componentAttrs[v.token], self.CObj[v.name].props);
+
+          // TODO 设置props中的事件
+          v.$props = newProps;
+ 
           node.innerHTML = self.getChangedData(newNode[0].outerHTML, self.CObj[v.name].data, newProps);
         } else {
-          console.log(v.name + '组件中token不存在', v);
+          console.log(v.name + '组件的token不存在', v);
         }
       }
 
@@ -596,6 +598,7 @@ export default class renderComponents {
       const arr = newAttrArr.filter((ev) => {
         return ev.which === v.name
       });
+
       arr.forEach(val => {
         if (document.querySelectorAll(val.ele)) {
           try {
@@ -636,7 +639,7 @@ export default class renderComponents {
    */
   private handelDataChange(v, type?): void {
     for (let i in v.data) {
-      Eventer.listen(i, info => {
+      Eventer.on(i, info => {
         //只处理当前组件的属性改变
         if (info.target === v.token && JSON.stringify(info.oldVal) !== JSON.stringify(info.newVal)) { 
           // 执行组件更新前函数
@@ -718,6 +721,7 @@ export default class renderComponents {
     const attrData = dataPos.filter(df => {
       return df.type === 'attr';
     });
+    
     if (attrData.length) {
       attrData.forEach(dp => {
         // 处理指令
@@ -780,7 +784,7 @@ export default class renderComponents {
             DOM.q(chItem.position).setAttribute(chItem.attr, chItem.value);
             // 更新componentAttrs
             self.componentAttrs[chItem.componentToken][chItem.attr] = chItem.value;
-            self.componentAttrs[chItem.componentToken][chItem.attr] = chItem.value;
+            // self.componentAttrs[chItem.componentToken][chItem.attr] = chItem.value;
             if (chItem.isComponent) {
               handelComponent(chItem);
             }

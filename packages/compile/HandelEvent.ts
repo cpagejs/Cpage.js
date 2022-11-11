@@ -10,8 +10,8 @@ class HandelEvent {
      * @param name 事件名称
      * @param msg 信息
      */
-    trigger(name, msg){
-        Eventer.trigger(name, msg);
+     emit(name, msg){
+        Eventer.emit(name, msg);
     }
 
     /**
@@ -19,8 +19,8 @@ class HandelEvent {
      * @param name 事件名称
      * @param fn 回调函数，返回触发的信息
      */
-    listen(name, fn){
-        Eventer.listen(name, fn);
+    on(name, fn){
+        Eventer.on(name, fn);
     }
 
 }

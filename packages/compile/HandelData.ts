@@ -31,7 +31,7 @@ class HandelData {
         this.data[key] = val;
         const newData = this.data;
 
-        Eventer.trigger(key, Util.clone({
+        Eventer.emit(key, Util.clone({
           target: this.token,
           which: this.name,
           old: oldData,

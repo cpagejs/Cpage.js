@@ -1,8 +1,6 @@
 {
     "compilerOptions": {
-        "outDir": "./built",
         "allowJs": true,
-        "noEmit": false,
         "target": "es5",
         "lib":["es5", "dom", "dom.iterable", "es2015", "es2016", "es2017", "scripthost"],
         "suppressExcessPropertyErrors": true,
@@ -20,15 +18,9 @@
           },
         "declaration": true, 
         "emitDeclarationOnly": true,
-        "declarationDir": "./typings",
+        "declarationDir": "typings",
     },
     "include": [
         "packages/**/*"
     ],
-    "exclude": [
-        "node_modules",
-        "docs",
-        "built",
-        "dist"
-    ]
 }

@@ -9,7 +9,7 @@ var HandelEventer = /** @class */ (function () {
      * @param name
      * @param msg
      */
-    HandelEventer.prototype.trigger = function (name, msg) {
+    HandelEventer.prototype.emit = function (name, msg) {
         var key = Array.prototype.shift.call(arguments);
         var fns = this.eventList[key];
         if (!fns || fns.length === 0) {
@@ -25,7 +25,7 @@ var HandelEventer = /** @class */ (function () {
      * @param name
      * @param fn
      */
-    HandelEventer.prototype.listen = function (name, fn) {
+    HandelEventer.prototype.on = function (name, fn) {
         if (!this.eventList[name]) {
             this.eventList[name] = [];
         }

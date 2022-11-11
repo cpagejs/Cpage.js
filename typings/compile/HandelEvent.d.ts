@@ -7,13 +7,13 @@ declare class HandelEvent {
      * @param name 事件名称
      * @param msg 信息
      */
-    trigger(name: any, msg: any): void;
+    emit(name: any, msg: any): void;
     /**
      * 监听事件
      * @param name 事件名称
      * @param fn 回调函数，返回触发的信息
      */
-    listen(name: any, fn: any): void;
+    on(name: any, fn: any): void;
 }
 declare const handelEvent: HandelEvent;
 export default handelEvent;

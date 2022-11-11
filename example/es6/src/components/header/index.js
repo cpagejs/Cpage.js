@@ -3,8 +3,8 @@ const html = require('./index.html');
 import css from './index.css';
 
 export default class Header extends Component {
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.name = 'cHeader';
         this.templateUrl = html;
         this.styleUrl = css;
@@ -12,12 +12,18 @@ export default class Header extends Component {
             title: {
                 type: "string",
                 default: "header"
+            },
+            onclick: {
+                type: "function",
+                default: () => {}
             }
         };
     }
 
     handelC(event){
-        this.$event.trigger('header-event', 'header');
+        this.$event.emit('header-event', 'header');
+        console.log(this)
+        this.props.onclick && this.props.onclick();
     }
 
     beforeRender(){

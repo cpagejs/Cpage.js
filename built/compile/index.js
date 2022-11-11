@@ -136,7 +136,7 @@ var CPage = /** @class */ (function () {
             r.componentToDom();
         }
     };
-    CPage.version = '1.1.2';
+    CPage.version = '1.2.5';
     return CPage;
 }());
 exports.default = CPage;
@@ -148,6 +148,9 @@ var Component = /** @class */ (function () {
         this.components = [];
         this.name = '';
         this.template = '';
+        this.templateUrl = '';
+        this.style = '';
+        this.styleUrl = '';
         this.data = {};
         this.props = {};
     }

@@ -12,16 +12,16 @@ var HandelEvent = /** @class */ (function () {
      * @param name 事件名称
      * @param msg 信息
      */
-    HandelEvent.prototype.trigger = function (name, msg) {
-        HandelEventer_1.default.trigger(name, msg);
+    HandelEvent.prototype.emit = function (name, msg) {
+        HandelEventer_1.default.emit(name, msg);
     };
     /**
      * 监听事件
      * @param name 事件名称
      * @param fn 回调函数，返回触发的信息
      */
-    HandelEvent.prototype.listen = function (name, fn) {
-        HandelEventer_1.default.listen(name, fn);
+    HandelEvent.prototype.on = function (name, fn) {
+        HandelEventer_1.default.on(name, fn);
     };
     return HandelEvent;
 }());
