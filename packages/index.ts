@@ -1,5 +1,5 @@
 import CPage, { Component } from './compile';
-import Dom from './Dom';
+import Dom from './dom';
 import STore from './store';
 const Store:any = new STore('user');
 
