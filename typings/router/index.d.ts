@@ -1,4 +1,4 @@
-﻿import { routerAction } from './router_action';
+﻿import { routerAction } from "./router_action";
 export default class Router implements routerAction {
     private url;
     routers: Array<object>;
@@ -33,6 +33,11 @@ export default class Router implements routerAction {
      * @param path
      */
     hash(path?: string): any;
+    /**
+     * 跳转到新路由
+     * @param path 路由路径
+     */
+    push(path: string): void;
     /**
      * 刷新当前路由
      */

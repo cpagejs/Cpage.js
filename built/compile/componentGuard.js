@@ -1,5 +1,6 @@
 ﻿"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = componentGuard;
 var $log = require("../log");
 var util_1 = require("../util");
 /**
@@ -85,4 +86,3 @@ function componentGuard(component) {
         return;
     }
 }
-exports.default = componentGuard;

@@ -1,7 +1,7 @@
-import { expect } from 'chai';
-import 'mocha';
+import { expect } from "chai";
+import "mocha";
 
-import * as $log from '../src/log';
+import * as $log from "../packages/log";
 
 // describe('$log测试',function(){
 // 	it('1, 测试log',function(){

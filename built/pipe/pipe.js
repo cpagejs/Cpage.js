@@ -1,6 +1,6 @@
 ﻿"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.$pipeProvider = void 0;
+exports.$pipeProvider = $pipeProvider;
 var $log = require("../log");
 var util_1 = require("../util");
 /**
@@ -66,5 +66,4 @@ function $pipeProvider($provider) {
             };
         }];
 }
-exports.$pipeProvider = $pipeProvider;
 $pipeProvider.$inject = ['$provider'];

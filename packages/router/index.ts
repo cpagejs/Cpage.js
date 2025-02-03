@@ -1,20 +1,26 @@
-import Store from '../store';
+import Store from "../store";
+import * as $log from "../log";
+
 const store: any = new Store();
 
-import { routerAction } from './router_action';
+import { routerAction } from "./router_action";
 
 // 后续支持history路由
 export default class Router implements routerAction {
-  private url: string;  //浏览器pathname
+  private url: string; //浏览器pathname
   public routers: Array<object>; //路由集合
-  public nowRouter;  //当前路由
+  public nowRouter; //当前路由
   public params: object; //路由参数
 
   constructor(url, routers) {
     this.url = url;
     this.routers = this._parseRouters(routers);
     this.nowRouter = this._getNowRouter(url, this.routers);
-    this.params = this.nowRouter ? (this.nowRouter.params ? this.nowRouter.params : {}) : {};
+    this.params = this.nowRouter
+      ? this.nowRouter.params
+        ? this.nowRouter.params
+        : {}
+      : {};
   }
 
   /**
@@ -23,16 +29,16 @@ export default class Router implements routerAction {
    * @param routers 路由集合
    */
   _getNowRouter(url, routers) {
-    if (url.includes('?')) {
-      url = url.substr(0, url.lastIndexOf('?'));
+    if (url.includes("?")) {
+      url = url.substr(0, url.lastIndexOf("?"));
     }
-    return routers.filter(v => {
-      return url.match(v.info.regexp)
+    return routers.filter((v) => {
+      return url.match(v.info.regexp);
     })[0];
   }
 
   _parseRouters(routers) {
-    routers.forEach(v => {
+    routers.forEach((v) => {
       const r = this._pathToReg(v.path);
       if (r != null) {
         v.info = r;
@@ -48,30 +54,32 @@ export default class Router implements routerAction {
    */
   _pathToReg(path) {
     var ret = {
-      originalPath: path,
-      regexp: path
-    },
-      keys = (<any>ret).keys = [];
+        originalPath: path,
+        regexp: path,
+      },
+      keys = ((<any>ret).keys = []);
 
     path = path
-      .replace(/([().])/g, '\\$1')
+      .replace(/([().])/g, "\\$1")
       .replace(/(\/)?:(\w+)(\*\?|[?*])?/g, function (_, slash, key, option) {
-        var optional = (option === '?' || option === '*?') ? '?' : null;
-        var star = (option === '*' || option === '*?') ? '*' : null;
+        var optional = option === "?" || option === "*?" ? "?" : null;
+        var star = option === "*" || option === "*?" ? "*" : null;
         keys.push({ name: key, optional: !!optional });
-        slash = slash || '';
-        return ''
-          + (optional ? '' : slash)
-          + '(?:'
-          + (optional ? slash : '')
-          + (star && '(.+?)' || '([^/]+)')
-          + (optional || '')
-          + ')'
-          + (optional || '');
+        slash = slash || "";
+        return (
+          "" +
+          (optional ? "" : slash) +
+          "(?:" +
+          (optional ? slash : "") +
+          ((star && "(.+?)") || "([^/]+)") +
+          (optional || "") +
+          ")" +
+          (optional || "")
+        );
       })
-      .replace(/([/$*])/g, '\\$1');
+      .replace(/([/$*])/g, "\\$1");
 
-    ret.regexp = new RegExp('^' + path + '$', '');
+    ret.regexp = new RegExp("^" + path + "$", "");
     return ret;
   }
 
@@ -79,20 +87,32 @@ export default class Router implements routerAction {
    * 跳转到已存在的路由页面
    * @param path 需要跳转的路径
    */
-  go({ path = '', params = {} }): void {
+  go({ path = "", params = {} }): void {
     updateRouterConfig(path, params);
     this.hash(path);
   }
 
   /**
    * url的hash
-   * @param path 
+   * @param path
    */
   hash(path?: string) {
     if (!path) {
       return (<any>window).location.hash;
     }
-    (<any>window).location.hash = '#' + path;
+    (<any>window).location.hash = "#" + path;
+  }
+
+  /**
+   * 跳转到新路由
+   * @param path 路由路径
+   */
+  push(path: string): void {
+    if (path) {
+      (<any>window).location.hash = "#" + path;
+    } else {
+      $log.error("路由跳转路径不能为空");
+    }
   }
 
   /**
@@ -100,7 +120,7 @@ export default class Router implements routerAction {
    */
   reflesh(): void {
     const hash = (<any>window).location.hash;
-    (<any>window).location.hash = '#';
+    (<any>window).location.hash = "#";
     (<any>window).location.hash = hash;
   }
 
@@ -114,10 +134,10 @@ export default class Router implements routerAction {
 
 // 更新路由配置
 function updateRouterConfig(path, params) {
-  store.get('routerConfig').forEach(v => {
+  store.get("routerConfig").forEach((v) => {
     if (v.path == path) {
       v.params = params;
     }
   });
-  store.data('routerConfig', store.get('routerConfig'));
+  store.data("routerConfig", store.get("routerConfig"));
 }

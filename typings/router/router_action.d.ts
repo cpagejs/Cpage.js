@@ -3,4 +3,5 @@
     hash(path?: string): any;
     reflesh(): void;
     back(): void;
+    push(path: string): void;
 }

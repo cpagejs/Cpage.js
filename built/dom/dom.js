@@ -24,7 +24,7 @@ var HandelDom = /** @class */ (function () {
         if (util_1.default.type(str) != 'string') {
             $log.error('组件模板' + str + '必须为字符串，请检查组件的template,templateId,templateUrl属性');
         }
-        var html = "" + str;
+        var html = "".concat(str);
         html = html.trim();
         html = html.replace(/<!--[\s\S]*?-->/gm, ''); //去除html注释
         html = html.replace(/>\s+([^\s<]*)\s+</gm, '>$1<').trim(); //去除html标签间的多余空白
@@ -256,7 +256,7 @@ var HandelDom = /** @class */ (function () {
      * @param title style的title属性，也是组件tag标签
      */
     HandelDom.prototype.appendStyle = function (inner, title) {
-        var style = "" + inner;
+        var style = "".concat(inner);
         // style = Util.trimStr(style);
         var newStyle = document.createElement('style');
         newStyle.type = 'text/css';

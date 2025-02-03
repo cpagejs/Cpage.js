@@ -11,7 +11,7 @@ var ASTCompile = /** @class */ (function () {
         this.state = {
             body: [],
             compileId: 0,
-            echo: [],
+            echo: [], //不同'compileId'的集合
             pipes: {} //管道过滤器
         };
         this.ast = {};

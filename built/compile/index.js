@@ -7,11 +7,12 @@ var render_1 = require("./render");
 var componentGuard_1 = require("./componentGuard");
 var store_1 = require("../store");
 var store = new store_1.default();
-store.data('componentList', []);
-store.service('component', function () {
+store.data("componentList", []);
+store.service("component", function () {
     this.ensureOneInvokeComponent = function (name, arr) {
         var res = {
-            type: 'yes'
+            type: "yes",
+            info: "",
         }, rootName = [], names = [];
         for (var i = 0; i < arr.length; i++) {
             if (arr[i].name == name)
@@ -20,8 +21,8 @@ store.service('component', function () {
         }
         if (rootName.length >= 2)
             res = {
-                type: 'no',
-                info: '只能有一个根组件，却发现' + rootName.length + '个' + name + '根组件'
+                type: "no",
+                info: "只能有一个根组件，却发现" + rootName.length + "个" + name + "根组件",
             };
         return res;
     };
@@ -46,16 +47,18 @@ var CPage = /** @class */ (function () {
             if (isRoot) {
                 rootComponent = classToJson.rootComponent;
             }
-            componentGuard_1.default(componentJson);
-            store.data('componentList', store.get('componentList').push(componentJson));
-            if (componentJson.components && util_1.default.type(componentJson.components) == 'array' && componentJson.components.length) {
+            (0, componentGuard_1.default)(componentJson);
+            store.data("componentList", store.get("componentList").push(componentJson));
+            if (componentJson.components &&
+                util_1.default.type(componentJson.components) == "array" &&
+                componentJson.components.length) {
                 componentJson.components.forEach(function (v) {
                     componetList(v);
                 });
             }
         }
         componetList(fn, true);
-        var r = new render_1.default(selector, rootComponent, store.get('componentList'));
+        var r = new render_1.default(selector, rootComponent, store.get("componentList"));
         r.componentToDom();
     };
     /**
@@ -64,8 +67,8 @@ var CPage = /** @class */ (function () {
      */
     CPage.router = function (config) {
         function check(str) {
-            if (util_1.default.type(str) != 'array') {
-                $log.error('路由配置项需为数组形式');
+            if (util_1.default.type(str) != "array") {
+                $log.error("路由配置项需为数组形式");
             }
         }
         check(config);
@@ -73,15 +76,17 @@ var CPage = /** @class */ (function () {
             var classToJson = util_1.default.classToJson(v.component, false);
             v.component = classToJson.componentJson;
         });
-        store.data('routerConfig', config);
+        store.data("routerConfig", config);
     };
     CPage.prototype.directive = function (name, fn) {
         var conf = fn();
         conf.id = this.id;
         this.CList.push(conf);
         this.id++;
-        var guard = store.get('component').ensureOneInvokeComponent(name, this.CList);
-        if (guard.type == 'no') {
+        var guard = store
+            .get("component")
+            .ensureOneInvokeComponent(name, this.CList);
+        if (guard.type == "no") {
             $log.error(guard.info);
         }
         return conf;
@@ -91,21 +96,21 @@ var CPage = /** @class */ (function () {
      * @param obj
      */
     CPage.prototype.component = function (obj) {
-        componentGuard_1.default(obj);
+        (0, componentGuard_1.default)(obj);
         var componentInfo = util_1.default.deepClone(obj);
         Object.defineProperties(componentInfo, {
             isRoot: {
                 value: false,
-                writable: true
+                writable: true,
             },
             $el: {
                 value: undefined,
-                writable: true
+                writable: true,
             },
             $props: {
                 value: {},
-                writable: true
-            }
+                writable: true,
+            },
         });
         return this.directive(obj.name, function () {
             return componentInfo;
@@ -117,26 +122,26 @@ var CPage = /** @class */ (function () {
      * @param root 根组件信息
      */
     CPage.prototype.bootstrap = function (selector, root) {
-        if (util_1.default.type(selector) != 'string') {
-            $log.error(selector + '应为字符串');
+        if (util_1.default.type(selector) != "string") {
+            $log.error(selector + "应为字符串");
         }
         if (!document.querySelector(selector)) {
-            $log.error('节点“' + selector + '”不存在');
+            $log.error("节点“" + selector + "”不存在");
         }
-        if (util_1.default.type(root) != 'object') {
-            $log.error(root + '应为json对象');
+        if (util_1.default.type(root) != "object") {
+            $log.error(root + "应为json对象");
         }
         if (arguments.length == 2) {
-            componentGuard_1.default(root);
+            (0, componentGuard_1.default)(root);
             if (!root.name) {
-                $log.error('找不到根组件的name属性');
+                $log.error("找不到根组件的name属性");
             }
-            store.data('rootComponent', root.name);
+            store.data("rootComponent", root.name);
             var r = new render_1.default(selector, root, this.CList);
             r.componentToDom();
         }
     };
-    CPage.version = '1.2.5';
+    CPage.version = "1.2.5";
     return CPage;
 }());
 exports.default = CPage;
@@ -146,16 +151,16 @@ exports.default = CPage;
 var Component = /** @class */ (function () {
     function Component() {
         this.components = [];
-        this.name = '';
-        this.template = '';
-        this.templateUrl = '';
-        this.style = '';
-        this.styleUrl = '';
+        this.name = "";
+        this.template = "";
+        this.templateUrl = "";
+        this.style = "";
+        this.styleUrl = "";
         this.data = {};
         this.props = {};
     }
     Component.prototype.render = function () {
-        $log.error('render方法必须被继承');
+        $log.error("render方法必须被继承");
     };
     return Component;
 }());

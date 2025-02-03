@@ -1,5 +1,6 @@
 ﻿"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = tpl;
 var $log = require("../log");
 var util_1 = require("../util");
 var parse_1 = require("../parse");
@@ -85,4 +86,3 @@ function tpl(text, data, props) {
     var parseTpl = new ParseTpl(text, data, props);
     return parseTpl.tpl();
 }
-exports.default = tpl;

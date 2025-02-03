@@ -334,8 +334,8 @@ var ASTBuilder = /** @class */ (function () {
             var args = [pipes];
             pipes = {
                 type: AST.ast_function['type'],
-                callee: this.identifierBuilder(),
-                arguments: args,
+                callee: this.identifierBuilder(), //管道名称
+                arguments: args, //待处理的内容以及管道参数
                 pipe: true
             };
             while (util_1.default.expect(this.tokens, ':')) {

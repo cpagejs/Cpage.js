@@ -9,15 +9,15 @@ var Http = /** @class */ (function () {
      * @param param0
      */
     Http.prototype.ajax = function (_a) {
-        var _b = _a.type, type = _b === void 0 ? 'get' : _b, _c = _a.url, url = _c === void 0 ? '' : _c, data = _a.data;
-        return parseHttp_1.parseHttp(type, url, data);
+        var _b = _a.type, type = _b === void 0 ? "get" : _b, _c = _a.url, url = _c === void 0 ? "" : _c, data = _a.data;
+        return (0, parseHttp_1.parseHttp)(type, url, data);
     };
     /**
      * get请求方式
      * @param url
      */
     Http.prototype.get = function (url) {
-        return parseHttp_1.parseHttp('get', url, null);
+        return (0, parseHttp_1.parseHttp)("get", url, null);
     };
     /**
      * post请求
@@ -25,7 +25,7 @@ var Http = /** @class */ (function () {
      * @param data
      */
     Http.prototype.post = function (url, data) {
-        return parseHttp_1.parseHttp('post', url, data);
+        return (0, parseHttp_1.parseHttp)("post", url, data);
     };
     /**
      * put请求
@@ -33,7 +33,7 @@ var Http = /** @class */ (function () {
      * @param data
      */
     Http.prototype.put = function (url, data) {
-        return parseHttp_1.parseHttp('put', url, data);
+        return (0, parseHttp_1.parseHttp)("put", url, data);
     };
     /**
      * delete请求
@@ -41,7 +41,7 @@ var Http = /** @class */ (function () {
      * @param data
      */
     Http.prototype.delete = function (url, data) {
-        return parseHttp_1.parseHttp('delete', url, data);
+        return (0, parseHttp_1.parseHttp)("delete", url, data);
     };
     return Http;
 }());

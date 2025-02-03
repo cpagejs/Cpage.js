@@ -9,12 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
+    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -319,7 +319,7 @@ var renderComponents = /** @class */ (function () {
                             directive: attrName
                         });
                         // 在组件渲染前面处理display
-                        var displayStatus = dom_1.default.boolToDisplay(parseTpl_1.default(len[j].value, this.CObj[name].data, this.CObj[name].props));
+                        var displayStatus = dom_1.default.boolToDisplay((0, parseTpl_1.default)(len[j].value, this.CObj[name].data, this.CObj[name].props));
                         node.style.display = displayStatus;
                         break;
                     case 'cIf':
@@ -332,7 +332,7 @@ var renderComponents = /** @class */ (function () {
                             directive: attrName,
                             html: node.outerHTML
                         });
-                        var ifInfo = parseTpl_1.default(len[j].value, this.CObj[name].data, this.CObj[name].props);
+                        var ifInfo = (0, parseTpl_1.default)(len[j].value, this.CObj[name].data, this.CObj[name].props);
                         if (ifInfo == 'true') {
                             node.style.display = 'none';
                         }
@@ -512,7 +512,7 @@ var renderComponents = /** @class */ (function () {
                             if (dom === undefined) {
                                 $log.error('节点' + self.selector + '不存在');
                             }
-                            dom.innerHTML = parseTpl_1.default(self.theTpl(self.root), self.root.data, {});
+                            dom.innerHTML = (0, parseTpl_1.default)(self.theTpl(self.root), self.root.data, {});
                             node = dom_1.default.q('[' + ID + '="' + v.token + '"]');
                             self.oneRootComponent++;
                         }
@@ -750,7 +750,7 @@ var renderComponents = /** @class */ (function () {
             textData.forEach(function (dp) {
                 var originNode = parseNode[0].parentNode.querySelector(dp.position).childNodes[dp.item].textContent;
                 if (document.querySelector(dp.position)) {
-                    document.querySelector(dp.position).childNodes[dp.item].textContent = parseTpl_1.default(originNode, info.new, info.props);
+                    document.querySelector(dp.position).childNodes[dp.item].textContent = (0, parseTpl_1.default)(originNode, info.new, info.props);
                 }
             });
         }
@@ -805,7 +805,7 @@ var renderComponents = /** @class */ (function () {
                         var changedComponent = self.CObj[dp.componentName], changedOriginComponentProps = changedComponent.props, changedComponentData = changedComponent.data, changedPropKey = dp.attr, changedPropVal = self.componentAttrs[dp.componentToken][dp.attr], changedComponentProps = self.combineChangedProps(changedPropKey, changedPropVal, changedOriginComponentProps);
                         var changedOrginNode = dom_1.default.create(self.templateId[dp.componentToken]);
                         var changedOrginText = changedOrginNode[0].parentNode.querySelector(chItem.position).childNodes[chItem.item].textContent;
-                        dom_1.default.q(chItem.position).childNodes[chItem.item].textContent = parseTpl_1.default(changedOrginText, changedComponentData, changedComponentProps);
+                        dom_1.default.q(chItem.position).childNodes[chItem.item].textContent = (0, parseTpl_1.default)(changedOrginText, changedComponentData, changedComponentProps);
                     });
                     // 属性类型
                     var childChangePosAttr = childChangePos.filter(function (df) {
@@ -875,7 +875,7 @@ var renderComponents = /** @class */ (function () {
                     var newn = dom_1.default.q(re.ele).cloneNode(true);
                     var data = {};
                     data[match2[1]] = item;
-                    newn.innerHTML = parseTpl_1.default(re.html, data, self.CObj[component.name]['props'] || {});
+                    newn.innerHTML = (0, parseTpl_1.default)(re.html, data, self.CObj[component.name]['props'] || {});
                     var newNode = self.loopNodes(component.name, dom_1.default.create(newn.outerHTML));
                     var innerComponents = self.findComponent(newNode[0]);
                     newNode[0].setAttribute('c-for-id', re.id);
@@ -1191,7 +1191,7 @@ var renderComponents = /** @class */ (function () {
                 var obj = {};
                 for (var i = 0, len = node.attributes; i < len.length; i++) {
                     if (len[i].name !== ID) {
-                        obj[len[i].name] = parseTpl_1.default(len[i].value, self.CObj[name].data, self.CObj[name].props);
+                        obj[len[i].name] = (0, parseTpl_1.default)(len[i].value, self.CObj[name].data, self.CObj[name].props);
                     }
                 }
                 if (!dom_1.default.noOtherAttr(ID, node)) {
@@ -1240,7 +1240,7 @@ var renderComponents = /** @class */ (function () {
      * @param data
      */
     renderComponents.prototype.getChangedData = function (html, data, props) {
-        return parseTpl_1.default(html, data, props);
+        return (0, parseTpl_1.default)(html, data, props);
     };
     /**
      * 序列化指令
